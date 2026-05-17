@@ -36,13 +36,14 @@ import PrivateAmbulance_thankupage from "./pages/AmbulanceSignup/PrivateAmbulanc
 import OnlineDoctorForm from "./pages/OnlineDoctor/OnlineDocSignup";
 import ClinicDoc_Receptionist_Details from "./pages/ClinicSignup/Addmembers/Docreception/receptionDetails";
 import Success_ClinicDocreceptionist_Page from "./pages/ClinicSignup/Addmembers/Docreception/successPage";
-import AdminDas from "./pages/test/AdminDas";
-import Manager from "./pages/test/Manager";
-import DoctorDas from "./pages/test/DoctorDas";
-import ReceptionistDas from "./pages/test/ReceptionistDas";
-import HospitalAmbulanceDas from "./pages/test/HospitalAmbulanceDas";
-import PrivateAmbulanceDas from "./pages/test/PrivateAmbulanceDas";
+import AdminDas from "./Modules/clinic/admin/AdminDas";
+import ManagerDas from "./Modules/clinic/manager/ManagerDas";
 import Doctordas from "./Modules/clinic/doctor/DoctorDas";
+import MyPatients from "./Modules/clinic/doctor/MyPatient";
+import Myapointment from "./Modules/clinic/doctor/MyAppointment";
+import ReceptionDash from "./Modules/clinic/reception/ReceptionDas";
+import DashboardLayout from "./Dashboardlayout";
+import AddPatientRecord from "./Modules/common/AddPatient";
 
 
 
@@ -229,35 +230,58 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage/>
       },
 
-      // test dastboard
+      // dastboard
+      {
+  path: "/dashboard",
+  element: <DashboardLayout />,
+  children: [
+    {
+      path: "admin",
+      element: <AdminDas />,
+    },
+    {
+      path: "manager",
+      element: <ManagerDas />,
+    },
+    {
+      path: "doctor",
+      element: <Doctordas />,
+    },
+    {
+      path: "receptionist",
+      element: <ReceptionDash />,
+    },
+   
+  ],
+
+      },
+     
+      //  {
+      //   path:"/HospitalAmbulance-Dashboard",
+      //   element: <HospitalAmbulanceDas/>,
+      //   errorElement: <ErrorPage/>
+      // },
+      //  {
+      //   path:"/PrivateAmbulance-Dashboard",
+      //   element: <PrivateAmbulanceDas/>,
+      //   errorElement: <ErrorPage/>
+      // },
+
        {
-        path:"/Admin-Dashboard",
-        element: <AdminDas/>,
+        path:"/dashboard/doctor/mypatient",
+        element: <MyPatients/>,
         errorElement: <ErrorPage/>
       },
+
        {
-        path:"/Manager-Dashboard",
-        element: <Manager/>,
+        path:"/dashboard/Addpatient",
+        element: <AddPatientRecord/>,
         errorElement: <ErrorPage/>
       },
+
        {
-        path:"/Doctor-Dashboard",
-        element: <Doctordas/>,
-        errorElement: <ErrorPage/>
-      },
-       {
-        path:"/Receptionist-Dashboard",
-        element: <ReceptionistDas/>,
-        errorElement: <ErrorPage/>
-      },
-       {
-        path:"/HospitalAmbulance-Dashboard",
-        element: <HospitalAmbulanceDas/>,
-        errorElement: <ErrorPage/>
-      },
-       {
-        path:"/PrivateAmbulance-Dashboard",
-        element: <PrivateAmbulanceDas/>,
+        path:"/dashboard/doctor/today'sappointmment",
+        element: <Myapointment/>,
         errorElement: <ErrorPage/>
       },
 

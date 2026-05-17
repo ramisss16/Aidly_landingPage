@@ -119,7 +119,7 @@ const LoginPage = () => {
         "admin"
       ) {
         navigate(
-          "/Admin-Dashboard"
+          "/dashboard/admin"
         );
       }
 
@@ -128,7 +128,7 @@ const LoginPage = () => {
         "doctor"
       ) {
         navigate(
-          "/Doctor-Dashboard"
+          "/dashboard/doctor"
         );
       }
 
@@ -137,7 +137,7 @@ const LoginPage = () => {
         "manager"
       ) {
         navigate(
-          "/Manager-Dashboard"
+          "/dashboard/manager"
         );
       }
 
@@ -146,7 +146,7 @@ const LoginPage = () => {
         "receptionist"
       ) {
         navigate(
-          "/Receptionist-Dashboard"
+          "/dashboard/receptionist"
         );
       }
 
