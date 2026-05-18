@@ -5,9 +5,8 @@ const {
   markAttendance,
   markBulkAttendance,
   getAttendance,
-  getAttendanceByDate
-} = require("../controllers/attendanceController");
-
+  getAttendanceByDate,
+} = require("../Controllers/attendanceController");
 
 // 🔹 Single attendance
 router.post("/mark", markAttendance);

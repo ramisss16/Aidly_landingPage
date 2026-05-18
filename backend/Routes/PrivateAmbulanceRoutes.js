@@ -10,9 +10,9 @@ router.post(
     { name: "driverIdProof", maxCount: 1 },
     { name: "vehicleRegistrationCertificate", maxCount: 1 },
     { name: "vehiclePhoto", maxCount: 1 },
-     {name: "driverLicense", maxCount: 1}
+    { name: "driverLicense", maxCount: 1 },
   ]),
-  controller.registerPrivateAmbulance
+  controller.registerPrivateAmbulance,
 );
 router.post("/login", controller.loginPrivateAmbulance);
 

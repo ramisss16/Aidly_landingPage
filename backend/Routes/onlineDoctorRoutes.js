@@ -5,7 +5,7 @@ const upload = require("../middleware/uploads");
 const {
   registerOnlineDoctor,
   loginOnlineDoctor,
-} = require("../controllers/onlineDoctorController");
+} = require("../Controllers/onlineDoctorController");
 
 router.post(
   "/register",
@@ -16,7 +16,7 @@ router.post(
     { name: "experienceCertificate", maxCount: 1 },
     { name: "licenseCertificate", maxCount: 1 },
   ]),
-  registerOnlineDoctor
+  registerOnlineDoctor,
 );
 
 router.post("/login", loginOnlineDoctor);

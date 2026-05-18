@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const adminController = require("../controllers/AidlyAdminController");
+const adminController = require("../Controllers/AidlyAdminController");
 const adminAuth = require("../middleware/adminAuth");
 
 // Public route

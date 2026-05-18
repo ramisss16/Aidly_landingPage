@@ -11,9 +11,8 @@
 //   getAllDoctors,
 //   getAllStaff,
 //   updateClinic,
-  
-// } = require("../controllers/clinicController");
 
+// } = require("../Controllers/clinicController");
 
 // // CLINIC REGISTER
 // router.post(
@@ -77,9 +76,6 @@
 //   registerDoctor
 // );
 
-
-
-
 // // MANAGER REGISTER
 // router.post(
 //   "/manager/register",
@@ -91,7 +87,6 @@
 //   ]),
 //   registerManager
 // );
-
 
 // // RECEPTIONIST REGISTER
 // router.post(
@@ -105,10 +100,8 @@
 //   registerReceptionist
 // );
 
-
 // // LOGIN
 // router.post("/auth/login", loginClinicUser);
-
 
 // // GET DATA
 // router.get("/doctor/:clinicId", getAllDoctors);
@@ -140,7 +133,7 @@ router.post(
     { name: "panDocument", maxCount: 1 },
     { name: "clinicLogo", maxCount: 1 },
   ]),
-  signupClinic
+  signupClinic,
 );
 
 // UPDATE CLINIC
@@ -154,7 +147,7 @@ router.put(
     { name: "clinicLogo", maxCount: 1 },
     { name: "experienceCertificate", maxCount: 1 },
   ]),
-  updateClinic
+  updateClinic,
 );
 
 // DOCTOR REGISTER
@@ -167,7 +160,7 @@ router.post(
     { name: "experienceCertificate", maxCount: 1 },
     { name: "qualificationCertificate", maxCount: 1 },
   ]),
-  registerDoctor
+  registerDoctor,
 );
 
 // MANAGER REGISTER
@@ -179,7 +172,7 @@ router.post(
     { name: "panDocument", maxCount: 1 },
     { name: "experienceCertificate", maxCount: 1 },
   ]),
-  registerManager
+  registerManager,
 );
 
 // RECEPTIONIST REGISTER
@@ -191,7 +184,7 @@ router.post(
     { name: "panDocument", maxCount: 1 },
     { name: "experienceCertificate", maxCount: 1 },
   ]),
-  registerReceptionist
+  registerReceptionist,
 );
 
 // LOGIN

@@ -4,7 +4,7 @@ const router = express.Router();
 const {
   createPrescription,
   getPatientPrescriptions,
-  getPrescriptionByAppointment
+  getPrescriptionByAppointment,
 } = require("../Controllers/prescriptionController");
 
 router.post("/", createPrescription);

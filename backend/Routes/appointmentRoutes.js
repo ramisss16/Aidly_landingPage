@@ -4,8 +4,8 @@ const router = express.Router();
 const {
   createAppointment,
   getDoctorAppointments,
-  getClinicAppointments
-} = require("../controllers/appointmentController");
+  getClinicAppointments,
+} = require("../Controllers/appointmentController");
 
 // ✅ Book appointment
 router.post("/", createAppointment);
