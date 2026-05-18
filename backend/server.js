@@ -34,7 +34,7 @@ const prescriptionRoutes = require("./Routes/prescriptionRoutes");
 const attendanceRoutes = require("./Routes/attendanceRoutes");
 const onlineDoctorRoutes = require("./Routes/onlineDoctorRoutes");
 const authRoutes = require("./Routes/authRoutes");
-const aidlyAdminRoutes = require("./routes/AidlyAdminRoutes");
+const aidlyAdminRoutes = require("./Routes/AidlyAdminRoutes");
 
 
 //  CLEAN PREFIXES
