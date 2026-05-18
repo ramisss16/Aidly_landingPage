@@ -109,7 +109,7 @@ const ClinicDocSignup = () => {
         form.append("experienceCertificate", formData.experienceCertificate);
       }
 
-      const response = await api.post(`clinic/clinic/update/${clinicId}`, form, {
+      const response = await api.put(`clinic/update/${clinicId}`, form, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

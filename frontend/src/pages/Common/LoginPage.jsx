@@ -2,200 +2,95 @@ import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../../service/api";
 import { jwtDecode } from "jwt-decode";
-import {
-  FaEye,
-  FaEyeSlash
-} from "react-icons/fa";
+import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const LoginPage = () => {
   const navigate = useNavigate();
 
-  // userId & password
   const [userId, setUserId] = useState("");
   const [password, setPassword] = useState("");
-
-  // loading & error
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
 
-  // HIDE SHOW PASSWORD
-  const [
-  showPassword,
-  setShowPassword
-] = useState(false);
-
- const handleLogin =
-  async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
 
     setLoading(true);
     setError("");
 
     try {
-
       let res;
 
-      // Hospital Ambulance
-      if (
-        userId.startsWith(
-          "HOSPAMB"
-        )
-      ) {
-
-        res =
-          await api.post(
-            "/hospital-ambulance/login",
-            {
-              hospitalAmbulanceId:
-                userId,
-              password,
-            }
-          );
+      // AIDLY ADMIN
+      if (userId.startsWith("AIDLY")) {
+        res = await api.post("/aidly-admin/login", {
+          adminId: userId,
+          password,
+        });
       }
 
-       else if (
-        userId.startsWith(
-          "PRIVAMB"
-        )
-      ) {
-
-        res =
-          await api.post(
-            "/private-ambulance/login",
-            {
-              privateAmbulanceId:
-                userId,
-              password,
-            }
-          );
+      // HOSPITAL AMBULANCE
+      else if (userId.startsWith("HOSPAMB")) {
+        res = await api.post("/hospital-ambulance/login", {
+          hospitalAmbulanceId: userId,
+          password,
+        });
       }
 
-      // Clinic users
+      // PRIVATE AMBULANCE
+      else if (userId.startsWith("PRIVAMB")) {
+        res = await api.post("/private-ambulance/login", {
+          privateAmbulanceId: userId,
+          password,
+        });
+      }
+
+      // CLINIC USERS
       else {
-
-        res =
-          await api.post(
-            "/clinic/auth/login",
-            {
-              userId,
-              password,
-            }
-          );
+        res = await api.post("/clinic/auth/login", {
+          userId,
+          password,
+        });
       }
 
-      const data =
-        res.data;
+      const data = res.data;
 
-      // save token
-      localStorage.setItem(
-        "token",
-        data.token
-      );
+      localStorage.setItem("token", data.token);
 
-      // decode jwt
-      const decoded =
-        jwtDecode(
-          data.token
-        );
+      const decoded = jwtDecode(data.token);
 
-      // save role
-      localStorage.setItem(
-        "role",
-        decoded.role
-      );
+      localStorage.setItem("role", decoded.role);
 
-      // save user/ambulance
       localStorage.setItem(
         "user",
-        JSON.stringify(
-          data.user ||
-          data.ambulance
-        )
+        JSON.stringify(data.user || data.ambulance || data.admin)
       );
 
-      // navigate by role
-      if (
-        decoded.role ===
-        "admin"
-      ) {
-        navigate(
-          "/Admin-Dashboard"
-        );
-      }
-
-      else if (
-        decoded.role ===
-        "doctor"
-      ) {
-        navigate(
-          "/Doctor-Dashboard"
-        );
-      }
-
-      else if (
-        decoded.role ===
-        "manager"
-      ) {
-        navigate(
-          "/Manager-Dashboard"
-        );
-      }
-
-      else if (
-        decoded.role ===
-        "receptionist"
-      ) {
-        navigate(
-          "/Receptionist-Dashboard"
-        );
-      }
-
-      else if (
-        decoded.role ===
-        "hospitalAmbulance"
-      ) {
-        navigate(
-          "/HospitalAmbulance-Dashboard"
-        );
-      }
-
-      else if (
-        decoded.role ===
-        "privateAmbulance"
-      ) {
-        navigate(
-          "/PrivateAmbulance-Dashboard"
-        );
+      if (decoded.role === "aidlyAdmin") {
+        navigate("/admin/dashboard");
+      } else if (decoded.role === "admin") {
+        navigate("/Admin-Dashboard");
+      } else if (decoded.role === "doctor") {
+        navigate("/Doctor-Dashboard");
+      } else if (decoded.role === "manager") {
+        navigate("/Manager-Dashboard");
+      } else if (decoded.role === "receptionist") {
+        navigate("/Receptionist-Dashboard");
+      } else if (decoded.role === "hospitalAmbulance") {
+        navigate("/HospitalAmbulance-Dashboard");
+      } else if (decoded.role === "privateAmbulance") {
+        navigate("/PrivateAmbulance-Dashboard");
       }
 
     } catch (err) {
-
-      if (
-        err.response?.status ===
-        401
-      ) {
-        setError(
-          "Invalid User ID or Password"
-        );
+      if (err.response?.status === 401) {
+        setError("Invalid User ID or Password");
+      } else if (err.response?.status === 404) {
+        setError("User not found");
+      } else {
+        setError(err.response?.data?.message || "Something went wrong");
       }
-
-      else if (
-        err.response?.status ===
-        404
-      ) {
-        setError(
-          "User not found"
-        );
-      }
-
-      else {
-        setError(
-          err.response?.data
-            ?.message ||
-          "Something went wrong"
-        );
-      }
-
     } finally {
       setLoading(false);
     }
@@ -210,24 +105,17 @@ const LoginPage = () => {
       }}
     >
       <div className="bg-white w-[90%] max-w-[520px] rounded-lg shadow-lg px-10 py-8">
-        
-        <h1 className="text-3xl font-semibold mb-1">
-          Login
-        </h1>
+        <h1 className="text-3xl font-semibold mb-1">Login</h1>
 
         <p className="text-sm text-gray-600 mb-6">
           Enter your credentials to login
         </p>
 
-        {/* error show */}
         {error && (
-          <p className="text-red-600 text-sm mb-3">
-            {error}
-          </p>
+          <p className="text-red-600 text-sm mb-3">{error}</p>
         )}
 
         <form onSubmit={handleLogin}>
-          
           <label className="block text-sm font-semibold mb-1">
             User ID
           </label>
@@ -236,10 +124,8 @@ const LoginPage = () => {
             type="text"
             className="w-full mb-4 px-4 py-2 rounded-md bg-[#E9E9E9]"
             placeholder="Enter User ID"
-            value={userId || ""}
-            onChange={(e) =>
-              setUserId(e.target.value)
-            }
+            value={userId}
+            onChange={(e) => setUserId(e.target.value)}
             required
           />
 
@@ -247,40 +133,24 @@ const LoginPage = () => {
             Password
           </label>
 
-         <div className="relative">
-  <input
-    type={
-      showPassword
-        ? "text"
-        : "password"
-    }
-    className="w-full px-4 py-2 rounded-md bg-[#E9E9E9]"
-    placeholder="Enter password"
-    value={password || ""}
-    onChange={(e) =>
-      setPassword(
-        e.target.value
-      )
-    }
-    required
-  />
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              className="w-full px-4 py-2 rounded-md bg-[#E9E9E9]"
+              placeholder="Enter password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
 
-  <button
-    type="button"
-    onClick={() =>
-      setShowPassword(
-        !showPassword
-      )
-    }
-    className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
-  >
-    {showPassword ? (
-      <FaEyeSlash />
-    ) : (
-      <FaEye />
-    )}
-  </button>
-</div>
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+            >
+              {showPassword ? <FaEyeSlash /> : <FaEye />}
+            </button>
+          </div>
 
           <div className="flex justify-end mb-5">
             <button
@@ -296,9 +166,7 @@ const LoginPage = () => {
             disabled={loading}
             className="w-full bg-[#1967FF] text-white py-3 rounded-md font-semibold text-lg mb-4"
           >
-            {loading
-              ? "Signing In..."
-              : "Sign In"}
+            {loading ? "Signing In..." : "Sign In"}
           </button>
         </form>
 

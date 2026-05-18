@@ -34,6 +34,7 @@ const prescriptionRoutes = require("./Routes/prescriptionRoutes");
 const attendanceRoutes = require("./Routes/attendanceRoutes");
 const onlineDoctorRoutes = require("./Routes/onlineDoctorRoutes");
 const authRoutes = require("./Routes/authRoutes");
+const aidlyAdminRoutes = require("./routes/AidlyAdminRoutes");
 
 
 //  CLEAN PREFIXES
@@ -57,6 +58,7 @@ app.use("/api/online-doctor", onlineDoctorRoutes);
 
 app.use("/api/auth", authRoutes);
 app.use("/api/otp", otpRoutes);
+app.use("/api/aidly-admin", aidlyAdminRoutes);
 
 app.listen(PORT, () => {
   console.log(`server is running on port ${PORT}`);

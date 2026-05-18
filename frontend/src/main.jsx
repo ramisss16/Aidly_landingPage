@@ -43,7 +43,7 @@ import ReceptionistDas from "./pages/test/ReceptionistDas";
 import HospitalAmbulanceDas from "./pages/test/HospitalAmbulanceDas";
 import PrivateAmbulanceDas from "./pages/test/PrivateAmbulanceDas";
 import Doctordas from "./Modules/clinic/doctor/DoctorDas";
-
+import AdminRoutes from "./Modules/AidlyAdmin/routes/AdminRoutes";
 
 
 
@@ -259,7 +259,13 @@ const router = createBrowserRouter([
         path:"/PrivateAmbulance-Dashboard",
         element: <PrivateAmbulanceDas/>,
         errorElement: <ErrorPage/>
-      },
+  },
+       
+       {
+  path: "/admin/*",
+  element: <AdminRoutes />,
+  errorElement: <ErrorPage />
+},
 
 ]);
 
