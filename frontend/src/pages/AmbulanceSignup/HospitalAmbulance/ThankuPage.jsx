@@ -40,10 +40,12 @@ function HospitalAmbulance_thankupage() {
 
         {/* Button */}
         
-          <button onClick={navigate("#")} className="bg-blue-600 text-white px-6 sm:px-10 py-2 sm:py-3 rounded-md text-sm sm:text-lg shadow-md hover:bg-blue-700 transition">
-            Go To Dashboard
-          </button>
-       
+        <button
+  onClick={() => navigate("/HospitalAmbulance-Dashboard")}
+  className="bg-blue-600 text-white px-6 sm:px-10 py-2 sm:py-3 rounded-md text-sm sm:text-lg shadow-md hover:bg-blue-700 transition"
+>
+  Go To Dashboard
+</button>
 
       </div>
     </div>

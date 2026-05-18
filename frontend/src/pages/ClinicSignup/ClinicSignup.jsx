@@ -106,7 +106,7 @@ const handleSubmit = async () => {
 
 
    const response = await api.post(
-  "/clinic/clinic/register",
+  "/clinic/register",
   form,
   {
     headers: {

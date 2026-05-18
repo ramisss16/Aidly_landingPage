@@ -48,10 +48,11 @@ import { Bell, User } from "lucide-react";
 const DashboardNav = () => {
   const [showProfile, setShowProfile] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const token = localStorage.getItem("hospitalToken");
 
   const profileRef = useRef(null);
   const notificationRef = useRef(null);
-
+ 
   // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -69,13 +70,19 @@ const DashboardNav = () => {
         setShowNotifications(false);
       }
     };
-
+   
     document.addEventListener("mousedown", handleClickOutside);
-
+    
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  
+const handleLogout = () => {
+    localStorage.removeItem("hospitalToken");
+    navigate("/login");
+  };
 
   return (
     <nav
@@ -124,7 +131,9 @@ const DashboardNav = () => {
 
                 <div className="border-t border-black"></div>
 
-                <button className="w-full py-3 text-2xl font-semibold text-red-500 hover:bg-red-50 transition">
+                <button
+                  className="w-full py-3 text-2xl font-semibold text-red-500 hover:bg-red-50 transition"
+                  onClick={handleLogout}>
                   Logout
                 </button>
               </div>

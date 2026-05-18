@@ -162,14 +162,29 @@ const DetailPage = () => {
             Record Details
           </h2>
 
-          {Object.entries(textFields).map(([key, value]) => (
-            <DataRow
-              key={key}
-              label={formatLabel(key)}
-              value={renderValue(value)}
-              isLink={key === "email"}
-            />
-          ))}
+  {Object.entries(textFields).map(([key, value]) => {
+  let displayLabel = formatLabel(key);
+  let displayValue = renderValue(value);
+
+  if (key === "clinicId" && value?.clinicName) {
+    displayLabel = "Clinic Name";
+    displayValue = value.clinicName;
+  }
+
+  if (key === "hospitalId" && value?.hospitalname) {
+    displayLabel = "Hospital Name";
+    displayValue = value.hospitalname;
+  }
+
+  return (
+    <DataRow
+      key={key}
+      label={displayLabel}
+      value={displayValue}
+      isLink={key === "email"}
+    />
+  );
+})}
 
           {Object.keys(imageFields).length > 0 && (
             <div className="pt-8 border-t border-gray-100 space-y-6">

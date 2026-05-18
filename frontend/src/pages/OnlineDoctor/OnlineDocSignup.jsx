@@ -103,7 +103,7 @@ const OnlineDoctorForm = () => {
       if (formData.experienceCertificate) form.append("experienceCertificate", formData.experienceCertificate);
       if (formData.licenseCertificate) form.append("licenseCertificate", formData.licenseCertificate);
 
-      const response = await api.post("/doctor/register", form, {
+      const response = await api.post("/online-doctor/register", form, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

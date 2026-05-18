@@ -30,30 +30,38 @@ exports.adminLogin = async (req, res) => {
 
     const admin = await Admin.findOne({ adminId });
 
-    if (!admin || !(await admin.comparePassword(password))) {
+    if (!admin) {
       return res.status(401).json({
-        error: "Invalid Admin ID or Password"
+        success: false,
+        message: "Invalid Admin ID",
+      });
+    }
+
+    const isMatch = await admin.comparePassword(password);
+
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid Password",
       });
     }
 
     const token = generateToken({
       id: admin._id,
+      role: "aidlyAdmin",
       adminId: admin.adminId,
-      role: "aidlyAdmin"
     });
 
-    res.json({
+    res.status(200).json({
+      success: true,
       token,
-      admin: {
-        name: admin.name,
-        adminId: admin.adminId,
-        role: "aidlyAdmin"
-      }
+      admin,
     });
 
   } catch (err) {
     res.status(500).json({
-      error: err.message
+      success: false,
+      message: err.message,
     });
   }
 };
@@ -113,7 +121,13 @@ exports.getEntityById = async (req, res) => {
     const Model = entityModelMap[entity];
     if (!Model) return res.status(404).json({ error: "Entity not found" });
 
-    const data = await Model.findById(id).select("-password");
+   let query = Model.findById(id).select("-password");
+
+if (entity === "receptionists" || entity === "doctors" || entity === "managers") {
+  query = query.populate("clinicId", "clinicName");
+}
+
+const data = await query;
     if (!data) return res.status(404).json({ error: "Record not found" });
 
     res.json(data);

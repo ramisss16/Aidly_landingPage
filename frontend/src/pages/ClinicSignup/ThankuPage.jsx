@@ -36,7 +36,7 @@ function Clinic_thankupage() {
 
         {/* Button */}
         
-          <button  onClick={useNavigate("#")}
+          <button onClick={() => navigate("/dashboard/doctor")}
            className="bg-blue-600 text-white px-6 sm:px-10 py-2 sm:py-3 rounded-md text-sm sm:text-lg shadow-md hover:bg-blue-700 transition">
            Go To Dashboard
           </button>

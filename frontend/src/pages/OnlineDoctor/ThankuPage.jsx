@@ -1,9 +1,10 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import success from "../../assets/success.png"
+import { useNavigate } from "react-router-dom";
 
 function OnlineDoc_thankupage() {
-
+const navigate = useNavigate();
   const doctorId =
   sessionStorage.getItem("doctorId");
 
@@ -37,11 +38,11 @@ function OnlineDoc_thankupage() {
         </p>
 
         {/* Button */}
-        <Link to="#">
-          <button className="bg-blue-600 text-white px-6 sm:px-10 py-2 sm:py-3 rounded-md text-sm sm:text-lg shadow-md hover:bg-blue-700 transition">
-            Go To Dashboard
-          </button>
-        </Link>
+        <Link to="/dashboard/doctor">
+  <button className="bg-blue-600 text-white px-6 sm:px-10 py-2 sm:py-3 rounded-md text-sm sm:text-lg shadow-md hover:bg-blue-700 transition">
+    Go To Dashboard
+  </button>
+</Link>
 
       </div>
     </div>

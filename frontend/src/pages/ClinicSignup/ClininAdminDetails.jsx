@@ -91,7 +91,7 @@ const ClinicAdminDetails = () => {
         form.append("aadhaarDocument", formData.idProof);
       }
 
-      const res = await api.put(`clinic/clinic/update/${clinicId}`, form, {
+      const res = await api.put(`clinic/update/${clinicId}`, form, {
         headers: {
           "Content-Type": "multipart/form-data",
         },

@@ -327,8 +327,6 @@
 
 //  export default Doctordas;
 
-
-
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import chart from "../../../assets/chart.png.jpg";
