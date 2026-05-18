@@ -5,7 +5,7 @@ const {
   createPrescription,
   getPatientPrescriptions,
   getPrescriptionByAppointment
-} = require("../controllers/prescriptionController");
+} = require("../Controllers/prescriptionController");
 
 router.post("/", createPrescription);
 
