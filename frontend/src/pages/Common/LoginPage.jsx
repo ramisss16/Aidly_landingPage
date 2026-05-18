@@ -51,16 +51,22 @@ const LoginPage = () => {
 
       const data = res.data;
 
-      localStorage.setItem("token", data.token);
+    localStorage.setItem("token", data.token);
 
-      const decoded = jwtDecode(data.token);
+const decoded = jwtDecode(data.token);
 
-      localStorage.setItem("role", decoded.role);
+localStorage.setItem("role", decoded.role);
 
-      localStorage.setItem(
-        "user",
-        JSON.stringify(data.user || data.ambulance || data.admin)
-      );
+if (data.clinicId) {
+  localStorage.setItem("clinicId", data.clinicId);
+}
+
+if (data.user || data.ambulance || data.admin) {
+  localStorage.setItem(
+    "user",
+    JSON.stringify(data.user || data.ambulance || data.admin)
+  );
+}
 
       if (decoded.role === "aidlyAdmin") {
         navigate("/admin/dashboard");

@@ -28,17 +28,17 @@ const AddPatientRecord = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError("");
+  e.preventDefault();
+  setError("");
 
-    try {
-      await axios.post("http://localhost:3000/api/patients", formData);
-      setShowSuccess(true);
-    } catch (err) {
-      setError("Failed to save patient record");
-    }
-  };
-
+  try {
+    await axios.post("http://localhost:3000/api/patient", formData);
+    navigate("/patientsuccess");
+  } catch (err) {
+    console.error(err.response?.data);
+    setError("Failed to save patient record");
+  }
+};
   return (
     <div
       className="min-h-screen w-full py-10 flex flex-col items-center"
@@ -125,9 +125,9 @@ const AddPatientRecord = () => {
                   className="w-full mt-2 px-6 py-3 rounded-full bg-[#d9d9d9] outline-none"
                 >
                   <option value="">Select</option>
-                  <option>Male</option>
-                  <option>Female</option>
-                  <option>Other</option>
+                 <option value="male">Male</option>
+<option value="female">Female</option>
+<option value="other">Other</option>
                 </select>
               </div>
 
@@ -168,14 +168,12 @@ const AddPatientRecord = () => {
             )}
 
             <div className="flex justify-center pt-6">
-              <Link to={`/dashboard/${role}/successful`}>
-                <button
-                  type="submit"
-                  className="bg-[#4CAF50] hover:bg-[#43a047] text-white px-20 py-3 rounded-full text-lg font-semibold shadow-md transition"
-                >
-                  Submit Record
-                </button>
-              </Link>
+              <button
+  type="submit"
+  className="bg-[#4CAF50] hover:bg-[#43a047] text-white px-20 py-3 rounded-full text-lg font-semibold shadow-md transition"
+>
+  Submit Record
+</button>
             </div>
 
           </form>

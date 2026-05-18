@@ -13,7 +13,7 @@ const ViewPatients = () => {
 
   const fetchPatients = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/patients");
+      const res = await axios.get("http://localhost:3000/api/patient");
       setPatients(res.data);
     } catch (error) {
       console.error(error);
@@ -21,9 +21,9 @@ const ViewPatients = () => {
   };
 
   const filteredPatients = patients.filter((patient) =>
-    patient.firstName.toLowerCase().includes(search.toLowerCase()) ||
-    patient.patientId.toLowerCase().includes(search.toLowerCase())
-  );
+  (patient.firstName?.toLowerCase() || "").includes(search.toLowerCase()) ||
+  (patient.patientId?.toLowerCase() || "").includes(search.toLowerCase())
+);
 
   return (
     <div
@@ -63,18 +63,24 @@ const ViewPatients = () => {
             className="px-6 py-2 rounded-full bg-gray-300 outline-none w-80"
           />
 
-          <button className="bg-blue-600 text-white px-6 py-2 rounded-full">
-            Search
-          </button>
+         <button
+  type="button"
+  className="bg-blue-600 text-white px-6 py-2 rounded-full"
+>
+  Search
+</button>
 
-          <button className="bg-green-500 text-white px-6 py-2 rounded-full">
-            Edit
-          </button>
-          <button
-            onClick={() => navigate("/add-patient")}  
-            className="bg-green-500 text-white px-6 py-2 rounded-full">
-           Add New
-          </button>
+         <button
+  type="button"
+  className="bg-green-500 text-white px-6 py-2 rounded-full"
+>
+  Edit
+</button>
+         <button
+  onClick={() => navigate("/addpatient")}  
+  className="bg-green-500 text-white px-6 py-2 rounded-full">
+  Add New
+</button>
         </div>
 
         {/* Table */}

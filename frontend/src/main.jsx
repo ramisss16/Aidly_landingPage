@@ -1,4 +1,3 @@
-
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
@@ -46,9 +45,12 @@ import Myapointment from "./Modules/clinic/doctor/MyAppointment";
 import ReceptionDash from "./Modules/clinic/reception/ReceptionDas";
 import DashboardLayout from "./DashboardLayout";
 import AddPatientRecord from "./Modules/common/AddPatient";
+import StaffAttendence from "./Modules/common/StaffAttendence";
+import AttendenceRecord from "./Modules/common/AttendenceRecord";
+import AttendenceSuccessPage from "./Modules/common/AttendenceSuccessPage";
 
-
-
+import PatientRecord from "./Modules/common/PatientRecord";
+import PatientSuccessPage from "./Modules/common/PatientSuccessPage";
 
 const ErrorPage = () => <h1 className="text-center mt-20 text-3xl">Page Not Found</h1>;
 
@@ -245,14 +247,24 @@ const router = createBrowserRouter([
       element: <Doctordas />,
     },
     {
-      path: "receptionist",
-      element: <ReceptionDash />,
-    },
-   
-  ],
-
+  path: "receptionist",
+  element: <ReceptionDash />,
       },
-     
+    ],
+  },
+     {
+      path: "/dashboard/receptionist/staffattendance",
+      element: <StaffAttendence />,
+  },
+{
+      path: "/dashboard/receptionist/viewattendance",
+      element: <AttendenceRecord />,
+  },
+{
+  path: "/staffsuccessful",
+  element: <AttendenceSuccessPage />,
+},
+   
       //  {
       //   path:"/HospitalAmbulance-Dashboard",
       //   element: <HospitalAmbulanceDas/>,
@@ -265,17 +277,20 @@ const router = createBrowserRouter([
       // },
 
        {
-        path:"/dashboard/doctor/mypatient",
-        element: <MyPatients/>,
-        errorElement: <ErrorPage/>
-      },
-
-       {
-        path:"/dashboard/Addpatient",
-        element: <AddPatientRecord/>,
-        errorElement: <ErrorPage/>
-      },
-
+  path:"/viewpatients",
+  element: <PatientRecord />,
+  errorElement: <ErrorPage/>
+},
+{
+  path: "/addpatient",
+  element: <AddPatientRecord />,
+  errorElement: <ErrorPage/>
+},
+{
+  path:"/patientsuccess",
+  element: <PatientSuccessPage />,
+  errorElement: <ErrorPage/>
+},
        {
         path:"/dashboard/doctor/today'sappointmment",
         element: <Myapointment/>,

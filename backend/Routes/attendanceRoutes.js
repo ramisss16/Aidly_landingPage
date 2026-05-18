@@ -6,8 +6,8 @@ const {
   markBulkAttendance,
   getAttendance,
   getAttendanceByDate,
+  getAllStaff,
 } = require("../Controllers/attendanceController");
-
 // 🔹 Single attendance
 router.post("/mark", markAttendance);
 
@@ -17,6 +17,7 @@ router.post("/bulk", markBulkAttendance);
 // 🔹 Get attendance for a specific day
 router.get("/day/:clinicId", getAttendanceByDate);
 
+router.get("/staff/:clinicId", getAllStaff);
 // 🔹 Monthly attendance
 router.get("/:clinicId", getAttendance);
 

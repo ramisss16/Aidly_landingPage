@@ -24,13 +24,13 @@ export default function StaffsuccessMessage() {
 
         <div className="flex justify-center gap-25">
 
-          <Link to={`/dashboard/${role}/viewAttendence`}>
+          <Link to="/dashboard/receptionist/viewattendance">
             <button className="bg-blue-700 text-white px-5 py-2 rounded-full hover:bg-green-800">
               View Attendance
             </button>
           </Link>
 
-          <Link to={`/dashboard/${role}`}>
+          <Link to="/dashboard/receptionist">
             <button className="bg-green-700 text-white px-5 py-2 rounded-full hover:bg-green-800">
               Back to Dashboard
             </button>

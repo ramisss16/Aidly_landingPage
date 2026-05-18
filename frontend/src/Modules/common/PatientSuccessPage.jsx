@@ -1,9 +1,7 @@
 import successIcon from "../../assets/success.png";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 export default function Patientsuccess() {
-
-  const {role} = useParams();
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-gradient-to-br from-[#1A5F48] via-[#6FAFB0] to-[#C6EBE8]">
@@ -32,19 +30,19 @@ export default function Patientsuccess() {
         {/* Buttons */}
         <div className="flex justify-center gap-4">
           
-          <Link to={`/dashboard/${role}/viewpatient`}>
+          <Link to="/viewpatients">
           <button className="bg-green-700 text-white px-5 py-2 rounded-full hover:bg-green-800">
             view records
           </button>
           </Link>
 
-           <Link to={`/dashboard/${role}/addpatient`}>
+           <Link to="/addpatient">
           <button className="bg-blue-500 text-white px-5 py-2 rounded-full hover:bg-blue-600">
             Update Another Record
           </button>
           </Link>
 
-           <Link to={`/dashboard/${role}`}>
+          <Link to="/dashboard/receptionist">
           <button className="bg-green-700 text-white px-5 py-2 rounded-full hover:bg-green-800">
             Back to Dashboard
           </button>
