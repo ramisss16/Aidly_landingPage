@@ -129,7 +129,7 @@ const {
   getAllDoctors,
   getAllStaff,
   updateClinic,
-} = require("../controllers/clinicController");
+} = require("../Controllers/clinicController");
 
 // CLINIC REGISTER
 router.post(
