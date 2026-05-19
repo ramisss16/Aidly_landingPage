@@ -265,6 +265,44 @@ const router = createBrowserRouter([
   element: <AttendenceSuccessPage />,
 },
    
+{
+  path: "/dashboard/manager/staffattendance",
+  element: <StaffAttendence />,
+},
+
+{
+  path: "/dashboard/manager/viewattendance",
+  element: <AttendenceRecord />,
+},
+
+{
+  path: "/dashboard/manager/addpatient",
+  element: <AddPatientRecord />,
+},
+
+{
+  path: "/dashboard/manager/viewpatient",
+  element: <PatientRecord />,
+  },
+{
+  path: "/dashboard/admin/staffattendance",
+  element: <StaffAttendence />,
+},
+
+{
+  path: "/dashboard/admin/viewattendance",
+  element: <AttendenceRecord />,
+},
+
+{
+  path: "/dashboard/admin/addpatient",
+  element: <AddPatientRecord />,
+},
+
+{
+  path: "/dashboard/admin/viewpatient",
+  element: <PatientRecord />,
+},
       //  {
       //   path:"/HospitalAmbulance-Dashboard",
       //   element: <HospitalAmbulanceDas/>,
@@ -289,6 +327,11 @@ const router = createBrowserRouter([
 {
   path:"/patientsuccess",
   element: <PatientSuccessPage />,
+  errorElement: <ErrorPage/>
+  },
+{
+  path:"/dashboard/doctor/mypatient",
+  element: <MyPatients />,
   errorElement: <ErrorPage/>
 },
        {

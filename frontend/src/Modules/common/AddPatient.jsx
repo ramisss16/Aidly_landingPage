@@ -1,12 +1,10 @@
 import React, { useState } from "react";
-import { useNavigate, Link, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const AddPatientRecord = () => {
   const navigate = useNavigate();
-  const { role } = useParams();
-
-  const [showSuccess, setShowSuccess] = useState(false);
+ const role = localStorage.getItem("role");
   const [error, setError] = useState("");
 
   const [formData, setFormData] = useState({
@@ -28,17 +26,18 @@ const AddPatientRecord = () => {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault();
-  setError("");
+    e.preventDefault();
+    setError("");
 
-  try {
-    await axios.post("http://localhost:3000/api/patient", formData);
-    navigate("/patientsuccess");
-  } catch (err) {
-    console.error(err.response?.data);
-    setError("Failed to save patient record");
-  }
-};
+    try {
+      await axios.post("http://localhost:3000/api/patient", formData);
+      navigate("/patientsuccess")
+    } catch (err) {
+      console.error(err.response?.data);
+      setError("Failed to save patient record");
+    }
+  };
+
   return (
     <div
       className="min-h-screen w-full py-10 flex flex-col items-center"
@@ -76,104 +75,102 @@ const AddPatientRecord = () => {
             <div className="grid grid-cols-2 gap-12">
 
               <div>
-                <label className="text-base font-medium">Patient ID :</label>
+                <label>Patient ID :</label>
                 <input
                   name="patientId"
                   value={formData.patientId}
                   onChange={handleChange}
-                  className="w-full mt-2 px-6 py-3 rounded-full bg-[#d9d9d9] outline-none"
+                  className="w-full mt-2 px-6 py-3 rounded-full bg-[#d9d9d9]"
                 />
               </div>
 
               <div>
-                <label className="text-base font-medium">First Name :</label>
+                <label>First Name :</label>
                 <input
                   name="firstName"
                   value={formData.firstName}
                   onChange={handleChange}
-                  className="w-full mt-2 px-6 py-3 rounded-full bg-[#d9d9d9] outline-none"
+                  className="w-full mt-2 px-6 py-3 rounded-full bg-[#d9d9d9]"
                 />
               </div>
 
               <div>
-                <label className="text-base font-medium">Last Name :</label>
+                <label>Last Name :</label>
                 <input
                   name="lastName"
                   value={formData.lastName}
                   onChange={handleChange}
-                  className="w-full mt-2 px-6 py-3 rounded-full bg-[#d9d9d9] outline-none"
+                  className="w-full mt-2 px-6 py-3 rounded-full bg-[#d9d9d9]"
                 />
               </div>
 
               <div>
-                <label className="text-base font-medium">Date of Birth :</label>
+                <label>Date of Birth :</label>
                 <input
                   type="date"
                   name="dateOfBirth"
                   value={formData.dateOfBirth}
                   onChange={handleChange}
-                  className="w-full mt-2 px-6 py-3 rounded-full bg-[#d9d9d9] outline-none"
+                  className="w-full mt-2 px-6 py-3 rounded-full bg-[#d9d9d9]"
                 />
               </div>
 
               <div>
-                <label className="text-base font-medium">Gender :</label>
+                <label>Gender :</label>
                 <select
                   name="gender"
                   value={formData.gender}
                   onChange={handleChange}
-                  className="w-full mt-2 px-6 py-3 rounded-full bg-[#d9d9d9] outline-none"
+                  className="w-full mt-2 px-6 py-3 rounded-full bg-[#d9d9d9]"
                 >
                   <option value="">Select</option>
-                 <option value="male">Male</option>
-<option value="female">Female</option>
-<option value="other">Other</option>
+                  <option value="male">Male</option>
+                  <option value="female">Female</option>
+                  <option value="other">Other</option>
                 </select>
               </div>
 
               <div>
-                <label className="text-base font-medium">Phone :</label>
+                <label>Phone :</label>
                 <input
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  className="w-full mt-2 px-6 py-3 rounded-full bg-[#d9d9d9] outline-none"
+                  className="w-full mt-2 px-6 py-3 rounded-full bg-[#d9d9d9]"
                 />
               </div>
 
             </div>
 
             <div>
-              <label className="text-base font-medium">Address :</label>
+              <label>Address :</label>
               <input
                 name="address"
                 value={formData.address}
                 onChange={handleChange}
-                className="w-full mt-2 px-6 py-3 rounded-full bg-[#d9d9d9] outline-none"
+                className="w-full mt-2 px-6 py-3 rounded-full bg-[#d9d9d9]"
               />
             </div>
 
             <div className="w-1/2">
-              <label className="text-base font-medium">Diagnosis :</label>
+              <label>Diagnosis :</label>
               <input
                 name="diagnosis"
                 value={formData.diagnosis}
                 onChange={handleChange}
-                className="w-full mt-2 px-6 py-3 rounded-full bg-[#d9d9d9] outline-none"
+                className="w-full mt-2 px-6 py-3 rounded-full bg-[#d9d9d9]"
               />
             </div>
 
-            {error && (
-              <p className="text-red-500 text-center">{error}</p>
-            )}
+            {error && <p className="text-red-500 text-center">{error}</p>}
 
             <div className="flex justify-center pt-6">
               <button
-  type="submit"
-  className="bg-[#4CAF50] hover:bg-[#43a047] text-white px-20 py-3 rounded-full text-lg font-semibold shadow-md transition"
->
-  Submit Record
-</button>
+                type="submit"
+                className="bg-[#4CAF50] text-white px-20 py-3 rounded-full"
+              >
+                Submit Record
+              </button>
             </div>
 
           </form>

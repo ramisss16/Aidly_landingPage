@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { useParams } from "react-router-dom";
+
 import chart from "../../../assets/chart.png.jpg"
 
 import diagnosis from "../../../assets/diagonosis.png.jpg"
@@ -13,7 +13,7 @@ import profile from "../../../assets/apolohos.png"
 
 const AdminDas = () => {
 
-const {role} = useParams();
+const role = localStorage.getItem("role");
 
   const[open, setopen] = useState("StaffAttendence");
 
@@ -46,13 +46,12 @@ Staff Attendance
 
 <div className="flex gap-2 mt-2">
 
-<Link to={'/dashboard/${role}/staffattendence'}>
+<Link to={`/dashboard/${role}/staffattendance`}>
 <button className="bg-blue-300 px-3 py-1 rounded-full">
 Update
 </button>
 </Link>
-
-<Link to={'/dashboard/${role}/viewAttendence'}>
+<Link to={`/dashboard/${role}/viewattendance`}>
 <button className="bg-green-300 px-3 py-1 rounded-full">
 View
 </button>
@@ -340,8 +339,7 @@ Patient Management
 Update
 </button>
 </Link>
-
-<Link to={'/dashboard/${role}/viewpatient'}>
+<Link to={`/dashboard/${role}/viewpatient`}>
 <button className="bg-green-300 px-3 rounded-full">
 View
 </button>

@@ -44,6 +44,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import AidlyLogo from "../src/assets/Aidly.jpg";
 import { Bell, User } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const DashboardNav = () => {
   const [showProfile, setShowProfile] = useState(false);
@@ -52,6 +53,7 @@ const DashboardNav = () => {
 
   const profileRef = useRef(null);
   const notificationRef = useRef(null);
+  const navigate = useNavigate();
  
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -78,11 +80,15 @@ const DashboardNav = () => {
     };
   }, []);
 
-  
 const handleLogout = () => {
-    localStorage.removeItem("hospitalToken");
-    navigate("/login");
-  };
+  localStorage.removeItem("token");
+  localStorage.removeItem("role");
+  localStorage.removeItem("clinicId");
+  localStorage.removeItem("user");
+  localStorage.removeItem("hospitalToken");
+
+  navigate("/");
+};
 
   return (
     <nav

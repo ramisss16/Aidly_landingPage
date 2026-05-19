@@ -2,8 +2,7 @@ import successIcon from "../../assets/success.png";
 import { Link, useParams } from "react-router-dom";
 
 export default function StaffsuccessMessage() {
-
-  const { role } = useParams();
+const role = localStorage.getItem("role");
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#1A5F48] via-[#6FAFB0] to-[#C6EBE8]">
@@ -29,12 +28,12 @@ export default function StaffsuccessMessage() {
               View Attendance
             </button>
           </Link>
-
-          <Link to="/dashboard/receptionist">
-            <button className="bg-green-700 text-white px-5 py-2 rounded-full hover:bg-green-800">
-              Back to Dashboard
-            </button>
-          </Link>
+<Link to={`/dashboard/${role}`}>
+  <button className="bg-green-700 text-white px-5 py-2 rounded-full hover:bg-green-800">
+    Back to Dashboard
+  </button>
+</Link>
+  
 
         </div>
 

@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { ArrowLeft, Search } from "lucide-react";
-
+import { useNavigate } from "react-router-dom";
 const patients = [
   {
     Time: "9:40 Am",
@@ -62,7 +62,7 @@ const statusColor = {
 };
 
 export default function Myapointment() {
-
+ const navigate = useNavigate();
   const [search, setsearch] = useState("")
   const [rowsPerPage, setRowsPerPage] = useState(10)
 
@@ -83,7 +83,12 @@ export default function Myapointment() {
 
 <div className="bg-white p-6 mb-2 rounded-b-4xl">
   <div className="flex items-center justify-center relative mb-6">
-    <ArrowLeft className="absolute left-0 cursor-pointer" size={28} />
+    <button
+        onClick={() => navigate(-1)}
+        className="absolute left-0"
+      >
+        <ArrowLeft className="cursor-pointer hover:text-teal-600" size={28} />
+      </button>
     <h1 className="text-3xl font-bold">My Appointments</h1>
   </div>
 </div>

@@ -1,87 +1,66 @@
-// import React from "react";
-// import { useNavigate } from "react-router-dom";
-// import AidlyLogo from "../../../assets/Aidly.jpg";
-
-// const Header = () => {
-//   const navigate = useNavigate();
-
-//   const handleLogout = () => {
-//     localStorage.removeItem("token");
-//     localStorage.removeItem("role");
-//     localStorage.removeItem("user");
-//     localStorage.removeItem("adminToken");
-//     navigate("/");
-//   };
-
-//   return (
-//     <header className="relative w-full z-20">
-//       <div
-//         className="h-[80px] flex items-center justify-between px-6"
-//         style={{
-//           background: "linear-gradient(180deg, #0D402F 0%, #1A5F48 100%)",
-//         }}
-//       >
-//         <div className="flex items-center gap-4">
-//           <img
-//             src={AidlyLogo}
-//             alt="logo"
-//             className="w-[70px] h-[70px] object-contain"
-//             style={{ opacity: 1 }}
-//           />
-
-//           <h1
-//             className="text-white text-3xl font-medium italic tracking-tight leading-none"
-//             style={{ fontFamily: "'Inria Serif', serif" }}
-//           >
-//             Aidly Corporate
-//           </h1>
-//         </div>
-
-//         <button
-//           onClick={handleLogout}
-//           className="px-6 py-2.5 bg-white text-[#1A5F48] font-bold rounded-md hover:bg-gray-100 transition-colors text-sm"
-//         >
-//           Logout
-//         </button>
-//       </div>
-//       <div className="h-[1px] w-full bg-white/20"></div>
-//     </header>
-//   );
-// };
-
-// export default Header;
-
-
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import AidlyLogo from "../../../assets/Aidly.jpg";
+import { Bell, User } from "lucide-react";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
-  const token = localStorage.getItem("hospitalToken");
+
+  const [showProfile, setShowProfile] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+
+  const profileRef = useRef(null);
+  const notificationRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(event.target)
+      ) {
+        setShowProfile(false);
+      }
+
+      if (
+        notificationRef.current &&
+        !notificationRef.current.contains(event.target)
+      ) {
+        setShowNotifications(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
 
   const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("role");
+    localStorage.removeItem("clinicId");
+    localStorage.removeItem("user");
     localStorage.removeItem("hospitalToken");
-    navigate("/login");
+
+    navigate("/");
   };
 
   return (
     <nav
-      className="w-full text-white border-b border-white/100"
+      className="w-full text-white border-b border-white/100 relative"
       style={{
         background: "linear-gradient(180deg, #1A5F48 0%, #18765A 100%)",
       }}
     >
       <div className="max-w-7xl mx-auto flex items-center justify-between px-4 md:px-10 py-5">
-        
-        {/* Left - Logo + Title */}
+
+        {/* Left */}
         <div className="flex items-center gap-3 md:gap-4">
           <img
             src={AidlyLogo}
             alt="logo"
             className="w-[50px] h-[50px] md:w-[70px] md:h-[70px] object-contain"
-            style={{ opacity: 1 }}
           />
 
           <h1
@@ -94,41 +73,72 @@ const Navbar = () => {
           </h1>
         </div>
 
-        {/* Right - Menu */}
-   
-      </div>
+        {/* Right Icons */}
+        <div className="flex items-center gap-6 relative">
 
-      {/* Mobile Menu Dropdown */}
-      {isOpen && (
-        <div className="md:hidden border-t border-white/20 bg-[#1A5F48]/95">
-          <ul className="flex flex-col py-4">
-            <li className="px-4 py-3 hover:bg-white/10 cursor-pointer transition">
-              Home
-            </li>
-            <li className="px-4 py-3 hover:bg-white/10 cursor-pointer transition">
-              About
-            </li>
-            <li className="px-4 py-3 hover:bg-white/10 cursor-pointer transition">
-              Services
-            </li>
-            <li className="px-4 py-3 hover:bg-white/10 cursor-pointer transition">
-              Contact
-            </li>
-            
-            {/* 🔐 Logout (only when logged in) */}
-            {token && (
-              <li className="px-4 py-3">
+          {/* User */}
+          <div className="relative" ref={profileRef}>
+            <User
+              size={30}
+              className="cursor-pointer"
+              onClick={() => {
+                setShowProfile(!showProfile);
+                setShowNotifications(false);
+              }}
+            />
+
+            {showProfile && (
+              <div className="absolute right-0 top-12 bg-white text-black rounded-md shadow-lg w-52 z-50 overflow-hidden">
+                <button className="w-full py-3 text-xl font-semibold hover:bg-gray-100 transition">
+                  My Profile
+                </button>
+
+                <div className="border-t border-black"></div>
+
                 <button
+                  className="w-full py-3 text-xl font-semibold text-red-500 hover:bg-red-50 transition"
                   onClick={handleLogout}
-                  className="w-full text-left hover:bg-white/10 text-white px-4 py-2 rounded-md transition"
                 >
                   Logout
                 </button>
-              </li>
+              </div>
             )}
-          </ul>
+          </div>
+
+          {/* Bell */}
+          <div className="relative" ref={notificationRef}>
+            <Bell
+              size={30}
+              className="cursor-pointer"
+              onClick={() => {
+                setShowNotifications(!showNotifications);
+                setShowProfile(false);
+              }}
+            />
+
+            {showNotifications && (
+              <div className="absolute right-0 top-12 bg-white text-black rounded-md shadow-lg w-72 z-50 overflow-hidden">
+                <div className="px-4 py-4 border-b font-semibold text-lg flex justify-between">
+                  <span>🔴 Test Result</span>
+                  <span className="text-gray-500 text-sm">2</span>
+                </div>
+
+                <div className="px-4 py-4 border-b font-semibold text-lg flex justify-between">
+                  <span>🔴 Pending approvals</span>
+                  <span className="text-gray-500 text-sm">3</span>
+                </div>
+
+                <div className="px-4 py-4 font-semibold text-lg flex justify-between">
+                  <span>🔴 Patient Emergency</span>
+                  <span className="text-gray-500 text-sm">1</span>
+                </div>
+              </div>
+            )}
+          </div>
+
         </div>
-      )}
+
+      </div>
     </nav>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { useParams, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import chart from "../../../assets/chart.png.jpg"
 
 import diagnosis from "../../../assets/diagonosis.png.jpg"
@@ -14,7 +14,7 @@ import { use } from "react";
 
 const managerDas = () => {
 
-const {role} = useParams();
+const role = localStorage.getItem("role");
 
   const[open, setopen] = useState("StaffAttendence");
 
@@ -47,13 +47,13 @@ Staff Attendance
 
 <div className="flex gap-2 mt-2">
 
-<Link to={'/dashboard/${role}/staffattendence'}>
+<Link to={`/dashboard/${role}/staffattendance`}>
 <button className="bg-blue-300 px-3 py-1 rounded-full">
 Update
 </button>
 </Link>
 
-<Link to={'/dashboard/${role}/viewAttendence'}>
+<Link to={`/dashboard/${role}/viewattendance`}>
 <button className="bg-green-300 px-3 py-1 rounded-full">
 View
 </button>
@@ -308,13 +308,13 @@ Patient Management
 
 <div className="flex justify-center gap-2 mt-2">
 
-<Link to={'/dashboard/${role}/addpatient'}>
+<Link to={`/dashboard/${role}/addpatient`}>
 <button className="bg-blue-300 px-3 rounded-full">
 Update
 </button>
 </Link>
 
-<Link to={'/dashboard/${role}/viewpatient'}>
+<Link to={`/dashboard/${role}/viewpatient`}>
 <button className="bg-green-300 px-3 rounded-full">
 View
 </button>
