@@ -1,16 +1,63 @@
-
+import { useState, useEffect, useRef } from "react";
 import { Outlet } from "react-router-dom";
-import Loginpage from "./pages/Common/LoginPage";
+import gsap from "gsap";
 import Navbar from "../Component/Navbar";
+import LandingPage from "./pages/LandingPage/Hero";
+import logo from "./assets/Aidly (2).png";
 
-function App(){
-  return(
+function App() {
+  const [loading, setLoading] = useState(true);
+  const loaderRef = useRef(null);
+
+  useEffect(() => {
+    gsap.fromTo(
+      loaderRef.current,
+      {
+        scale: 0.75,
+        opacity: 0.4,
+        filter: "drop-shadow(0 0 0px #37B3BB)",
+      },
+      {
+        scale: 1.1,
+        opacity: 1,
+        filter: "drop-shadow(0 0 35px #37B3BB)",
+        duration: 0.8,
+        repeat: -1,
+        yoyo: true,
+        ease: "power1.inOut",
+      }
+    );
+
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+
+    return () => clearTimeout(timer);
+  }, []);
+
+  if (loading) {
+    return <Loader loaderRef={loaderRef} />;
+  }
+
+  return (
     <div>
-      <Navbar/>
+      <Navbar />
       <Outlet/>
     </div>
-  )
+  );
 }
 
+function Loader({ loaderRef }) {
+  return (
+    <div className="h-screen flex items-center justify-center bg-gray-400">
+      <img
+        ref={loaderRef}
+        src={logo}
+        className="w-[250px] object-contain"
+        alt=""
+      />
+    </div>
+  );
+}
 
 export default App;

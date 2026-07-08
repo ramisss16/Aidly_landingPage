@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import api from "../../service/api"
 
 
+
 function Clinic_details() {
 
   const [loading, setLoading] = useState(false);
@@ -31,20 +32,66 @@ const [formData, setFormData] = useState({
 });
 
 
- const handleChange = (e) => {
+const handleChange = async (e) => {
   const { name, value, files } = e.target;
 
+  let formattedValue = value;
+
+  // First letter capital for text fields
+  if (
+    name === "clinicName" ||
+    name === "city" ||
+    name === "state"
+  ) {
+    formattedValue = value
+      .toLowerCase()
+      .replace(/\b\w/g, (char) => char.toUpperCase());
+  }
+
+  // Update current field
   setFormData((prev) => ({
     ...prev,
-    [name]: files ? files[0] : value,
+    [name]: files ? files[0] : formattedValue,
   }));
+
+  // Auto fetch city & state from pincode
+  if (name === "pincode" && value.length === 6) {
+    try {
+      const res = await fetch(
+        `https://api.postalpincode.in/pincode/${value}`
+      );
+
+      const data = await res.json();
+
+      if (
+        data[0].Status === "Success" &&
+        data[0].PostOffice?.length > 0
+      ) {
+        const office = data[0].PostOffice[0];
+
+        setFormData((prev) => ({
+          ...prev,
+          pincode: value,
+          city: office.District
+            .toLowerCase()
+            .replace(/\b\w/g, (c) => c.toUpperCase()),
+          state: office.State
+            .toLowerCase()
+            .replace(/\b\w/g, (c) => c.toUpperCase()),
+        }));
+      }
+    } catch (error) {
+      console.log("Pincode Error:", error);
+    }
+  }
 };
 
-const handleSubmit = async () => {
+const handleSubmit = async (e) => {
+ 
+   if (e) e.preventDefault();
+
   try {
     
-   
-
    setLoading(true);
 
     const form = new FormData();
@@ -102,6 +149,8 @@ const handleSubmit = async () => {
       "clinicEmail",
       formData.clinicEmail
     );
+
+    form.append("licenseDocument", formData.licenseDocument);
 
 
 
@@ -220,8 +269,8 @@ const handleSubmit = async () => {
         </h2>
 
         {/* Specialists */}
-        <label className="block mb-2 text-sm md:text-lg font-medium">
-          How many different Specialist are available in your clinic ?
+        <label className="block mb-2 text-sm md:text-lg font-medium" aria-required>
+          How many different Specialist are available in your clinic ?  <span className="text-red-600 px-2">*</span>
         </label>
 
       <div className="flex flex-col gap-3 mb-8">
@@ -231,6 +280,7 @@ const handleSubmit = async () => {
       className="flex items-center gap-2 bg-blue-100 px-4 py-2 rounded-lg cursor-pointer w-[250px] sm:w-[300px]"
     >
       <input
+      required
         type="radio"
         name="specialistsCount"
         value={item}
@@ -254,7 +304,7 @@ const handleSubmit = async () => {
 
         {/* Doctors */}
         <label className="block mb-2 text-sm md:text-lg font-medium">
-          How many Doctor you have currently practicing in your clinic ?
+          How many Doctor you have currently practicing in your clinic ? <span className="text-red-600 px-2">*</span>
         </label>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-8">
@@ -264,6 +314,7 @@ const handleSubmit = async () => {
       className="flex items-center gap-2 bg-blue-100 px-4 py-2 rounded-lg cursor-pointer"
     >
       <input
+      required
         type="radio"
         name="doctorsCount"
         value={item}
@@ -287,7 +338,7 @@ const handleSubmit = async () => {
 
         {/* Visit Mode */}
         <label className="block mb-2 text-sm md:text-lg font-medium">
-          How do you manage patient visit ?
+          How do you manage patient visit ? <span className="text-red-600 px-2">*</span>
         </label>
 
       <div className="flex flex-col gap-3 mb-6">
@@ -297,6 +348,7 @@ const handleSubmit = async () => {
       className="flex items-center gap-2 bg-blue-100 px-4 py-2 rounded-lg cursor-pointer"
     >
       <input
+      required
         type="radio"
         name="visitMode"
         value={item}
@@ -331,11 +383,14 @@ const handleSubmit = async () => {
           {/* step 2: clinic details */}
         {step == 2 && (
           <>
-
+       <form 
+          onSubmit={handleSubmit}>
            {/* Clinic Name */}
         <div className="flex flex-col md:flex-row items-start md:items-center gap-3 mb-5">
-          <label className="w-full md:w-48 font-semibold">Clinic Name</label>
+          <label className="w-full md:w-48 font-semibold">Clinic Name  <span className="text-red-600 px-2">*</span></label>
           <input name="clinicName"
+          required
+          value={formData.clinicName}
           type="text"
            onChange={handleChange} 
            className="w-full bg-gray-200 p-2 rounded-md outline-none"/>
@@ -356,6 +411,7 @@ const handleSubmit = async () => {
             <label className="font-semibold mb-1">City</label>
             <input
               name="city"
+              value={formData.city}
               type="text"
               onChange={handleChange}
               className="bg-gray-200 p-2 rounded-md outline-none"
@@ -366,6 +422,7 @@ const handleSubmit = async () => {
             <label className="font-semibold mb-1">State</label>
             <input
               name="state"
+              value={formData.state}
               type="text"
               onChange={handleChange}
               className="bg-gray-200 p-2 rounded-md outline-none"
@@ -376,7 +433,9 @@ const handleSubmit = async () => {
         {/* Pincode */}
         <div className="flex flex-col md:flex-row gap-3 mb-5">
           <label className="w-full md:w-48 font-semibold">Pincode</label>
-          <input name="pincode" 
+          <input name="pincode"
+          value={formData.pincode}
+          maxLength={6} 
           type="text"
           onChange={handleChange} 
           className="w-full md:w-1/2 bg-gray-200 p-2 rounded-md outline-none"/>
@@ -393,8 +452,9 @@ const handleSubmit = async () => {
 
         {/* Email */}
         <div className="flex flex-col md:flex-row gap-3 mb-5">
-          <label className="w-full md:w-48 font-semibold">Email Address</label>
+          <label className="w-full md:w-48 font-semibold">Email Address  <span className="text-red-600 px-2">*</span></label>
           <input name="clinicEmail" 
+          required
           type="email"
           onChange={handleChange} className="w-full bg-gray-200 p-2 rounded-md outline-none"/>
         </div>
@@ -402,9 +462,10 @@ const handleSubmit = async () => {
         {/* License */}
         <div className="flex flex-col md:flex-row gap-3 mb-6">
           <label className="w-full md:w-48 font-semibold">
-            Registration / License Number
+            Registration / License Number <span className="text-red-600 px-2">*</span>
           </label>
           <input name="licenseNumber" 
+          required
           type="text"
           onChange={handleChange} 
           className="w-full md:w-1/2 bg-gray-200 p-2 rounded-md outline-none"/>
@@ -412,7 +473,7 @@ const handleSubmit = async () => {
 
         {/* Upload */}
         <h3 className="text-lg md:text-xl font-semibold mb-4">
-          Upload Document for given Registration / License Number
+          Upload Document for given Registration / License Number  <span className="text-red-600 px-2">*</span>
         </h3>
 
         <div className="border-2 border-dashed border-blue-500 mx-auto rounded-lg flex flex-col items-center justify-center p-8 mb-2">
@@ -420,9 +481,12 @@ const handleSubmit = async () => {
             DRAG FILE HERE OR
           </p>
 
-          <input type="file" name="licenseDocument" 
+          <input
+          required
+           type="file" name="licenseDocument" 
           onChange={handleChange} 
-          className="hidden" id="licenseupload"/>
+          className="w-full text-sm" 
+          id="licenseupload"/>
 
           <label htmlFor="licenseupload" className="bg-blue-600 text-white px-6 py-2 rounded-full cursor-pointer hover:bg-blue-700">
             Browse
@@ -444,20 +508,23 @@ const handleSubmit = async () => {
         {/* Button */}
         <div className="flex justify-center">
           <button
-          type="button"
-            onClick={handleSubmit}
+          type="submit"
+            
             className="bg-blue-600 text-white px-10 py-3 rounded-md text-lg shadow-md hover:bg-blue-700">
             Continue
           </button>
         </div>
 
-          
+          </form>
           </>
+          
         )}
 
       </div>
     </div>
+    
     </>
+    
   );
 }
 

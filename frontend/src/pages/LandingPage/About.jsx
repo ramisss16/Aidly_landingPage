@@ -1,7 +1,51 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
+
 import gsap from "gsap";
+import satyam from "../../assets/satyamImage.jpeg"
+import satyamremovebg from "../../assets/satyamImage-removebg.png"
+import shefali from "../../assets/shifaliImage.jpeg"
+import shifaliremovebg from "../../assets/shifaliImage-removebg.png"
+import shahid from "../../assets/shahidImage.jpeg"
+import shahidremovebg from "../../assets/shahidImage-removebg.png"
+import sachin from "../../assets/sachinImage.jpeg"
+import sachinremovebg from "../../assets/sachinImage-removebg.png"
+import shivam from "../../assets/shivamImage.jpeg"
+import shivamremovebg from "../../assets/shivamImage-removebg.png"
+import ramish from "../../assets/ramishImage.png"
+import ramishremovebg from "../../assets/ramishImage-removebg.png"
+import riya from "../../assets/riyaImage.jpeg"
+import riyaremovebg from "../../assets/riyaImage-removebg.png"
+import bharti from "../../assets/bhartiImage.jpeg"
+import bhartiremovebg from "../../assets/bhartiImage-removebg.png"
+import nisha from "../../assets/nishaImage.jpeg"
+import nisharemovebg from "../../assets/nishaImage-removebg.png"
+import siya from "../../assets/siyaImage.jpeg"
+import siyaremovebg from "../../assets/siyaImage-removebg.png"
 
 const AboutAidly = () => {
+
+const [current, setCurrent] = useState(0);
+
+const intervalRef = useRef(null);
+
+const startSlider = () => {
+  clearInterval(intervalRef.current);
+
+  intervalRef.current = setInterval(() => {
+    setCurrent((prev) => (prev + 1) % team.length);
+  }, 2500);
+};
+
+const stopSlider = () => {
+  clearInterval(intervalRef.current);
+};
+
+useEffect(() => {
+  startSlider();
+
+  return () => clearInterval(intervalRef.current);
+}, []);
+
      const aboutRef = useRef(null);
 
        useEffect(() => {
@@ -12,12 +56,124 @@ const AboutAidly = () => {
       ease: "power3.out",
     });
   }, []);
+
+  const team = [
+  {
+    image: satyam,
+    bgromveImage: satyamremovebg,
+    name: "Satyam Kumar",
+    role: "Co-Founder & CEO",
+    description: "Driving the company’s overarching strategic vision, commercial growth, and investor relations. He focuses on scaling early operations, securing venture capital, and building high-impact market partnerships to expand the company's footprint.",
+  },
+  {
+    image: shefali,
+    bgromveImage: shifaliremovebg,
+    name: "Shefali Kishan",
+    role: "Co-Founder & CTO",
+    description: " Overseeing the company’s technological strategy, architecture, and product development. She translates company goals into a robust, scalable technical roadmap, leading engineering execution from inception to scale.",
+  },
+  {
+    image: shahid,
+    bgromveImage: shahidremovebg,
+    name: "Shahid Ahmed",
+    role: "Graphic Designer",
+    description: "Creates engaging visuals for Aidly's website/App, branding, and marketing materials. Ensures a consistent brand identity while designing user-friendly graphics that enhance communication and user experience.",
   
+  },
+  {
+    image: sachin,
+    bgromveImage: sachinremovebg,
+    name: "Sachin Kumar",
+    role: "Manual Tester",
+    description: "Performed manual testing by executing functional test cases.Identified and reported defects while verifying bug fixes. Collaborated with the team to ensure software quality and reliability",
+  },
+  {
+    image: shivam,
+    bgromveImage: shivamremovebg,
+    name: "Shivam Kumar Sahu",
+    role: "Researcher",
+    description: "Financial Researcher specialized in startup economics, investment analysis, and data-driven growth strategies",
+  },
+  {
+    image: ramish,
+    bgromveImage: ramishremovebg,
+    name: "Ramish Khan",
+    role: "Full Stack Web Developer",
+    description: "Contributed to the end-to-end development of Aidly by building scalable frontend components and robust backend services. Worked on authentication, healthcare service modules, API integration, dashboards, and deployment while ensuring security, performance, and reliability.",
+  },
+  {
+    image: riya,
+    bgromveImage: riyaremovebg,
+    name: "Riya Jain",
+    role: "Full Stack Web Developer",
+    description: "Developed and integrated scalable frontend and backend modules. Contributed to authentication, appointment management, dashboards, API integration, and deployment while ensuring a seamless user experience",
+  },
+  {
+    image: bharti,
+    bgromveImage: bhartiremovebg,
+    name: "Bharti Kushwaha",
+    role: "App Front-end Developer",
+    description: "Worked as a Frontend Developer, designing and developing responsive and user-friendly mobile applications using Flutter. Created visually appealing UI screens and ensured a seamless user experience across the application.",
+  },
+  {
+    image: nisha,
+    bgromveImage: nisharemovebg,
+    name: "Nisha Sahu",
+    role: "App Front-end Developer",
+    description: "Frontend Developer specializing in Flutter, with experience in developing responsive, scalable, and user-centric mobile applications. Passionate about crafting modern UI, enhancing usability, and delivering seamless cross-platform experiences.",
+  },
+  {
+    image: siya,
+    bgromveImage: siyaremovebg,
+    name: "Siya Naik",
+    role: "App Back-end Developer",
+    description: "Developed and maintained the application's backend services, APIs, and database. Ensured secure data management, efficient server-side functionality, and reliable performance to support a seamless user experience.",
+  },
+];
+
+const activeMember = team[current];
+ 
+const imageRef = useRef(null);
+const contentRef = useRef(null);
+
+useEffect(() => {
+  const ctx = gsap.context(() => {
+    gsap.fromTo(
+      imageRef.current,
+      {
+        opacity: 0,
+        x: 60,
+        scale: 0.9,
+      },
+      {
+        opacity: 1,
+        x: 0,
+        scale: 1,
+        duration: 0.6,
+      }
+    );
+
+    gsap.fromTo(
+      contentRef.current,
+      {
+        opacity: 0,
+        x: -60,
+      },
+      {
+        opacity: 1,
+        x: 0,
+        duration: 0.6,
+      }
+    );
+  });
+
+  return () => ctx.revert();
+}, [current]);
 
   return (
-    <div ref={aboutRef} className="w-full bg-gradient-to-b from-[#1A5F48] via-[#89C9CA] to-[#C6EBE8] px-4 sm:px-6 md:px-10 py-6 md:py-10">
+    <div ref={aboutRef} className="w-full bg-gradient-to-b from-[#1A5F48] via-[#89C9CA] to-[#C6EBE8] px-4 sm:px-6 md:px-10 py-8 md:py-10">
 
-      <h2 className="pt-15 md:pt-18 text-3xl sm:text-4xl md:text-[44px] font-bold text-white leading-tight mb-3">
+      <h2 className="pt-15 md:pt-18 text-2xl sm:text-3xl md:text-[44px] font-bold text-white leading-tight mb-3">
         About Aidly
       </h2>
 
@@ -56,6 +212,97 @@ const AboutAidly = () => {
         and patient-centric services. We strive to provide reliable emergency support, professional medical consultations,
         convenient home healthcare solutions, and hassle-free medicine delivery through a unified platform.
       </p>
+
+      <section className="mt-20">
+
+  <h2 className="text-3xl md:text-5xl font-bold text-black mb-5 ">
+    Our Team
+  </h2>
+
+  <div className="grid lg:grid-cols-2 gap-2 items-center lg:px-24 md:-mt-6 ">
+
+    {/* Left */}
+    <div ref={contentRef} className="text-center ">
+
+      <h3 className=" text-2xl md:text-4xl font-bold text-black">
+        {activeMember.name}
+      </h3>
+
+      <h4 className="text-xl md:text-2xl font-bold mt-2">
+        {activeMember.role}
+      </h4>
+
+      <p className="mt-6 md:text-xl leading-relaxed text-black">
+        {activeMember.description}
+      </p>
+
+    </div>
+
+    {/* Right */}
+    <div ref={imageRef} className="flex justify-center">
+
+      <img
+        src={activeMember.bgromveImage}
+        alt=""
+         loading="eager"
+        decoding="async"
+        className="w-[260px] md:w-[370px]  object-contain"
+      />
+
+    </div>
+
+  </div>
+
+  {/* Team Card */}
+
+  <div className=" rounded-[35px] bg-white/30 backdrop-blur-md p-3">
+
+    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-y-5">
+
+    {team.map((member, index) => (
+  <div
+    key={index}
+    onClick={() => setCurrent(index)}
+    onMouseEnter={stopSlider}
+    onMouseLeave={startSlider}
+    className="flex flex-col items-center text-center cursor-pointer"
+  >
+    <img
+      src={member.image}
+      alt={member.name}
+       loading="eager"
+       decoding="async"
+      className={`w-15 h-15 md:w-20 md:h-20  rounded-full object-cover transition-all duration-500 shadow-lg
+      ${
+        current === index
+          ? "border-4 border-[#1A5F48] scale-110 opacity-100"
+          : "border-4 border-white opacity-60 hover:opacity-100 hover:scale-105"
+      }`}
+    />
+
+    <h3
+      className={`mt-2  md:text-lg font-bold transition-all duration-300 ${
+        current === index ? "text-[#1A5F48]" : "text-black"
+      }`}
+    >
+      {member.name}
+    </h3>
+
+    <p
+      className={`text-base md:text-[15px] transition-all duration-300 ${
+        current === index ? "text-[#1A5F48]" : "text-black"
+      }`}
+    >
+      {member.role}
+    </p>
+  </div>
+))}
+
+    </div>
+
+  </div>
+
+</section>
 
       <h2 className="pt-8 md:pt-18 text-3xl sm:text-4xl md:text-[44px] font-bold text-black leading-tight mb-5">
         Why Choose Aidly?

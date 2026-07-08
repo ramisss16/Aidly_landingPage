@@ -72,7 +72,6 @@
 //   );
 // };
 
-// export default Navbar;
 import React, { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import gsap from "gsap";
@@ -82,27 +81,32 @@ import { User } from "lucide-react";
 const NAV_HEIGHT = 80;
 
 const Navbar = () => {
-  const location = useLocation();
-
-  const isActive = (item) => {
-  const path = item === "Home" ? "/" : `/${item.toLowerCase()}`;
-  return location.pathname === path;
-};
-
   const navigate = useNavigate();
+  const location = useLocation();
   const navRef = useRef(null);
 
   const [isOpen, setIsOpen] = useState(false);
+
   const token = localStorage.getItem("hospitalToken");
 
   useEffect(() => {
     gsap.from(navRef.current, {
       y: -120,
       opacity: 0,
-      duration: 1.5,
+      duration: 1.2,
       ease: "power3.out",
     });
   }, []);
+
+  const isActive = (item) => {
+    const path = item === "Home" ? "/" : `/${item.toLowerCase()}`;
+    return location.pathname === path;
+  };
+
+  const handleNavClick = (path) => {
+    setIsOpen(false);
+    navigate(path);
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("hospitalToken");
@@ -110,131 +114,169 @@ const Navbar = () => {
     navigate("/login");
   };
 
-  const handleNavClick = (item, path) => {
-  setIsOpen(false);
-  if (path) navigate(path);
-};
+  const navItems = ["Home", "About", "Services", "Contact"];
 
   return (
     <nav
       ref={navRef}
-      className="bg-transparent fixed top-0 left-0 w-full z-50"
+      className="fixed top-0 left-0 w-full z-50 bg-transparent"
       style={{ height: NAV_HEIGHT }}
-      aria-label="Main navigation"
     >
       <div
-        className="w-full h-full rounded-b-3xl shadow-md flex items-center justify-between px-4 md:px-8"
+        className="w-full h-full flex items-center justify-between rounded-b-3xl shadow-md px-5 md:px-5 lg:px-14"
         style={{
-          background: "linear-gradient(180deg, #1A5F48 0%, #18765A 100%)",
+          background: "linear-gradient(180deg,#1A5F48 0%,#18765A 100%)",
         }}
       >
-        <div className="flex items-center gap-3">
+        {/* Logo */}
+        <div
+          className="cursor-pointer"
+          onClick={() => navigate("/")}
+        >
           <img
             src={AidlyLogo}
-            alt="Aidly logo"
-            className="h-15 md:h-20 w-auto object-contain"
+            alt="Aidly Logo"
+            className="h-25 sm:h-35 md:h-40 w-auto object-contain"
           />
         </div>
 
-        <div className="flex items-center gap-6">
-          <ul className="hidden md:flex items-center gap-8 text-lg md:text-xl font-semibold">
-            {["Home", "About", "Services", "Contact"].map((item) => (
+        {/* Desktop Menu */}
+        <div className="hidden  md:flex items-center gap-8">
+          <ul className="flex items-center gap-8 text-lg lg:text-xl font-semibold">
+            {navItems.map((item) => (
               <li
                 key={item}
                 onClick={() =>
-                  handleNavClick(item, item === "Home" ? "/" : `/${item.toLowerCase()}`)
+                  handleNavClick(item === "Home" ? "/" : `/${item.toLowerCase()}`)
                 }
-               className={`cursor-pointer transition ${
-  isActive(item)
-    ? "text-black font-bold"
-    : "text-white hover:text-gray-200"
-}`}
-                role="button"
+                onKeyDown={(e) =>
+                  e.key === "Enter" &&
+                  handleNavClick(
+                    item === "Home" ? "/" : `/${item.toLowerCase()}`
+                  )
+                }
                 tabIndex={0}
-                onKeyDown={(e) => e.key === "Enter" && handleNavClick(item)}
+                role="button"
+                className={`cursor-pointer transition-colors duration-300 ${
+                  isActive(item)
+                    ? "text-black font-bold"
+                    : "text-white hover:text-gray-200"
+                }`}
               >
                 {item}
               </li>
             ))}
-          </ul>
 
-          {token ? (
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => {
-                 
-                  handleLogout();
-                }}
-                className="bg-white text-[#1A5F48] px-3 py-1 md:px-4 md:py-2 rounded-lg font-semibold text-sm md:text-base flex items-center gap-2"
-                aria-label="Logout"
+            {!token ? (
+              <li
+                onClick={() => handleNavClick("/login")}
+                className={`cursor-pointer transition-colors duration-300 ${
+                  isActive("Login")
+                    ? "text-black font-bold"
+                    : "text-white hover:text-gray-200"
+                }`}
               >
-                <User size={20} className="text-black shrink-0" />
-                Logout
-              </button>
-            </div>
-          ) : (
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => {
-                 
-                  setIsOpen(false);
-                  navigate("/login");
-                }}
-                className="bg-white text-[#1A5F48] px-3 py-1 md:px-4 md:py-2 rounded-lg font-semibold text-sm md:text-base flex items-center gap-2"
-                aria-label="Login"
-              >
-                <User size={20} className="text-black shrink-0" />
                 Login
-              </button>
-            </div>
-          )}
+              </li>
+            ) : (
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => navigate("/profile")}
+                  className="text-white hover:text-gray-200 transition"
+                >
+                  <User size={26} />
+                </button>
 
-          <button
-            onClick={() => setIsOpen((s) => !s)}
-            className="md:hidden relative w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10 transition-all duration-300"
-            aria-expanded={isOpen}
-            aria-label="Toggle mobile menu"
-          >
-            <span
-              className={`absolute w-6 h-[3px] bg-white rounded-full transition-all duration-500 ease-in-out ${
-                isOpen ? "rotate-45 translate-y-0" : "-translate-y-2"
-              }`}
-            />
-            <span
-              className={`absolute w-6 h-[3px] bg-white rounded-full transition-all duration-300 ease-in-out ${
-                isOpen ? "opacity-0 scale-0" : "opacity-100 scale-100"
-              }`}
-            />
-            <span
-              className={`absolute w-6 h-[3px] bg-white rounded-full transition-all duration-500 ease-in-out ${
-                isOpen ? "-rotate-45 translate-y-0" : "translate-y-2"
-              }`}
-            />
-          </button>
+                <button
+                  onClick={handleLogout}
+                  className="bg-white text-[#1A5F48] px-4 py-2 rounded-lg font-semibold hover:scale-105 transition"
+                >
+                  Logout
+                </button>
+              </div>
+            )}
+          </ul>
         </div>
+
+        {/* Mobile Button */}
+        <button
+          onClick={() => setIsOpen(!isOpen)}
+          className="md:hidden relative w-10 h-10 flex items-center justify-center rounded-full hover:bg-white/10"
+        >
+          <span
+            className={`absolute w-6 h-[3px] bg-white rounded transition-all duration-300 ${
+              isOpen ? "rotate-45" : "-translate-y-2"
+            }`}
+          />
+
+          <span
+            className={`absolute w-6 h-[3px] bg-white rounded transition-all duration-300 ${
+              isOpen ? "opacity-0" : "opacity-100"
+            }`}
+          />
+
+          <span
+            className={`absolute w-6 h-[3px] bg-white rounded transition-all duration-300 ${
+              isOpen ? "-rotate-45" : "translate-y-2"
+            }`}
+          />
+        </button>
       </div>
 
+      {/* Mobile Menu */}
       <div
-        className={`md:hidden backdrop-blur-xl bg-[#37B3BB]/90 text-white rounded-b-2xl px-4 overflow-hidden transform transition-all duration-300 ease-in-out ${
-          isOpen ? "max-h-[360px] opacity-100 translate-y-0 py-4" : "max-h-0 opacity-0 -translate-y-4 py-0"
+        className={`md:hidden overflow-hidden backdrop-blur-xl bg-[#37B3BB]/90 rounded-b-2xl transition-all duration-300 ${
+          isOpen
+            ? "max-h-[450px] opacity-100 py-4"
+            : "max-h-0 opacity-0 py-0"
         }`}
       >
-        <ul className="space-y-3 font-medium">
-          {["Home", "About", "Services", "Contact"].map((item) => (
+        <ul className="space-y-3 px-5 font-medium">
+          {navItems.map((item) => (
             <li
               key={item}
               onClick={() =>
-                handleNavClick(item, item === "Home" ? "/" : `/${item.toLowerCase()}`)
+                handleNavClick(item === "Home" ? "/" : `/${item.toLowerCase()}`)
               }
-             className={`py-2 cursor-pointer transition ${
-  isActive(item) ? "text-black font-bold" : "text-white"
-}`}
+              className={`cursor-pointer py-2 transition ${
+                isActive(item)
+                  ? "text-black font-bold"
+                  : "text-white"
+              }`}
             >
               {item}
             </li>
           ))}
 
-        
+          {!token ? (
+            <li
+              onClick={() => handleNavClick("/login")}
+              className={`cursor-pointer py-2 ${
+                isActive("Login")
+                  ? "text-black font-bold"
+                  : "text-white"
+              }`}
+            >
+              Login
+            </li>
+          ) : (
+            <>
+              <li
+                onClick={() => handleNavClick("/profile")}
+                className="flex items-center gap-2 py-2 text-white cursor-pointer"
+              >
+                <User size={20} />
+                Profile
+              </li>
+
+              <li
+                onClick={handleLogout}
+                className="py-2 text-white cursor-pointer"
+              >
+                Logout
+              </li>
+            </>
+          )}
         </ul>
       </div>
     </nav>

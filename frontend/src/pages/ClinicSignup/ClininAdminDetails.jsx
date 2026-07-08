@@ -184,7 +184,14 @@ sessionStorage.removeItem(
 
   return (
     <>
+
+    <form  
+       onSubmit={(e) => {
+      e.preventDefault();
+      handleSubmit();
+    }}>
       {loading && (
+        
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="w-16 h-16 border-4 border-white border-t-blue-600 rounded-full animate-spin"></div>
         </div>
@@ -202,10 +209,11 @@ sessionStorage.removeItem(
 
           <div className="flex items-center md:gap-2 mb-5">
             <label className="text-sm sm:text-lg font-semibold w-28 sm:w-48 ml-2 sm:ml-10">
-              Full Name
+              Full Name <span className="px-2 text-red-600">*</span>
             </label>
 
             <input
+              required
               name="fullName"
               value={formData.fullName || ""}
               onChange={handleChange}
@@ -215,10 +223,11 @@ sessionStorage.removeItem(
 
           <div className="flex items-center md:gap-2 mb-5">
             <label className="text-sm sm:text-lg font-semibold w-28 sm:w-48 ml-2 sm:ml-10">
-              Email Address
+              Email Address <span className="px-2 text-red-600">*</span>
             </label>
 
             <input
+              required
               name="email"
               value={formData.email || ""}
               onChange={handleChange}
@@ -228,11 +237,12 @@ sessionStorage.removeItem(
 
           <div className="flex items-start sm:items-center md:gap-2 mb-5">
             <label className="text-sm sm:text-lg font-semibold w-28 sm:w-48 ml-2 sm:ml-10">
-              Phone Number
+              Phone Number <span className="px-2 text-red-600">*</span>
             </label>
 
             <div className="flex flex-col sm:flex-row flex-1 gap-2 sm:gap-5">
               <input
+                required
                 name="phonenumber"
                 value={formData.phonenumber || ""}
                 onChange={handleChange}
@@ -252,11 +262,12 @@ sessionStorage.removeItem(
 
           <div className="flex flex-col items-start md:gap-2 mb-5">
             <label className="text-sm sm:text-lg font-semibold w-full ml-2 mb-2 sm:ml-10">
-              Enter the OTP sent on your mobile number
+              Enter the OTP sent on your mobile number 
             </label>
 
             <div className="flex flex-row flex-1 gap-3 sm:gap-5 sm:ml-[240px] ml-[120px]">
               <input
+              
                 name="otp"
                 value={formData.otp || ""}
                 onChange={handleChange}
@@ -279,13 +290,14 @@ sessionStorage.removeItem(
           </div>
 
           <h3 className="text-lg md:text-xl font-semibold mb-4">
-            Upload an ID Proof (Adhar or PAN)
+            Upload an ID Proof (Adhar or PAN) <span className="px-2 text-red-600">*</span>
           </h3>
 
           <div className="border-2 border-dashed border-blue-500 mx-auto rounded-lg flex flex-col items-center justify-center p-8 mb-2">
             <p className="text-gray-500 mb-4 text-center">DRAG FILE HERE OR</p>
 
             <input
+              required
               type="file"
               name="idProof"
               onChange={handleChange}
@@ -326,11 +338,12 @@ sessionStorage.removeItem(
 
           <div className="flex items-center md:gap-2 mb-5">
             <label className="text-sm sm:text-lg font-semibold w-30 sm:w-48 ml-2 sm:ml-10">
-              Create password
+              Create password 
             </label>
 
             <div className="relative flex-1">
               <input
+                required
                 type={showPassword ? "text" : "password"}
                 name="Createpassword"
                 value={formData.Createpassword || ""}
@@ -349,11 +362,12 @@ sessionStorage.removeItem(
 
           <div className="flex items-center md:gap-2 mb-5">
             <label className="text-sm sm:text-lg font-semibold w-30 sm:w-48 ml-2 sm:ml-10">
-              Confirm Password
+              Confirm Password 
             </label>
 
             <div className="relative flex-1">
               <input
+                required
                 type={showConfirmPassword ? "text" : "password"}
                 name="confirmPassword"
                 value={formData.confirmPassword || ""}
@@ -371,13 +385,15 @@ sessionStorage.removeItem(
           </div>
 
           <button
-            onClick={handleSubmit}
+           
+            type="submit"
             className="bg-blue-600 text-white px-10 py-2 rounded-md text-lg shadow-md hover:bg-blue-700 flex items-center justify-center mx-auto"
           >
             Continue
           </button>
         </div>
       </div>
+      </form>
     </>
   );
 };

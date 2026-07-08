@@ -49,7 +49,7 @@ const HospitalAmbulance_TermsCondition = () => {
 
         {/* Button */}
        
-        <button onClick={()=>navigate("/Hospital-Ambulance-ThankuPage")} className="mt-6 w-full bg-blue-600 hover:bg-blue-700 transition text-white py-2.5 rounded-lg font-medium shadow-md">
+        <button onClick={()=>navigate("/Document-Approved")} className="mt-6 w-full bg-blue-600 hover:bg-blue-700 transition text-white py-2.5 rounded-lg font-medium shadow-md">
           Accept and Continue
         </button>
         

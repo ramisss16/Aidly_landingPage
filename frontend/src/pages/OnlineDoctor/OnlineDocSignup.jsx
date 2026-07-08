@@ -170,11 +170,17 @@ const OnlineDoctorForm = () => {
 
           {step === 1 && (
             <>
+            <form 
+              onSubmit={(e) => {
+      e.preventDefault();
+      handleNext();
+    }}>
               <div className="flex items-center md:gap-2 mb-5">
                 <label className="text-sm sm:text-lg font-semibold w-28 sm:w-48 ml-2 sm:ml-10">
-                  Full Name
+                  Full Name <span className="px-2 text-red-600">*</span>
                 </label>
                 <input
+                  required
                   name="fullName"
                   value={formData.fullName || ""}
                   onChange={handleChange}
@@ -184,9 +190,10 @@ const OnlineDoctorForm = () => {
 
               <div className="flex items-center md:gap-2 mb-5">
                 <label className="text-sm sm:text-lg font-semibold w-28 sm:w-48 ml-2 sm:ml-10">
-                  Email Address
+                  Email Address <span className="px-2 text-red-600">*</span>
                 </label>
                 <input
+                   required
                   name="email"
                   value={formData.email || ""}
                   onChange={handleChange}
@@ -196,10 +203,11 @@ const OnlineDoctorForm = () => {
 
               <div className="flex items-start sm:items-center md:gap-2 mb-5">
                 <label className="text-sm sm:text-lg font-semibold w-28 sm:w-48 ml-2 sm:ml-10">
-                  Phone Number
+                  Phone Number 
                 </label>
                 <div className="flex flex-col sm:flex-row flex-1 gap-2 sm:gap-5">
                   <input
+                 
                     name="phonenumber"
                     value={formData.phonenumber || ""}
                     onChange={handleChange}
@@ -218,10 +226,11 @@ const OnlineDoctorForm = () => {
 
               <div className="flex flex-col items-start md:gap-2 mb-5">
                 <label className="text-sm sm:text-lg font-semibold w-full ml-2 mb-2 sm:ml-10">
-                  Enter the OTP sent on your mobile number
+                  Enter the OTP sent on your mobile number 
                 </label>
                 <div className="flex flex-row flex-1 gap-3 sm:gap-5 sm:ml-[240px] ml-[120px]">
                   <input
+                    required
                     name="otp"
                     value={formData.otp || ""}
                     onChange={handleChange}
@@ -272,13 +281,14 @@ const OnlineDoctorForm = () => {
               </p>
 
               <h3 className="text-lg md:text-xl font-semibold mb-4">
-                Upload an ID Proof (Adhar or PAN)
+                Upload an ID Proof (Adhar or PAN) <span className="px-2 text-red-600">*</span>
               </h3>
 
               <div className="border-2 border-dashed border-blue-500 flex flex-col items-center justify-center mx-auto p-8 mb-2">
                 <p className="text-lg text-gray-500 mb-3">DRAG FILE HERE OR</p>
 
                 <input
+                  required
                   type="file"
                   name="aadhaarDocument"
                   onChange={handleChange}
@@ -306,10 +316,11 @@ const OnlineDoctorForm = () => {
 
               <div className="flex items-center md:gap-2 mb-5">
                 <label className="text-sm sm:text-lg font-semibold w-30 sm:w-48 ml-2 sm:ml-10">
-                  Create password
+                  Create password 
                 </label>
                 <div className="relative flex-1">
                   <input
+                    required
                     type={showPassword ? "text" : "password"}
                     name="Createpassword"
                     value={formData.Createpassword || ""}
@@ -331,6 +342,7 @@ const OnlineDoctorForm = () => {
                 </label>
                 <div className="relative flex-1">
                   <input
+                    required
                     type={showConfirmPassword ? "text" : "password"}
                     name="confirmPassword"
                     value={formData.confirmPassword || ""}
@@ -348,21 +360,29 @@ const OnlineDoctorForm = () => {
 
               <div className="flex justify-center mt-8">
                 <button
-                  onClick={handleNext}
+                  
+                  type="submit"
                   className="bg-blue-600 text-white px-10 py-2 rounded-md text-lg shadow-md hover:bg-blue-700"
                 >
                   Continue
                 </button>
               </div>
+              </form>
             </>
           )}
 
           {step === 2 && (
             <>
+            <form 
+              onSubmit={async(e) => {
+      e.preventDefault();
+     await handleSubmit();
+    }}>
               <div className="space-y-5">
                 <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                  <label className="sm:w-1/3 font-medium">Specialization</label>
+                  <label className="sm:w-1/3 font-medium">Specialization <span className="px-2 text-red-600">*</span></label>
                   <input
+                    required
                     name="specialization"
                     value={formData.specialization || ""}
                     onChange={handleChange}
@@ -402,12 +422,13 @@ const OnlineDoctorForm = () => {
                 </p>
 
                 <h3 className="text-lg md:text-xl font-semibold mb-4">
-                  Upload Your License Certificate
+                  Upload Your License Certificate <span className="px-2 text-red-600">*</span>
                 </h3>
 
                 <div className="border-2 border-dashed border-blue-500 mx-auto rounded-lg flex flex-col items-center justify-center p-8 mb-2">
                   <p className="text-gray-500 mb-4 text-center">DRAG FILE HERE OR</p>
                   <input
+                    required
                     type="file"
                     name="licenseCertificate"
                     onChange={handleChange}
@@ -475,9 +496,10 @@ const OnlineDoctorForm = () => {
 
                 <div className="flex flex-col sm:flex-row gap-2">
                   <label className="sm:w-1/3 font-medium">
-                    Contact Number (Official)
+                    Contact Number (Official) <span className="px-2 text-red-600">*</span>
                   </label>
                   <input
+                    required
                     name="officialPhone"
                     value={formData.officialPhone || ""}
                     onChange={handleChange}
@@ -488,9 +510,10 @@ const OnlineDoctorForm = () => {
 
                 <div className="flex flex-col sm:flex-row gap-2">
                   <label className="sm:w-1/3 font-medium">
-                    Email Address (Official)
+                    Email Address (Official) <span className="px-2 text-red-600">*</span>
                   </label>
                   <input
+                   required
                     name="officialEmail"
                     value={formData.officialEmail || ""}
                     onChange={handleChange}
@@ -500,12 +523,14 @@ const OnlineDoctorForm = () => {
                 </div>
 
                 <button
-                  onClick={handleSubmit}
+                  
+                  type="submit"
                   className="sm:w-[200px] w-[100px] bg-blue-600 text-white py-3 rounded-lg text-lg font-semibold shadow-md hover:bg-blue-700 transition mx-auto flex justify-center items-center text-center"
                 >
                   Continue
                 </button>
               </div>
+              </form>
             </>
           )}
         </div>

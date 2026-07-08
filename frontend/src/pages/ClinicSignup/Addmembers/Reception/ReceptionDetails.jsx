@@ -130,7 +130,7 @@ const Clinic_Receptionist_Details = () => {
 
       console.log(response.data.data.receptionistId);
 
-      navigate("/succesful-add-Receptionist");
+      navigate("/Clinic-ReceptionApproval");
     } catch (err) {
       console.log(err.response?.data);
 
@@ -142,6 +142,12 @@ const Clinic_Receptionist_Details = () => {
 
   return (
     <>
+
+    <form 
+      onSubmit={async(e) => {
+      e.preventDefault();
+      await handleSubmit();
+    }}>
       {loading && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="w-16 h-16 border-4 border-white border-t-blue-600 rounded-full animate-spin"></div>
@@ -162,9 +168,10 @@ const Clinic_Receptionist_Details = () => {
 
           <div className="flex items-center md:gap-2 mb-5">
             <label className="text-sm sm:text-lg font-semibold w-28 sm:w-48 ml-2 sm:ml-10">
-              Full Name
+              Full Name <span className="px-2 text-red-600">*</span>
             </label>
             <input
+              required
               name="fullName"
               value={formData.fullName || ""}
               onChange={handleChange}
@@ -174,9 +181,10 @@ const Clinic_Receptionist_Details = () => {
 
           <div className="flex items-center md:gap-2 mb-5">
             <label className="text-sm sm:text-lg font-semibold w-28 sm:w-48 ml-2 sm:ml-10">
-              Email Address
+              Email Address <span className="px-2 text-red-600">*</span>
             </label>
             <input
+              required
               name="email"
               value={formData.email || ""}
               onChange={handleChange}
@@ -186,10 +194,11 @@ const Clinic_Receptionist_Details = () => {
 
           <div className="flex items-start sm:items-center md:gap-2 mb-5">
             <label className="text-sm sm:text-lg font-semibold w-28 sm:w-48 ml-2 sm:ml-10">
-              Phone Number
-            </label>
+              Phone Number 
+            </label> 
             <div className="flex flex-col sm:flex-row flex-1 gap-2 sm:gap-5">
               <input
+              
                 name="phonenumber"
                 value={formData.phonenumber || ""}
                 onChange={handleChange}
@@ -208,10 +217,11 @@ const Clinic_Receptionist_Details = () => {
 
           <div className="flex flex-col items-start md:gap-2 mb-5">
             <label className="text-sm sm:text-lg font-semibold w-full ml-2 mb-2 sm:ml-10">
-              Enter the OTP sent on your mobile number
+              Enter the OTP sent on your mobile number 
             </label>
             <div className="flex flex-row flex-1 gap-3 sm:gap-5 sm:ml-[240px] ml-[120px]">
               <input
+              
                 name="otp"
                 value={formData.otp || ""}
                 onChange={handleChange}
@@ -333,13 +343,14 @@ const Clinic_Receptionist_Details = () => {
           </p>
 
           <h3 className="text-lg md:text-xl font-semibold mb-4">
-            Upload an ID Proof (Aadhar or PAN)
+            Upload an ID Proof (Aadhar or PAN) <span className="px-2 text-red-600">*</span>
           </h3>
 
           <div className="border-2 border-dashed border-blue-500 mx-auto rounded-lg flex flex-col items-center justify-center p-8 mb-2">
             <p className="text-gray-500 mb-4 text-center">DRAG FILE HERE OR</p>
 
             <input
+              required
               type="file"
               name="aadhaarDocument"
               id="aadhaarUpload"
@@ -371,6 +382,7 @@ const Clinic_Receptionist_Details = () => {
             </label>
             <div className="relative flex-1">
               <input
+                required
                 type={showPassword ? "text" : "password"}
                 name="Createpassword"
                 value={formData.Createpassword || ""}
@@ -392,6 +404,7 @@ const Clinic_Receptionist_Details = () => {
             </label>
             <div className="relative flex-1">
               <input
+                required
                 type={showConfirmPassword ? "text" : "password"}
                 name="confirmPassword"
                 value={formData.confirmPassword || ""}
@@ -409,9 +422,8 @@ const Clinic_Receptionist_Details = () => {
 
           <div className="flex justify-center mt-8">
             <button
-              onClick={async () => {
-                await handleSubmit();
-              }}
+             
+              type="submit"
               className="bg-blue-600 text-white px-10 py-2 rounded-md text-lg shadow-md hover:bg-blue-700"
             >
               Submit
@@ -419,6 +431,7 @@ const Clinic_Receptionist_Details = () => {
           </div>
         </div>
       </div>
+      </form>
     </>
   );
 };

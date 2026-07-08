@@ -393,8 +393,8 @@ import HomeCareImage from "../../assets/HomeCareImage.png";
 import MedicalStore from "../../assets/MedicalStoreImage.png";
 import ReviewImage1 from "../../assets/ReviewImage.jpeg";
 import ReviewImage2 from "../../assets/ReviewImage2.jpeg";
-import ReviewImage3 from "../../assets/ReviewImage4.jpeg";
-import ReviewImage4 from "../../assets/ReviewImage2.jpeg";
+import ReviewImage3 from "../../assets/ReviewImage3.jpeg";
+import ReviewImage4 from "../../assets/ReviewImage4.jpeg";
 import ReviewImage5 from "../../assets/ReviewImage5.jpeg";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -403,21 +403,25 @@ const NAV_HEIGHT = 40;
 
 const services = [
   {
+    id: "ambulance",
     title: "Ambulance Booking",
     image: AmbulanceImage,
     reverse: false,
   },
   {
+    id: "doctor",
     title: "Doctor Appointment",
     image: DoctorApointmentImage,
     reverse: true,
   },
   {
+    id: "homecare",
     title: "Home Healthcare",
     image: HomeCareImage,
     reverse: false,
   },
   {
+    id: "medical",
     title: "Medical Store",
     image: MedicalStore,
     reverse: true,
@@ -481,19 +485,21 @@ export default function LandingPage() {
 
    
 
-      gsap.to(hero, {
-        x,
-        y,
-        scale: 1,
-        ease: "none",
-        scrollTrigger: {
-          trigger: target,
-          start: "top 80%",
-          end: "top 40%",
-          scrub: true,
-        },
-      });
-    }, 2200);
+     if (!window.matchMedia("(min-width: 768px) and (max-width: 1023px)").matches) {
+  gsap.to(hero, {
+    x,
+    y,
+    scale: 1,
+    ease: "none",
+    scrollTrigger: {
+      trigger: target,
+      start: "top 80%",
+      end: "top 40%",
+      scrub: true,
+    },
+  });
+}
+    }, 1500);
 
     const sections = [aboutRef.current, reviewsRef.current, downloadRef.current];
 
@@ -583,7 +589,7 @@ export default function LandingPage() {
       <section
         
         ref={heroRef}
-        className="pt-12 md:pt-22 flex flex-col items-center px-4 text-center"
+        className="pt-10 md:pt-24 flex flex-col items-center px-4 text-center"
       >
         <img
           ref={heroLogoRef}
@@ -608,7 +614,8 @@ export default function LandingPage() {
             Explore Aidly
           </button>
 
-          <button className="px-8 md:px-12 py-4 rounded-2xl bg-blue-600 text-white text-xl sm:text-2xl md:text-3xl font-semibold shadow-lg hover:bg-blue-700 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
+          <button className="px-8 md:px-12 py-4 rounded-2xl bg-blue-600 text-white text-xl sm:text-2xl md:text-3xl font-semibold shadow-lg hover:bg-blue-700 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+                   onClick={()=>navigate("/services")}>
             View Services
           </button>
         </div>
@@ -626,10 +633,17 @@ export default function LandingPage() {
             </p>
           </div>
 
-          <div
-            ref={aboutLogoRef}
-            className="w-[220px] h-[220px] sm:w-[280px] sm:h-[280px] md:w-[350px] md:h-[350px] shrink-0"
-          />
+        <div
+  ref={aboutLogoRef}
+  className="w-[220px] h-[220px] sm:w-[280px] sm:h-[280px] md:w-[350px] md:h-[350px] shrink-0"
+>
+  {/* Tablet (768px - 1023px) par logo show hoga */}
+  <img
+    src={landinglogo}
+    alt="Aidly Logo"
+    className="hidden md:block lg:hidden w-full h-full object-contain"
+  />
+</div>
         </div>
       </section>
 
@@ -646,7 +660,7 @@ export default function LandingPage() {
         ref={(el) => (serviceRefs.current[i] = el)}
         className={`
           rounded-3xl flex flex-col md:flex-row
-          items-center justify-between gap-6 md:gap-8
+          items-center justify-between gap-4 md:gap-8
           transition-all duration-300 hover:shadow-2xl hover:-translate-y-2
           py-2 md:py-4
           px-2 sm:px-4
@@ -669,7 +683,15 @@ export default function LandingPage() {
             {service.title}
           </h3>
 
-          <button className="mt-6 md:mt-10 bg-white px-5 sm:px-6 md:px-8 py-2 md:py-3 rounded-full text-base sm:text-lg md:text-2xl font-medium transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
+          <button className="mt-2 mb-2 md:mt-10 bg-white px-5 sm:px-6 md:px-8 py-2 md:py-3 rounded-full text-base sm:text-lg md:text-2xl font-medium transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+           onClick={() =>
+    navigate("/services", {
+      state: {
+        service: service.id,
+      },
+    })
+  }
+          >
             View Details
           </button>
         </div>

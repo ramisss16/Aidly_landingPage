@@ -1,6 +1,7 @@
 import React from "react";
 import { useRef, useEffect } from "react";
 import gsap from "gsap";
+import { useLocation } from "react-router-dom";
 import AmbulanceImage from "../../assets/AmbulanceImage.png";
 import HomecareImage from "../../assets/HomecareImage.png";
 import DoctorImage from "../../assets/DoctorApointmentImage.png";
@@ -18,15 +19,35 @@ const AidlyServices = () => {
     });
   }, []);
 
+  const sectionRefs = {
+  ambulance: useRef(null),
+  doctor: useRef(null),
+  homecare: useRef(null),
+  medical: useRef(null),
+};
+
+const location = useLocation();
+
+useEffect(() => {
+  const service = location.state?.service;
+
+  if (service && sectionRefs[service]) {
+    sectionRefs[service].current?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
+}, []);
+
   return (
     <div ref={servicesRef} className="w-full bg-gradient-to-b from-[#1A5F48] via-[#89C9CA] to-[#C6EBE8] px-4 sm:px-6 md:px-10 py-6 md:py-10">
 
-      <h1 className="font-bold text-3xl sm:text-4xl text-white mt-15 md:mt-15 mb-8 text-center md:text-left">
+      <h1 className="font-bold text-3xl sm:text-4xl text-white mt-18 md:mt-15 mb-8 text-center md:text-left">
         Our Services
       </h1>
 
       {/* Ambulance */}
-      <div className="relative w-full max-w-6xl mx-auto rounded-[30px] bg-white/85 shadow-lg overflow-hidden py-10 sm:py-14 md:py-16 px-4 sm:px-8 md:px-16 mb-10 md:mb-15">
+      <div ref={sectionRefs.ambulance} className="relative w-full max-w-6xl mx-auto rounded-[30px] bg-white/85 shadow-lg overflow-hidden py-10 sm:py-14 md:py-16 px-4 sm:px-8 md:px-16 mb-10 md:mb-15">
         <img
           src={AmbulanceImage}
           alt="ambulance"
@@ -53,7 +74,7 @@ const AidlyServices = () => {
       </div>
 
       {/* Doctor Appointment */}
-      <div className="relative w-full max-w-6xl mx-auto rounded-[30px] bg-white/85 shadow-lg overflow-hidden py-10 sm:py-14 md:py-16 px-4 sm:px-8 md:px-16 mb-10 md:mb-15">
+      <div ref={sectionRefs.doctor} className="relative w-full max-w-6xl mx-auto rounded-[30px] bg-white/85 shadow-lg overflow-hidden py-10 sm:py-14 md:py-16 px-4 sm:px-8 md:px-16 mb-10 md:mb-15">
         <img
           src={DoctorImage}
           alt="doctor"
@@ -80,7 +101,7 @@ const AidlyServices = () => {
       </div>
 
       {/* Homecare */}
-      <div className="relative w-full max-w-6xl mx-auto rounded-[30px] bg-white/85 shadow-lg overflow-hidden py-10 sm:py-14 md:py-16 px-4 sm:px-8 md:px-16 mb-10 md:mb-15">
+      <div ref={sectionRefs.homecare} className="relative w-full max-w-6xl mx-auto rounded-[30px] bg-white/85 shadow-lg overflow-hidden py-10 sm:py-14 md:py-16 px-4 sm:px-8 md:px-16 mb-10 md:mb-15">
         <img
           src={HomecareImage}
           alt="homecare"
@@ -107,7 +128,7 @@ const AidlyServices = () => {
       </div>
 
       {/* Medical Store */}
-      <div className="relative w-full max-w-6xl mx-auto rounded-[30px] bg-white/85 shadow-lg overflow-hidden py-10 sm:py-14 md:py-16 px-4 sm:px-8 md:px-16 mb-10 md:mb-15">
+      <div ref={sectionRefs.medical} className="relative w-full max-w-6xl mx-auto rounded-[30px] bg-white/85 shadow-lg overflow-hidden py-10 sm:py-14 md:py-16 px-4 sm:px-8 md:px-16 mb-10 md:mb-15">
         <img
           src={MedicalStoreImage}
           alt="medical store"

@@ -100,13 +100,13 @@ if (data.user || data.ambulance || data.admin) {
 
   return (
     <div
-      className="min-h-[calc(100vh-64px)] flex justify-center items-start pt-16"
+      className=" min-h-screen flex justify-center items-start pt-16"
       style={{
         background:
           "linear-gradient(0deg, #C6EBE8 0%, #89C9CA 60.58%, #1A5F48 100%)",
       }}
     >
-      <div className="bg-white w-[90%] max-w-[520px] rounded-lg shadow-lg px-10 py-8">
+      <div className="bg-white w-[90%] max-w-[520px] rounded-lg shadow-lg px-10 py-8 mt-18">
         <h1 className="text-3xl font-semibold mb-1">Login</h1>
 
         <p className="text-sm text-gray-600 mb-6">

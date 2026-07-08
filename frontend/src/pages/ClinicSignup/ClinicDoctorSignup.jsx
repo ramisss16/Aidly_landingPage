@@ -226,6 +226,7 @@ sessionStorage.removeItem(
 
   return (
     <>
+    
       {loading && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
           <div className="w-16 h-16 border-4 border-white border-t-blue-600 rounded-full animate-spin"></div>
@@ -254,12 +255,17 @@ sessionStorage.removeItem(
           {/* doctor details */}
           {step == 1 && (
             <>
+            <form 
+                onSubmit={(e) => {
+    handleNext(e);
+  }}>
               <div className="flex items-center md:gap-2 mb-5">
                 <label className="text-sm sm:text-lg font-semibold w-28 sm:w-48 ml-2 sm:ml-10">
-                  Full Name
+                  Full Name <span className="px-2 text-red-600">*</span>
                 </label>
 
                 <input
+                required
                   name="fullName"
                   type="text"
                   value={formData.fullName || ""}
@@ -270,10 +276,11 @@ sessionStorage.removeItem(
 
               <div className="flex items-center md:gap-2 mb-5">
                 <label className="text-sm sm:text-lg font-semibold w-28 sm:w-48 ml-2 sm:ml-10">
-                  Email Address
+                  Email Address <span className="px-2 text-red-600">*</span>
                 </label>
 
                 <input
+                required
                   name="email"
                   type="email"
                   value={formData.email || ""}
@@ -288,7 +295,8 @@ sessionStorage.removeItem(
                 </label>
 
                 <div className="flex flex-col sm:flex-row flex-1 gap-2 sm:gap-5">
-                  <input
+                  <input 
+                  
                     type="number"
                     name="phonenumber"
                     value={formData.phonenumber || ""}
@@ -314,6 +322,7 @@ sessionStorage.removeItem(
 
                 <div className="flex flex-row flex-1 gap-3 sm:gap-5 sm:ml-[240px] ml-[120px]">
                   <input
+                  required
                     name="otp"
                     value={formData.otp || ""}
                     onChange={handleChange}
@@ -377,6 +386,7 @@ sessionStorage.removeItem(
 
                 <div className="relative flex-1">
                   <input
+                  required
                     type={showPassword ? "text" : "password"}
                     name="Createpassword"
                     value={formData.Createpassword || ""}
@@ -400,6 +410,7 @@ sessionStorage.removeItem(
 
                 <div className="relative flex-1">
                   <input
+                  required
                     type={showConfirmPassword ? "text" : "password"}
                     name="confirmPassword"
                     value={formData.confirmPassword || ""}
@@ -420,22 +431,29 @@ sessionStorage.removeItem(
 
               <div className="flex justify-center mt-8">
                 <button
-                  onClick={handleNext}
+                  type="submit"
                   className="bg-blue-600 text-white px-10 py-2 rounded-md text-lg shadow-md hover:bg-blue-700"
                 >
                   Continue
                 </button>
               </div>
+              </form>
             </>
           )}
 
           {/* verification details */}
           {step == 2 && (
             <>
+            <form 
+       onSubmit={(e) => {
+    e.preventDefault();
+    handleSubmit();
+  }}>
               <div className="space-y-5">
                 <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                  <label className="sm:w-1/3 font-medium">Specialization</label>
+                  <label className="sm:w-1/3 font-medium">Specialization <span className="px-2 text-red-600">*</span></label>
                   <input
+                  required
                     type="text"
                     name="specialization"
                     value={formData.specialization || ""}
@@ -480,7 +498,7 @@ sessionStorage.removeItem(
                 </p>
 
                 <h3 className="text-lg md:text-xl font-semibold mb-4">
-                  Upload Document Your License Certificate
+                  Upload Document Your License Certificate <span className="px-2 text-red-600">*</span>
                 </h3>
 
                 <div className="border-2 border-dashed border-blue-500 mx-auto rounded-lg flex flex-col items-center justify-center p-8 mb-2">
@@ -489,6 +507,7 @@ sessionStorage.removeItem(
                   </p>
 
                   <input
+                  required
                     type="file"
                     name="licenseDocument"
                     onChange={handleChange}
@@ -559,9 +578,10 @@ sessionStorage.removeItem(
 
                 <div className="flex flex-col sm:flex-row gap-2">
                   <label className="sm:w-1/3 font-medium">
-                    Contact Number (Official)
+                    Contact Number (Official) <span className="px-2 text-red-600">*</span>
                   </label>
                   <input
+                  required
                     type="number"
                     name="officialContact"
                     value={formData.officialContact || ""}
@@ -572,9 +592,10 @@ sessionStorage.removeItem(
 
                 <div className="flex flex-col sm:flex-row gap-2">
                   <label className="sm:w-1/3 font-medium">
-                    Email Address (Official)
+                    Email Address (Official) <span className="px-2 text-red-600">*</span>
                   </label>
                   <input
+                  required
                     type="email"
                     name="officialEmail"
                     value={formData.officialEmail || ""}
@@ -594,12 +615,13 @@ sessionStorage.removeItem(
                 </div>
 
                 <button
-                  onClick={handleSubmit}
+                  type="submit"
                   className="w-full bg-blue-600 text-white py-3 rounded-lg text-lg font-semibold shadow-md hover:bg-blue-700 transition"
                 >
                   Continue
                 </button>
               </div>
+              </form>
             </>
           )}
         </div>

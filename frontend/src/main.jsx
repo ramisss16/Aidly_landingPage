@@ -49,8 +49,20 @@ import StaffAttendence from "./Modules/common/StaffAttendence";
 import AttendenceRecord from "./Modules/common/AttendenceRecord";
 import AttendenceSuccessPage from "./Modules/common/AttendenceSuccessPage";
 
+
 import PatientRecord from "./Modules/common/PatientRecord";
 import PatientSuccessPage from "./Modules/common/PatientSuccessPage";
+
+import LandingPage from "./pages/LandingPage/Hero";
+import AboutAidly from "./pages/LandingPage/About";
+import AidlyServices from "./pages/LandingPage/Service";
+import AidlyContact from "./pages/LandingPage/Contact";
+import DocumentApproved from "./pages/Common/DocumentApproved";
+import DocReceptionDocumentApproved from "./pages/ClinicSignup/Addmembers/Docreception/DocumentApprovedPage";
+import DoctorDocumentApproved from "./pages/ClinicSignup/Addmembers/Doctor/DocumentApprovedPage";
+import ManagerDocumentApproved from "./pages/ClinicSignup/Addmembers/Manager/DocumentApprovedPage";
+import ReceptionDocumentApproved from "./pages/ClinicSignup/Addmembers/Reception/DocumentApprovedPage";
+
 
 const ErrorPage = () => <h1 className="text-center mt-20 text-3xl">Page Not Found</h1>;
 
@@ -62,8 +74,31 @@ const router = createBrowserRouter([
 
     children: [
 
+
       {
         path: "/",
+        element: <LandingPage/>,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "about",
+        element: <AboutAidly/>,
+        errorElement: <ErrorPage />,
+      },
+      {
+        path: "services",
+        element: <AidlyServices/>,
+        errorElement: <ErrorPage />,
+      },
+
+      {
+        path: "contact",
+        element: <AidlyContact/>,
+        errorElement: <ErrorPage />,
+      },
+
+      {
+        path: "login",
         element: <LoginPage/>,
         errorElement: <ErrorPage />,
       },
@@ -103,41 +138,47 @@ const router = createBrowserRouter([
          errorElement: <ErrorPage />
       }, 
       {
+        path: "/Clinic-DoctorApproval",
+        element: <DoctorDocumentApproved/>,
+         errorElement: <ErrorPage />
+      }, 
+
+      {
         path: "/add-manager",
         element: <Clinic_Manager_Details/>,
          errorElement: <ErrorPage />
       }, 
+
+         {
+        path: "/Clinic-ManagerApproval",
+        element: <ManagerDocumentApproved/>,
+         errorElement: <ErrorPage />
+      }, 
+
       {
         path: "/add-receptionist",
         element: <Clinic_Receptionist_Details/>,
          errorElement: <ErrorPage />
       }, 
 
-      {
-        path: "/succesful-add-doctor",
-        element: <Success_Doc_Page/>,
+         {
+        path: "/Clinic-ReceptionApproval",
+        element: <ReceptionDocumentApproved/>,
          errorElement: <ErrorPage />
       }, 
+
       {
-        path: "/succesful-add-manager",
-        element: <Success_manager_Page />,
+        path: "/Document-Approved",
+        element: <DocumentApproved/>,
          errorElement: <ErrorPage />
       }, 
-      {
-        path: "/succesful-add-Receptionist",
-        element: <Success_receptionist_Page/>,
-         errorElement: <ErrorPage />
-      }, 
+     
       {
         path: "/Clinic_termAndCondition",
         element: <Clinic_TermsCondition />,
          errorElement: <ErrorPage />
       }, 
-      {
-        path: "/Clinic_thankupage",
-        element: <Clinic_thankupage/>,
-         errorElement: <ErrorPage />
-      }, 
+  
 
       // ClinicDocsingup
    
@@ -159,11 +200,13 @@ const router = createBrowserRouter([
         element: <ClinicDoc_Receptionist_Details/>,
         errorElement: <ErrorPage/>
       },
+
       {
-        path:"/ClinicDoc-success-add-receptionist",
-        element: <Success_ClinicDocreceptionist_Page/>,
+        path:"/ClinicDoc-receptionistApproval",
+        element: <DocReceptionDocumentApproved/>,
         errorElement: <ErrorPage/>
       },
+    
 
    // Online Doc signup
         {
@@ -177,11 +220,7 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage/>
       },
 
-        {
-        path:"/Doctor-ThankuPage",
-        element: <OnlineDoc_thankupage/>,
-        errorElement: <ErrorPage/>
-      },
+       
 
       // Ambulance
 
@@ -201,11 +240,7 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage/>
       },
 
-        {
-        path:"/Hospital-Ambulance-ThankuPage",
-        element: <HospitalAmbulance_thankupage/>,
-        errorElement: <ErrorPage/>
-      },
+       
 
       // -> private
 
@@ -223,128 +258,124 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage/>
       },
 
-        {
-        path:"/Private-Ambulance-ThankuPage",
-        element: <PrivateAmbulance_thankupage/>,
-        errorElement: <ErrorPage/>
-      },
-
-      // dastboard
-      {
-  path: "/dashboard",
-  element: <DashboardLayout />,
-  children: [
-    {
-      path: "admin",
-      element: <AdminDas />,
-    },
-    {
-      path: "manager",
-      element: <ManagerDas />,
-    },
-    {
-      path: "doctor",
-      element: <Doctordas />,
-    },
-    {
-  path: "receptionist",
-  element: <ReceptionDash />,
-      },
-    ],
-  },
-     {
-      path: "/dashboard/receptionist/staffattendance",
-      element: <StaffAttendence />,
-  },
-{
-      path: "/dashboard/receptionist/viewattendance",
-      element: <AttendenceRecord />,
-  },
-{
-  path: "/staffsuccessful",
-  element: <AttendenceSuccessPage />,
-},
-   
-{
-  path: "/dashboard/manager/staffattendance",
-  element: <StaffAttendence />,
-},
-
-{
-  path: "/dashboard/manager/viewattendance",
-  element: <AttendenceRecord />,
-},
-
-{
-  path: "/dashboard/manager/addpatient",
-  element: <AddPatientRecord />,
-},
-
-{
-  path: "/dashboard/manager/viewpatient",
-  element: <PatientRecord />,
-  },
-{
-  path: "/dashboard/admin/staffattendance",
-  element: <StaffAttendence />,
-},
-
-{
-  path: "/dashboard/admin/viewattendance",
-  element: <AttendenceRecord />,
-},
-
-{
-  path: "/dashboard/admin/addpatient",
-  element: <AddPatientRecord />,
-},
-
-{
-  path: "/dashboard/admin/viewpatient",
-  element: <PatientRecord />,
-},
-      //  {
-      //   path:"/HospitalAmbulance-Dashboard",
-      //   element: <HospitalAmbulanceDas/>,
-      //   errorElement: <ErrorPage/>
-      // },
-      //  {
-      //   path:"/PrivateAmbulance-Dashboard",
-      //   element: <PrivateAmbulanceDas/>,
-      //   errorElement: <ErrorPage/>
-      // },
-
-       {
-  path:"/viewpatients",
-  element: <PatientRecord />,
-  errorElement: <ErrorPage/>
-},
-{
-  path: "/addpatient",
-  element: <AddPatientRecord />,
-  errorElement: <ErrorPage/>
-},
-{
-  path:"/patientsuccess",
-  element: <PatientSuccessPage />,
-  errorElement: <ErrorPage/>
-  },
-{
-  path:"/dashboard/doctor/mypatient",
-  element: <MyPatients />,
-  errorElement: <ErrorPage/>
-},
-       {
-        path:"/dashboard/doctor/today'sappointmment",
-        element: <Myapointment/>,
-        errorElement: <ErrorPage/>
-  },
        
-       {
-  path: "/admin/*",
-  element: <AdminRoutes />,
-  errorElement: <ErrorPage />
-},
+
+//       // dastboard
+//       {
+//   path: "/dashboard",
+//   element: <DashboardLayout />,
+//   children: [
+//     {
+//       path: "admin",
+//       element: <AdminDas />,
+//     },
+//     {
+//       path: "manager",
+//       element: <ManagerDas />,
+//     },
+//     {
+//       path: "doctor",
+//       element: <Doctordas />,
+//     },
+//     {
+//   path: "receptionist",
+//   element: <ReceptionDash />,
+//       },
+//     ],
+//   },
+//      {
+//       path: "/dashboard/receptionist/staffattendance",
+//       element: <StaffAttendence />,
+//   },
+// {
+//       path: "/dashboard/receptionist/viewattendance",
+//       element: <AttendenceRecord />,
+//   },
+// {
+//   path: "/staffsuccessful",
+//   element: <AttendenceSuccessPage />,
+// },
+   
+// {
+//   path: "/dashboard/manager/staffattendance",
+//   element: <StaffAttendence />,
+// },
+
+// {
+//   path: "/dashboard/manager/viewattendance",
+//   element: <AttendenceRecord />,
+// },
+
+// {
+//   path: "/dashboard/manager/addpatient",
+//   element: <AddPatientRecord />,
+// },
+
+// {
+//   path: "/dashboard/manager/viewpatient",
+//   element: <PatientRecord />,
+//   },
+// {
+//   path: "/dashboard/admin/staffattendance",
+//   element: <StaffAttendence />,
+// },
+
+// {
+//   path: "/dashboard/admin/viewattendance",
+//   element: <AttendenceRecord />,
+// },
+
+// {
+//   path: "/dashboard/admin/addpatient",
+//   element: <AddPatientRecord />,
+// },
+
+// {
+//   path: "/dashboard/admin/viewpatient",
+//   element: <PatientRecord />,
+// },
+//       //  {
+//       //   path:"/HospitalAmbulance-Dashboard",
+//       //   element: <HospitalAmbulanceDas/>,
+//       //   errorElement: <ErrorPage/>
+//       // },
+//       //  {
+//       //   path:"/PrivateAmbulance-Dashboard",
+//       //   element: <PrivateAmbulanceDas/>,
+//       //   errorElement: <ErrorPage/>
+//       // },
+
+//        {
+//   path:"/viewpatients",
+//   element: <PatientRecord />,
+//   errorElement: <ErrorPage/>
+// },
+// {
+//   path: "/addpatient",
+//   element: <AddPatientRecord />,
+//   errorElement: <ErrorPage/>
+// },
+// {
+//   path:"/patientsuccess",
+//   element: <PatientSuccessPage />,
+//   errorElement: <ErrorPage/>
+//   },
+// {
+//   path:"/dashboard/doctor/mypatient",
+//   element: <MyPatients />,
+//   errorElement: <ErrorPage/>
+// },
+//        {
+//         path:"/dashboard/doctor/today'sappointmment",
+//         element: <Myapointment/>,
+//         errorElement: <ErrorPage/>
+//   },
+       
+//        {
+//   path: "/admin/*",
+//   element: <AdminRoutes />,
+//   errorElement: <ErrorPage />
+// },
 
 ]);
 

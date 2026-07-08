@@ -197,11 +197,17 @@ const HospitalAmbulaceSignup = () => {
 
           {step === 1 && (
             <>
+            <form 
+              onSubmit={(e) => {
+      e.preventDefault();
+      handleNext();
+    }}>
               <div className="flex items-center md:gap-2 mb-5">
                 <label className="text-sm sm:text-lg font-semibold w-28 sm:w-48 ml-2 sm:ml-10">
-                  Hospital Name
+                  Hospital Name <span className="text-red-600 px-2">*</span>
                 </label>
                 <input
+                required
                   name="hospitalName"
                   type="text"
                   value={formData.hospitalName || ""}
@@ -212,9 +218,10 @@ const HospitalAmbulaceSignup = () => {
 
               <div className="flex items-center md:gap-2 mb-5">
                 <label className="text-sm sm:text-lg font-semibold w-28 sm:w-48 ml-2 sm:ml-10">
-                  Driver Name
+                  Driver Name <span className="text-red-600 px-2">*</span>
                 </label>
                 <input
+                required
                   name="driverName"
                   type="text"
                   value={formData.driverName || ""}
@@ -252,6 +259,7 @@ const HospitalAmbulaceSignup = () => {
                 </label>
                 <div className="flex flex-row flex-1 gap-3 sm:gap-5 sm:ml-[240px] ml-[120px]">
                   <input
+                  required
                     name="otp"
                     value={formData.otp || ""}
                     onChange={handleChange}
@@ -272,9 +280,10 @@ const HospitalAmbulaceSignup = () => {
 
               <div className="flex items-center md:gap-2 mb-5">
                 <label className="text-sm sm:text-lg font-semibold w-28 sm:w-48 ml-2 sm:ml-10">
-                  Hospital Address
+                  Hospital Address <span className="text-red-600 px-2">*</span>
                 </label>
                 <input
+                required
                   name="hospitalAddress"
                   type="text"
                   value={formData.hospitalAddress || ""}
@@ -316,7 +325,7 @@ const HospitalAmbulaceSignup = () => {
               </p>
 
               <h3 className="text-lg md:text-xl font-semibold mb-4">
-                Upload Driver's License Certificate
+                Upload Driver's License Certificate <span className="text-red-600 px-2">*</span>
               </h3>
 
               <div className="border-2 border-dashed border-blue-500 mx-auto rounded-lg flex flex-col items-center justify-center p-8 mb-2">
@@ -324,6 +333,7 @@ const HospitalAmbulaceSignup = () => {
                   DRAG FILE HERE OR
                 </p>
                 <input
+                  required
                   type="file"
                   name="driverLicense"
                   onChange={handleChange}
@@ -348,7 +358,7 @@ const HospitalAmbulaceSignup = () => {
               </p>
 
               <h3 className="text-lg md:text-xl font-semibold mb-4">
-                Upload an ID Proof (Adhar or PAN)
+                Upload an ID Proof (Adhar or PAN) <span className="text-red-600 px-2">*</span>
               </h3>
 
               <div className="border-2 border-dashed border-blue-500 mx-auto rounded-lg flex flex-col items-center justify-center p-8 mb-2">
@@ -356,6 +366,7 @@ const HospitalAmbulaceSignup = () => {
                   DRAG FILE HERE OR
                 </p>
                 <input
+                 required
                   type="file"
                   name="driverIdProof"
                   id="driverIdUpload"
@@ -385,6 +396,7 @@ const HospitalAmbulaceSignup = () => {
                 </label>
                 <div className="relative flex-1">
                   <input
+                  required
                     type={showPassword ? "text" : "password"}
                     name="password"
                     value={formData.password || ""}
@@ -406,6 +418,7 @@ const HospitalAmbulaceSignup = () => {
                 </label>
                 <div className="relative flex-1">
                   <input
+                  required
                     type={showConfirmPassword ? "text" : "password"}
                     name="confirmPassword"
                     value={formData.confirmPassword || ""}
@@ -423,22 +436,29 @@ const HospitalAmbulaceSignup = () => {
 
               <div className="flex justify-center mt-8">
                 <button
-                  onClick={handleNext}
+                type="submit"
                   className="bg-blue-600 text-white px-10 py-2 rounded-md text-lg shadow-md hover:bg-blue-700"
                 >
                   Continue
                 </button>
               </div>
+              </form>
             </>
           )}
 
           {step === 2 && (
             <>
+            <form 
+              onSubmit={async(e) => {
+      e.preventDefault();
+      await handleSubmit();
+    }}>
               <div className="flex items-center md:gap-2 mb-5">
                 <label className="text-sm sm:text-lg font-semibold w-28 sm:w-48 ml-2 sm:ml-10">
-                  Ambulance Type
+                  Ambulance Type <span className="text-red-600 px-2">*</span>
                 </label>
                 <select
+                required
                   name="ambulanceType"
                   value={formData.ambulanceType || ""}
                   onChange={handleChange}
@@ -455,9 +475,10 @@ const HospitalAmbulaceSignup = () => {
 
               <div className="flex items-center md:gap-2 mb-5">
                 <label className="text-sm sm:text-lg font-semibold w-28 sm:w-48 ml-2 sm:ml-10">
-                  Vehical Number
+                  Vehical Number <span className="text-red-600 px-2">*</span>
                 </label>
                 <input
+                required
                   name="vehicleNumber"
                   value={formData.vehicleNumber || ""}
                   onChange={handleChange}
@@ -467,9 +488,10 @@ const HospitalAmbulaceSignup = () => {
 
               <div className="flex items-center md:gap-2 mb-5">
                 <label className="text-sm sm:text-lg font-semibold w-28 sm:w-48 ml-2 sm:ml-10">
-                  vehical Registration\License Number
+                  vehical Registration\License Number <span className="text-red-600 px-2">*</span>
                 </label>
                 <input
+                required
                   name="vehicleRegistrationLicenseNumber"
                   value={formData.vehicleRegistrationLicenseNumber || ""}
                   onChange={handleChange}
@@ -478,7 +500,7 @@ const HospitalAmbulaceSignup = () => {
               </div>
 
               <h3 className="text-lg md:text-xl font-semibold mb-4">
-                Upload Vehicle Registration Number Certificate
+                Upload Vehicle Registration Number Certificate <span className="text-red-600 px-2">*</span>
               </h3>
 
               <div className="border-2 border-dashed border-blue-500 mx-auto rounded-lg flex flex-col items-center justify-center p-8 mb-2">
@@ -486,6 +508,7 @@ const HospitalAmbulaceSignup = () => {
                   DRAG FILE HERE OR
                 </p>
                 <input
+                required
                   type="file"
                   name="vehicleRegistrationCertificate"
                   id="vehicleRegistrationUpload"
@@ -543,12 +566,13 @@ const HospitalAmbulaceSignup = () => {
 
               <div className="flex justify-center mt-8">
                 <button
-                  onClick={handleSubmit}
+                 type="submit"
                   className="bg-blue-600 text-white px-10 py-2 rounded-md text-lg shadow-md hover:bg-blue-700"
                 >
                   Continue
                 </button>
               </div>
+              </form>
             </>
           )}
         </div>
