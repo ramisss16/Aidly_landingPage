@@ -471,36 +471,7 @@ export default function LandingPage() {
   const downloadRef = useRef(null);
 
   useLayoutEffect(() => {
-    const timer = setTimeout(() => {
-      const hero = heroLogoRef.current;
-      const target = aboutLogoRef.current;
-
-      if (!hero || !target) return;
-
-      const heroRect = hero.getBoundingClientRect();
-      const targetRect = target.getBoundingClientRect();
-
-      const x = targetRect.left - heroRect.left;
-      const y = targetRect.top - heroRect.top;
-
    
-
-     if (!window.matchMedia("(min-width: 768px) and (max-width: 1023px)").matches) {
-  gsap.to(hero, {
-    x,
-    y,
-    scale: 1,
-    ease: "none",
-    scrollTrigger: {
-      trigger: target,
-      start: "top 80%",
-      end: "top 40%",
-      scrub: true,
-    },
-  });
-}
-    }, 1500);
-
     const sections = [aboutRef.current, reviewsRef.current, downloadRef.current];
 
     sections.forEach((section) => {
@@ -583,13 +554,13 @@ export default function LandingPage() {
   
   return (
     <div
-      className="bg-gradient-to-b from-[#1A5F48] via-[#89C9CA] to-[#C6EBE8] min-h-[400px] overflow-x-hidden"
-      style={{ paddingTop: NAV_HEIGHT }}
+      className="bg-[linear-gradient(0deg,_#FFFFFF_0%,_#C6EBE8_39.9%,_#89C9CA_75.48%,_#1A5F48_100%)] min-h-screen bg-fixed overflow-x-hidden"
+      style={{ paddingTop: NAV_HEIGHT  }}
     >
       <section
         
         ref={heroRef}
-        className="pt-10 md:pt-24 flex flex-col items-center px-4 text-center"
+        className="pt-8 md:pt-18 flex flex-col items-center px-4 text-center"
       >
         <img
           ref={heroLogoRef}
@@ -605,24 +576,25 @@ export default function LandingPage() {
         </h1>
 
         <p className="text-lg sm:text-xl md:text-2xl font-bold mt-3 px-2">
-          Your health, our priority. Stay Healthy!
+         All In One Healthcare Platform
+
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 mt-8 w-full justify-center">
-          <button onClick={()=>navigate("/about")} 
+          <button onClick={()=>navigate("//about")} 
           className="px-8 md:px-12 py-4 rounded-2xl bg-blue-600 text-white text-xl sm:text-2xl md:text-3xl font-semibold shadow-lg hover:bg-blue-700 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
             Explore Aidly
           </button>
 
           <button className="px-8 md:px-12 py-4 rounded-2xl bg-blue-600 text-white text-xl sm:text-2xl md:text-3xl font-semibold shadow-lg hover:bg-blue-700 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
-                   onClick={()=>navigate("/services")}>
-            View Services
+                   onClick={()=>navigate("//login")}>
+            Admin Login
           </button>
         </div>
       </section>
 
       <section ref={aboutRef} className="py-16 md:py-20 px-4 md:px-10 scroll-mt-24">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-10">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
           <div className="flex flex-col items-center md:items-start w-full md:w-1/2">
             <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-center md:text-left">
               Aidly
@@ -634,14 +606,14 @@ export default function LandingPage() {
           </div>
 
         <div
-  ref={aboutLogoRef}
-  className="w-[220px] h-[220px] sm:w-[280px] sm:h-[280px] md:w-[350px] md:h-[350px] shrink-0"
+  
+  className="w-[220px] h-[220px] sm:w-[280px] sm:h-[280px] md:w-[420px] md:h-[420px]"
 >
   {/* Tablet (768px - 1023px) par logo show hoga */}
   <img
-    src={landinglogo}
+    src={AidlyLogo}
     alt="Aidly Logo"
-    className="hidden md:block lg:hidden w-full h-full object-contain"
+    className=" w-full h-full object-contain"
   />
 </div>
         </div>

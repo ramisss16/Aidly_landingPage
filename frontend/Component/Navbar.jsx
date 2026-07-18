@@ -78,7 +78,7 @@ import gsap from "gsap";
 import AidlyLogo from "../src/assets/Aidly.png";
 import { User } from "lucide-react";
 
-const NAV_HEIGHT = 80;
+const NAV_HEIGHT = 90;
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -119,14 +119,12 @@ const Navbar = () => {
   return (
     <nav
       ref={navRef}
-      className="fixed top-0 left-0 w-full z-50 bg-transparent"
+      className="fixed top-0 left-0 w-full z-50 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-xl"
       style={{ height: NAV_HEIGHT }}
     >
       <div
         className="w-full h-full flex items-center justify-between rounded-b-3xl shadow-md px-5 md:px-5 lg:px-14"
-        style={{
-          background: "linear-gradient(180deg,#1A5F48 0%,#18765A 100%)",
-        }}
+       
       >
         {/* Logo */}
         <div

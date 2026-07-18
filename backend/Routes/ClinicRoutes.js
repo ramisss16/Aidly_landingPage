@@ -122,6 +122,7 @@ const {
   getAllDoctors,
   getAllStaff,
   updateClinic,
+  getClinicById,
 } = require("../Controllers/ClinicController");
 
 // CLINIC REGISTER
@@ -193,5 +194,7 @@ router.post("/auth/login", loginClinicUser);
 // GET DATA
 router.get("/doctor/:clinicId", getAllDoctors);
 router.get("/staff/:clinicId", getAllStaff);
+
+router.get("/:clinicId", getClinicById);
 
 module.exports = router;

@@ -663,3 +663,32 @@ exports.getAllStaff = async (req, res) => {
     });
   }
 };
+
+// GET CLINIC DETAILS
+exports.getClinicById = async (req, res) => {
+  try {
+    const { clinicId } = req.params;
+
+    const clinic = await Clinic.findById(clinicId).select(
+      "clinicName city state pincode"
+    );
+
+    if (!clinic) {
+      return res.status(404).json({
+        success: false,
+        message: "Clinic not found",
+      });
+    }
+
+    res.status(200).json({
+      success: true,
+      data: clinic,
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
