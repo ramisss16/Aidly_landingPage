@@ -58,10 +58,14 @@ import AboutAidly from "./pages/LandingPage/About";
 import AidlyServices from "./pages/LandingPage/Service";
 import AidlyContact from "./pages/LandingPage/Contact";
 import DocumentApproved from "./pages/Common/DocumentApproved";
-import DocReceptionDocumentApproved from "./pages/ClinicSignup/Addmembers/Docreception/DocumentApprovedPage";
-import DoctorDocumentApproved from "./pages/ClinicSignup/Addmembers/Doctor/DocumentApprovedPage";
-import ManagerDocumentApproved from "./pages/ClinicSignup/Addmembers/Manager/DocumentApprovedPage";
-import ReceptionDocumentApproved from "./pages/ClinicSignup/Addmembers/Reception/DocumentApprovedPage";
+import DocReceptionDocumentApproved from "./pages/ClinicSignup/Addmembers/Docreception/ClinicDocReceptionTermAndCondition";
+import DoctorDocumentApproved from "./pages/ClinicSignup/Addmembers/Doctor/ClinicDocTermAndCoendition";
+import ManagerDocumentApproved from "./pages/ClinicSignup/Addmembers/Manager/ClinicManagerTermAndCondition";
+import ReceptionDocumentApproved from "./pages/ClinicSignup/Addmembers/Reception/ClinicRecTermAndCondition";
+import ClinicDoc_TermsCondition from "./pages/ClinicSignup/Addmembers/Doctor/ClinicDocTermAndCoendition";
+import ClinicMan_TermsCondition from "./pages/ClinicSignup/Addmembers/Manager/ClinicManagerTermAndCondition";
+import ClinicRec_TermsCondition from "./pages/ClinicSignup/Addmembers/Reception/ClinicRecTermAndCondition";
+import ClinicDocRec_TermsCondition from "./pages/ClinicSignup/Addmembers/Docreception/ClinicDocReceptionTermAndCondition";
 
 
 const ErrorPage = () => <h1 className="text-center mt-20 text-3xl">Page Not Found</h1>;
@@ -76,7 +80,7 @@ const router = createBrowserRouter([
 
 
       {
-        path: "/",
+        index: true,
         element: <LandingPage/>,
         errorElement: <ErrorPage />,
       },
@@ -120,7 +124,7 @@ const router = createBrowserRouter([
     
   },
 
-   // clinic
+  // clinic
       {
         path: "/clinic_form",
         element: <Clinic_details/>,
@@ -137,52 +141,65 @@ const router = createBrowserRouter([
         element: <Clinic_doc_Details />,
          errorElement: <ErrorPage />
       }, 
-      {
-        path: "/Clinic-DoctorApproval",
-        element: <DoctorDocumentApproved/>,
-         errorElement: <ErrorPage />
-      }, 
 
+      
       {
         path: "/add-manager",
         element: <Clinic_Manager_Details/>,
          errorElement: <ErrorPage />
       }, 
 
-         {
-        path: "/Clinic-ManagerApproval",
-        element: <ManagerDocumentApproved/>,
+       {
+        path: "/Clinicman_TermAndCondition",
+        element: <ClinicMan_TermsCondition />,
          errorElement: <ErrorPage />
       }, 
-
       {
         path: "/add-receptionist",
         element: <Clinic_Receptionist_Details/>,
          errorElement: <ErrorPage />
       }, 
 
-         {
-        path: "/Clinic-ReceptionApproval",
-        element: <ReceptionDocumentApproved/>,
+        {
+        path: "/Clinicrec_TermAndCondition",
+        element: <ClinicRec_TermsCondition />,
          errorElement: <ErrorPage />
       }, 
 
+       
+
       {
-        path: "/Document-Approved",
-        element: <DocumentApproved/>,
+        path: "/succesful-add-doctor",
+        element: <Success_Doc_Page/>,
          errorElement: <ErrorPage />
       }, 
-     
+      {
+        path: "/succesful-add-manager",
+        element: <Success_manager_Page />,
+         errorElement: <ErrorPage />
+      }, 
+      {
+        path: "/succesful-add-Receptionist",
+        element: <Success_receptionist_Page/>,
+         errorElement: <ErrorPage />
+      }, 
+
+    
       {
         path: "/Clinic_termAndCondition",
         element: <Clinic_TermsCondition />,
+         errorElement: <ErrorPage />
+      }, 
+      {
+        path: "/Clinic_thankupage",
+        element: <Clinic_thankupage/>,
          errorElement: <ErrorPage />
       }, 
   
 
       // ClinicDocsingup
    
-      {
+        {
         path:"/Clinic-Doctor-Signup",
         element: <ClinicDocSignup/>,
         errorElement: <ErrorPage/>
@@ -202,21 +219,35 @@ const router = createBrowserRouter([
       },
 
       {
-        path:"/ClinicDoc-receptionistApproval",
-        element: <DocReceptionDocumentApproved/>,
+        path:"/ClinicDocrec_TermAndCondition",
+        element: <ClinicDocRec_TermsCondition/>,
         errorElement: <ErrorPage/>
       },
+       {
+        path: "/succesful-add-DocReceptionist",
+        element: <Success_ClinicDocreceptionist_Page/>,
+         errorElement: <ErrorPage />
+      }, 
     
 
    // Online Doc signup
-        {
+         {
         path:"/Doctor-Signup",
         element: <OnlineDoctorForm/>,
         errorElement: <ErrorPage/>
       },
-      {
+
+      
+
+        {
         path:"/Doctor-TermAndCondition",
         element: <OnlineDoc_TermsCondition/>,
+        errorElement: <ErrorPage/>
+      },
+
+        {
+        path:"/Doctor-ThankuPage",
+        element: <OnlineDoc_thankupage/>,
         errorElement: <ErrorPage/>
       },
 
@@ -258,31 +289,39 @@ const router = createBrowserRouter([
         errorElement: <ErrorPage/>
       },
 
+      // comman
+
+        {
+        path:"/Document-Approved",
+        element: <DocumentApproved/>,
+        errorElement: <ErrorPage/>
+      },
+
        
 
-//       // dastboard
-//       {
-//   path: "/dashboard",
-//   element: <DashboardLayout />,
-//   children: [
-//     {
-//       path: "admin",
-//       element: <AdminDas />,
-//     },
-//     {
-//       path: "manager",
-//       element: <ManagerDas />,
-//     },
-//     {
-//       path: "doctor",
-//       element: <Doctordas />,
-//     },
-//     {
-//   path: "receptionist",
-//   element: <ReceptionDash />,
-//       },
-//     ],
-//   },
+      // dastboard
+      {
+  path: "/dashboard",
+  element: <DashboardLayout />,
+  children: [
+    {
+      path: "admin",
+      element: <AdminDas />,
+    },
+    {
+      path: "manager",
+      element: <ManagerDas />,
+    },
+    {
+      path: "doctor",
+      element: <Doctordas />,
+    },
+    {
+  path: "receptionist",
+  element: <ReceptionDash />,
+      },
+    ],
+  },
 //      {
 //       path: "/dashboard/receptionist/staffattendance",
 //       element: <StaffAttendence />,

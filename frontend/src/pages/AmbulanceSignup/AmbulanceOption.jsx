@@ -6,7 +6,9 @@ const AmbulanceLoginoption = () => {
 
 
   return (
-    <div className="w-full min-h-screen flex flex-col items-center justify-start bg-gradient-to-b from-[#1A5F48] via-[#89C9CA] to-[#C6EBE8] pt-6 sm:pt-10">
+     <div className="relative min-h-screen overflow-x-hidden">
+    <div className="fixed inset-0 -z-10 bg-[linear-gradient(0deg,_#FFFFFF_0%,_#C6EBE8_39.9%,_#89C9CA_75.48%,_#1A5F48_100%)]" />
+    <div className="w-full min-h-screen flex flex-col items-center justify-start  pt-26 sm:pt-30">
 
       {/* Main Card */}
       <div className="mt-6 sm:mt-10 bg-white/80 backdrop-blur-md p-5 sm:p-8 md:p-10 shadow-lg w-[90%] max-w-[600px] min-h-[420px] rounded-lg ">
@@ -28,6 +30,7 @@ const AmbulanceLoginoption = () => {
       </div>
 
       </div>
+    </div>
     </div>
   );
 };

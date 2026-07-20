@@ -381,6 +381,9 @@
 // }
 
 import React, { useState, useRef, useLayoutEffect } from "react";
+import useEmblaCarousel from "embla-carousel-react";
+import Autoplay from "embla-carousel-autoplay";
+import { useEffect, useCallback } from "react";
 import { Navigate, useNavigate } from "react-router-dom";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -389,6 +392,7 @@ import landinglogo from "../../assets/landingLogo2.png";
 import AidlyLogo from "../../assets/Aidly2.png";
 import AmbulanceImage from "../../assets/AmbulanceImage.png";
 import DoctorApointmentImage from "../../assets/DoctorApointmentImage.png";
+import clinicmangementImage from "../../assets/clinicmanagementImage.png";
 import HomeCareImage from "../../assets/HomeCareImage.png";
 import MedicalStore from "../../assets/MedicalStoreImage.png";
 import ReviewImage1 from "../../assets/ReviewImage.jpeg";
@@ -406,53 +410,46 @@ const services = [
     id: "ambulance",
     title: "Ambulance Booking",
     image: AmbulanceImage,
-    reverse: false,
+    
   },
   {
     id: "doctor",
     title: "Doctor Appointment",
     image: DoctorApointmentImage,
-    reverse: true,
+    
+  },
+  {
+    id: "clinic",
+    title: "Clinic Management",
+    image: clinicmangementImage,
+   
   },
   {
     id: "homecare",
     title: "Home Healthcare",
     image: HomeCareImage,
-    reverse: false,
+  
   },
   {
     id: "medical",
     title: "Medical Store",
     image: MedicalStore,
-    reverse: true,
+    
   },
 ];
 
 const reviews = [
   {
-    name: "Rahul Sharma",
-    image: ReviewImage1,
-    text: "Booked an ambulance in an emergency, and it arrived quickly. Excellent service and support",
+    title: "Doctors & Clinics",
+    text: "The survey indicates strong interest among doctors in adopting digital clinic management solutions. Respondents highlighted the need for streamlined appointments, digital patient records, billing, and efficient clinic operations. Overall, the responses validate the demand for an integrated, user-friendly platform that improves workflow and patient care.",
   },
   {
-    name: "Priya Verma",
-    image: ReviewImage2,
-    text: "Home healthcare team was professional and caring. Highly recommended for patient care at home",
+    title: "Users & Their Family",
+    text: "The survey shows strong demand for affordable, trusted, and accessible digital healthcare services. Respondents prioritized faster ambulance response, verified doctors, home healthcare, and easy appointment booking while identifying long waiting times and high consultation costs as key challenges. Nearly 80% showed interest in a family healthcare subscription, with ₹299–₹499/month as the preferred price range. Overall, the responses validate strong interest in the Aidly platform.",
   },
   {
-    name: "Amit Singh",
-    image: ReviewImage3,
-    text: "Doctor appointment booking was simple and hassle free. The consultation experience was great",
-  },
-  {
-    name: "Sneha Patel",
-    image: ReviewImage4,
-    text: "Ordered medicines through the medical store and received them on time. Reliable and convenient service",
-  },
-  {
-    name: "Rohan Gupta",
-    image: ReviewImage5,
-    text: "Complete healthcare platform with excellent Ambulance, Doctor and Pharmacy services.",
+    title: "Pharmacy",
+    text: "The survey shows strong interest among pharmacies in joining a digital platform to increase customer reach. Medicine expiry was identified as a key challenge, while demand for home delivery and online medicine orders was high. Trust was the main concern, highlighting the need for transparency, secure payments, and reliable support. The responses validate the need for barcode scanning, delivery integration, and sales reporting.",
   },
 ];
 
@@ -489,22 +486,7 @@ export default function LandingPage() {
       });
     });
 
-    serviceRefs.current.forEach((card, i) => {
-      if (!card) return;
-
-      gsap.from(card, {
-        opacity: 0,
-        x: i % 2 === 0 ? -150 : 150,
-        duration: 1.5,
-        ease: "none",
-        scrollTrigger: {
-          trigger: card,
-          start: "top 85%",
-          toggleActions: "play none none none",
-        },
-      });
-    });
-
+   
     gsap.from(heroRef.current, {
       opacity: 0,
       y: 20,
@@ -516,7 +498,7 @@ export default function LandingPage() {
 
     
 
-    return () => clearTimeout(timer);
+    
   }, []);
 
   const handleMouseMove = (e) => {
@@ -551,6 +533,34 @@ export default function LandingPage() {
     });
   };
 
+  // reviews section
+  const autoplay = Autoplay({
+  delay: 3000,
+  stopOnInteraction: false,
+});
+
+const [emblaRef, emblaApi] = useEmblaCarousel(
+  {
+    loop: true,
+    align: "center",
+  },
+  [autoplay]
+);
+
+const [selected, setSelected] = useState(0);
+
+const onSelect = useCallback(() => {
+  if (!emblaApi) return;
+  setSelected(emblaApi.selectedScrollSnap());
+}, [emblaApi]);
+
+useEffect(() => {
+  if (!emblaApi) return;
+
+  onSelect();
+  emblaApi.on("select", onSelect);
+}, [emblaApi, onSelect]);
+
   
   return (
     <div
@@ -560,7 +570,7 @@ export default function LandingPage() {
       <section
         
         ref={heroRef}
-        className="pt-8 md:pt-18 flex flex-col items-center px-4 text-center"
+        className="pt-18 md:pt-18 flex flex-col items-center px-4 text-center"
       >
         <img
           ref={heroLogoRef}
@@ -580,23 +590,23 @@ export default function LandingPage() {
 
         </p>
 
-        <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 mt-8 w-full justify-center">
-          <button onClick={()=>navigate("//about")} 
+        <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 mt-8 md:w-full justify-center">
+          <button onClick={()=>navigate("/about")} 
           className="px-8 md:px-12 py-4 rounded-2xl bg-blue-600 text-white text-xl sm:text-2xl md:text-3xl font-semibold shadow-lg hover:bg-blue-700 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2">
             Explore Aidly
           </button>
 
           <button className="px-8 md:px-12 py-4 rounded-2xl bg-blue-600 text-white text-xl sm:text-2xl md:text-3xl font-semibold shadow-lg hover:bg-blue-700 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
-                   onClick={()=>navigate("//login")}>
+                   onClick={()=>navigate("/login")}>
             Admin Login
           </button>
         </div>
       </section>
 
       <section ref={aboutRef} className="py-16 md:py-20 px-4 md:px-10 scroll-mt-24">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-3">
-          <div className="flex flex-col items-center md:items-start w-full md:w-1/2">
-            <h2 className="text-4xl sm:text-5xl md:text-6xl font-bold text-center md:text-left">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-center gap-5 lg:gap-28">
+          <div className="flex flex-col items-center  w-full md:w-1/2">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center md:text-left">
               Aidly
             </h2>
 
@@ -620,133 +630,251 @@ export default function LandingPage() {
       </section>
 
     {/* SERVICES */}
-<section className="py-10 md:py-16 px-4 sm:px-6">
-  <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-center mb-8 md:mb-10">
+<section className="py-3 md:py-8 px-4 sm:px-6 mb-12 lg:mb-22 ">
+  <h2 className="text-3xl sm:text-4xl md:text-5xl  font-bold text-center mb-8 md:mb-10">
     Our Services
   </h2>
+<div className="max-w-7xl mx-auto space-y-8">
 
-  <div className="space-y-6 md:space-y-10 max-w-7xl mx-auto">
-    {services.map((service, i) => (
-      <div
-        key={i}
-        ref={(el) => (serviceRefs.current[i] = el)}
-        className={`
-          rounded-3xl flex flex-col md:flex-row
-          items-center justify-between gap-4 md:gap-8
-          transition-all duration-300 hover:shadow-2xl hover:-translate-y-2
-          py-2 md:py-4
-          px-2 sm:px-4
-          ${
-            service.reverse
-              ? "md:flex-row-reverse bg-gradient-to-r from-[#1d8c72] to-[#d9fff7] md:pl-16 lg:pl-24 md:pr-8"
-              : "md:flex-row bg-gradient-to-l from-[#1d8c72] to-[#d9fff7] md:pl-8 md:pr-16 lg:pr-24"
-          }
-        `}
-      >
+  {/* First 3 Cards */}
+  <div className="grid grid-cols-1  sm:grid-cols-3 gap-5 ">
+    {services.slice(0, 3).map((service, i) => (
+        <div
+      key={i}
+     
+      className={` 
+        rounded-3xl overflow-hidden w-full md:w-full
+       bg-[linear-gradient(0deg,_#1A5F48_0%,_#89C9CA_24.52%,_#C6EBE8_60.1%,_#FFFFFF_100%)]
+        transition-all duration-300 hover:shadow-2xl hover:-translate-y-2
+        
+      `}
+    >
+      <div className="flex flex-col items-center text-center p-2">
         <img
           src={service.image}
-          alt=""
-          className="w-[220px] sm:w-[280px] md:w-[320px] lg:w-[360px] 
-                     h-auto md:h-[300px] object-contain"
+          alt={service.title}
+          className="w-60 h-52 object-contain"
         />
 
-        <div className="flex flex-col items-center text-center">
-          <h3 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-white font-semibold">
-            {service.title}
-          </h3>
+        <h3 className="text-3xl text-white font-semibold mt-2">
+          {service.title}
+        </h3>
 
-          <button className="mt-2 mb-2 md:mt-10 bg-white px-5 sm:px-6 md:px-8 py-2 md:py-3 rounded-full text-base sm:text-lg md:text-2xl font-medium transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
-           onClick={() =>
-    navigate("/services", {
-      state: {
-        service: service.id,
-      },
-    })
-  }
-          >
-            View Details
-          </button>
-        </div>
+        <button
+          className="mt-3 mb-2 bg-white px-8 py-3 rounded-full text-xl font-semibold hover:shadow-xl"
+          onClick={() =>
+            navigate("/services", {
+              state: { service: service.id },
+            })
+          }
+        >
+          View Details
+        </button>
       </div>
+    </div>
+    ))}
+  </div>
+
+  {/* Last 2 Cards */}
+  <div className="flex flex-col sm:flex-row justify-center gap-8">
+    {services.slice(3).map((service, i) => (
+       <div
+      key={i}
+      ref={(el) => (serviceRefs.current[i] = el)}
+      className={` w-full md:w-[240px] lg:w-[380px]  justify-self-center
+        rounded-3xl overflow-hidden
+       bg-[linear-gradient(0deg,_#1A5F48_0%,_#89C9CA_24.52%,_#C6EBE8_60.1%,_#FFFFFF_100%)]
+        transition-all duration-300 hover:shadow-2xl hover:-translate-y-2
+        
+      `}
+    >
+      <div className="flex flex-col items-center text-center p-2">
+        <img
+          src={service.image}
+          alt={service.title}
+            className={`w-60 h-52 object-contain ${
+     service.title === "Medical Store"
+      ? "md:mb-8 lg:-mb-1"
+      : ""
+  }`}
+        />
+
+        <h3 className="text-3xl text-white font-semibold mt-2">
+          {service.title}
+        </h3>
+
+        <button
+          className="mt-3 mb-2 bg-white px-8 py-3 rounded-full text-xl font-semibold hover:shadow-xl"
+          onClick={() =>
+            navigate("/services", {
+              state: { service: service.id },
+            })
+          }
+        >
+          View Details
+        </button>
+      </div>
+    </div>
+    ))}
+  </div>
+
+</div>
+</section>
+
+    <section
+  ref={reviewsRef}
+  className="py-8 md:py-10 px-4 sm:px-6 lg:px-8 bg-white/30 mx-4  md:mx-8 rounded-[25px] md:rounded-[35px]"
+>
+  <h2 className="text-center text-3xl sm:text-4xl md:text-5xl font-bold">
+    Aidly Feedback
+  </h2>
+
+  <p className="text-center text-lg sm:text-xl md:text-2xl font-semibold mt-3">
+    What Our Survey Says
+  </p>
+
+  <div className="overflow-hidden mt-5 md:mt-12" ref={emblaRef}>
+    <div className="flex">
+      {reviews.map((review, i) => (
+        <div
+          key={i}
+          className="
+            flex-[0_0_100%]
+            sm:flex-[0_0_92%]
+            md:flex-[0_0_82%]
+            xl:flex-[0_0_78%]
+            px-2 sm:px-3 md:px-4
+          "
+        >
+          <div
+            className="
+              bg-white
+              rounded-[24px] md:rounded-[32px]
+              shadow-lg
+              px-2 sm:px-6 md:px-8
+              py-3 md:py-8
+              
+              h-[480px]
+              md:h-[530px]
+              lg:h-[350px]
+              flex flex-col
+            "
+          >
+            {/* Fixed title height */}
+            <div className="h-5 md:h-16 flex items-start">
+              <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold">
+                {review.title}
+              </h3>
+            </div>
+
+            {/* Text */}
+            <div className="mt-6 flex-1">
+              <p className="text-base sm:text-lg md:text-2xl leading-7 md:leading-9 text-justify">
+                {review.text}
+              </p>
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <div className="flex justify-center gap-3 mt-8">
+    {reviews.map((_, i) => (
+      <button
+        key={i}
+        onClick={() => emblaApi?.scrollTo(i)}
+        className={`transition-all duration-300 rounded-full ${
+          selected === i
+            ? "w-7 h-3 bg-black"
+            : "w-3 h-3 bg-gray-400"
+        }`}
+      />
     ))}
   </div>
 </section>
 
-      <section  ref={reviewsRef} className="py-16 md:py-20 px-4 md:px-6 scroll-mt-24">
-        <h2 className="text-center text-4xl sm:text-5xl md:text-6xl font-bold text-blue-500">
-          Aidly Reviews
-        </h2>
-        <p className="text-center text-2xl sm:text-3xl md:text-4xl font-semibold mt-3">
-          What Our User Says
-        </p>
-
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5 mt-12">
-          {reviews.map((review, i) => (
-            <div
-              key={i}
-              className="shadow-lg rounded-xl p-4 bg-white transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
-            >
-              <img
-                src={review.image}
-                alt={review.name}
-                className="w-full h-52 object-cover rounded-lg"
-              />
-
-              <div className="text-yellow-500 text-center mt-3">★★★★★</div>
-
-              <h3 className="font-bold text-center mt-3">{review.name}</h3>
-
-              <p className="text-center text-sm mt-3">{review.text}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
       <section ref={downloadRef} className="py-16 px-4 md:px-5 scroll-mt-24">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col lg:flex-row gap-6 lg:gap-8 items-start lg:items-center">
-            <h2 className="text-3xl md:text-4xl font-bold">Download Aidly App:</h2>
+     <div className="max-w-7xl mx-auto mt-10 px-4">
+  <div className="flex flex-col lg:flex-row lg:items-center lg:justify-center gap-4 md:gap-12">
 
-            <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto">
-              <button
-                onClick={() => setShowPopup(true)}
-                className="w-full sm:w-auto bg-black text-white rounded-xl text-lg sm:text-2xl md:text-3xl flex items-center justify-center gap-3 px-6 py-5 md:py-8 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
-              >
-                <FaGooglePlay className="text-3xl md:text-4xl" />
-                Get on Google Play Store
-              </button>
+    {/* Heading */}
+    <h2 className="text-2xl sm:text-4xl md:text-5xl font-bold text-center md:text-left">
+      Download Aidly App:
+    </h2>
 
-              <button
-                onClick={() => setShowPopup(true)}
-                className="w-full sm:w-auto bg-black text-white rounded-xl text-lg sm:text-2xl md:text-3xl flex items-center justify-center gap-3 px-6 py-5 md:py-8 transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
-              >
-                <FaApple className="text-3xl md:text-4xl" />
-                Get on Apple App Store
-              </button>
-            </div>
-          </div>
+    {/* Buttons */}
+    <div className="flex flex-col sm:flex-row gap-4 w-full lg:w-auto  md:justify-center">
+
+      <button
+        onClick={() => setShowPopup(true)}
+        className="
+          bg-[#4A4A4A]
+          hover:bg-[#3d3d3d]
+          text-white
+          flex items-center justify-center
+          md:gap-3 gap-2
+          px-1 md:px-6 py-2 md:py-4
+          w-[250px] sm:w-auto mx-auto
+          transition-all duration-300
+        "
+      >
+        <FaGooglePlay className="text-4xl flex-shrink-0" />
+
+        <div className="text-left leading-tight">
+          <p className="text-2xl font-semibold">Get on Google</p>
+          <p className="text-2xl font-semibold">Play Store</p>
         </div>
+      </button>
 
-        <div className="mt-10 space-y-5 mx-auto max-w-2xl">
-          <a
-            href="https://www.linkedin.com/company/aidly-in/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-1 md:gap-3 bg-gradient-to-r from-[#B8B6FF] via-[#2F3FD8] to-[#B8B6FF] rounded-full py-4 px-4 text-base sm:text-lg md:text-3xl font-semibold transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
-          >
-            <span>Follow on LinkedIn for more updates</span>
-            <FaLinkedin className="text-3xl shrink-0" />
-          </a>
+      <button
+        onClick={() => setShowPopup(true)}
+        className="
+          bg-[#4A4A4A]
+          hover:bg-[#3d3d3d]
+          text-white
+          flex items-center justify-center
+         md:gap-3 gap-2
+          px-1 md:px-6 py-2 md:py-4
+          w-[250px] sm:w-auto mx-auto
+          transition-all duration-300
+        "
+      >
+        <FaApple className="text-4xl flex-shrink-0" />
 
-          <a
-            href="https://www.instagram.com/aidly_in?igsh=MWxxMWt1cGoxNmdscA=="
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-1 md:gap-3 bg-gradient-to-r from-[#A64DFF] via-[#dac67f] to-[#A64DFF] rounded-full py-4 px-4 text-base sm:text-lg md:text-3xl font-semibold transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
-          >
-            <span>Follow on Instagram for more updates</span>
-            <FaInstagram className="text-2xl shrink-0" />
-          </a>
+        <div className="text-left leading-tight">
+          <p className="text-2xl font-semibold">Get on Apple</p>
+          <p className="text-2xl font-semibold">App Store</p>
+        </div>
+      </button>
+
+    </div>
+  </div>
+</div>
+
+       <div className="mt-10 space-y-5 mx-auto max-w-lg md:max-w-xl">
+                     <a
+                       href="https://www.linkedin.com/company/aidly-in/"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       className="flex items-center justify-center gap-1 md:gap-3 bg-gradient-to-r from-[#B8B6FF] via-[#2F3FD8] to-[#B8B6FF] rounded-full px-2 py-3 md:py-4 md:px-4  text-base sm:text-lg md:text-2xl font-semibold transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+                     >
+                       <span>Follow on LinkedIn for more updates</span>
+                       <FaLinkedin className=" text-2xl md:text-3xl shrink-0" />
+                     </a>
+           
+                     <a
+                       href="https://www.instagram.com/aidly_in?igsh=MWxxMWt1cGoxNmdscA=="
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       className="flex items-center justify-center gap-1 md:gap-3 bg-gradient-to-r from-[#A64DFF] via-[#dac67f] to-[#A64DFF] rounded-full px-2 py-3 md:py-4 md:px-4 text-base sm:text-lg md:text-2xl font-semibold transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+                     >
+                       <span>Follow on Instagram for more updates</span>
+                       <FaInstagram className="text-2xl md:text-3xl shrink-0" />
+                     </a>
+           
+                    
+                  
 
           <p className="text-lg sm:text-2xl md:text-3xl mt-10 font-bold text-center sm:text-left">
             Reach out to us:
@@ -754,7 +882,7 @@ export default function LandingPage() {
               href="mailto:aidlyservice2025@gmail.com?subject=Inquiry about Aidly"
               className="text-blue-500 underline ml-2 hover:text-blue-700 break-all"
             >
-              aidlyservice2025@gmail.com
+              service@aidly.in
             </a>
           </p>
         </div>
@@ -778,8 +906,11 @@ export default function LandingPage() {
         </div>
       )}
 
-      <p className="text-center mb-1 text-base sm:text-lg md:text-xl">
+      <p className="text-center mb-2 text-base sm:text-lg md:text-xl">
         © 2025 Aidly. All rights reserved.
+      </p>
+      <p className="text-center mb-1 text-base sm:text-lg md:text-xl">
+        Powered by Aidcore Technologies Pvt. Ltd
       </p>
     </div>
   );

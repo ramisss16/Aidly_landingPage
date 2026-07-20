@@ -99,12 +99,14 @@ if (data.user || data.ambulance || data.admin) {
   };
 
   return (
+     <div className="relative min-h-screen overflow-x-hidden">
+    <div className="fixed inset-0 -z-10 bg-[linear-gradient(0deg,_#FFFFFF_0%,_#C6EBE8_39.9%,_#89C9CA_75.48%,_#1A5F48_100%)]" />
     <div
       className=" min-h-screen flex justify-center items-start pt-16"
-      style={{
-        background:
-          "linear-gradient(0deg, #C6EBE8 0%, #89C9CA 60.58%, #1A5F48 100%)",
-      }}
+      // style={{
+      //   background:
+      //     "linear-gradient(0deg, #C6EBE8 0%, #89C9CA 60.58%, #1A5F48 100%)",
+      // }}
     >
       <div className="bg-white w-[90%] max-w-[520px] rounded-lg shadow-lg px-10 py-8 mt-18">
         <h1 className="text-3xl font-semibold mb-1">Login</h1>
@@ -124,7 +126,7 @@ if (data.user || data.ambulance || data.admin) {
 
           <input
             type="text"
-            className="w-full mb-4 px-4 py-2 rounded-md bg-[#E9E9E9]"
+            className="w-full mb-4 px-4 py-2 rounded-md bg-[#E9E9E9] "
             placeholder="Enter User ID"
             value={userId}
             onChange={(e) => setUserId(e.target.value)}
@@ -182,6 +184,7 @@ if (data.user || data.ambulance || data.admin) {
           </Link>
         </p>
       </div>
+    </div>
     </div>
   );
 };

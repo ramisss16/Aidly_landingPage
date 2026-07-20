@@ -17,15 +17,17 @@ const AidlyContact = () => {
   }, []);
 
   return (
+    <div className="relative min-h-screen overflow-x-hidden">
+    <div className="fixed inset-0 -z-10 bg-[linear-gradient(0deg,_#FFFFFF_0%,_#C6EBE8_39.9%,_#89C9CA_75.48%,_#1A5F48_100%)]" />
     <div ref={contactRef}
       className="min-h-screen w-full px-4 sm:px-6 md:px-8 lg:px-12 py-6"
-      style={{
-        background:
-          "radial-gradient(circle at center, #eefafa 0%, #b9e4e4 45%, #4f9d97 100%)",
-      }}
+      // style={{
+      //   background:
+      //     "radial-gradient(circle at center, #eefafa 0%, #b9e4e4 45%, #4f9d97 100%)",
+      // }}
     >
       {/* Heading */}
-      <h1 className="text-white text-xl sm:text-2xl md:text-4xl font-bold mb-6 md:mb-10 pt-18">
+      <h1 className="text-black text-center text-3xl sm:text-4xl md:text-5xl  font-bold mb-6 md:mb-10 pt-20">
         Contact Us
       </h1>
 
@@ -65,8 +67,21 @@ const AidlyContact = () => {
               href="mailto:aidlyservice2025@gmail.com?subject=Inquiry about Aidly"
               className="ml-6 md:ml-10 break-all text-lg sm:text-xl md:text-2xl lg:text-2xl"
             >
-              aidlyservice2025@gmail.com
+              service@aidly.in
             </a>
+        </div>
+
+        <div>
+          <h2 className="text-xl sm:text-xl md:text-2xl lg:text-2xl font-medium">
+            🆔 CIN:
+          </h2>
+       
+            <p
+              
+              className="ml-6 md:ml-10 break-all text-lg sm:text-xl md:text-2xl lg:text-2xl"
+            >
+              U86909BR2026PTC085901
+            </p>
         </div>
 
         <div>
@@ -95,29 +110,30 @@ const AidlyContact = () => {
       </div>
 
       {/* Social Buttons */}
-     <div className="mt-10 space-y-5 mx-auto max-w-2xl">
+     <div className="mt-10 space-y-5 mx-auto max-w-lg md:max-w-xl">
               <a
                 href="https://www.linkedin.com/company/aidly-in/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-1 md:gap-3 bg-gradient-to-r from-[#B8B6FF] via-[#2F3FD8] to-[#B8B6FF] rounded-full py-4 px-4 text-base sm:text-lg md:text-3xl font-semibold transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+                className="flex items-center justify-center gap-1 md:gap-3 bg-gradient-to-r from-[#B8B6FF] via-[#2F3FD8] to-[#B8B6FF] rounded-full px-2 py-3 md:py-4 md:px-4  text-base sm:text-lg md:text-2xl font-semibold transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
               >
                 <span>Follow on LinkedIn for more updates</span>
-                <FaLinkedin className="text-3xl shrink-0" />
+                <FaLinkedin className=" text-2xl md:text-3xl shrink-0" />
               </a>
     
               <a
                 href="https://www.instagram.com/aidly_in?igsh=MWxxMWt1cGoxNmdscA=="
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-1 md:gap-3 bg-gradient-to-r from-[#A64DFF] via-[#dac67f] to-[#A64DFF] rounded-full py-4 px-4 text-base sm:text-lg md:text-3xl font-semibold transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+                className="flex items-center justify-center gap-1 md:gap-3 bg-gradient-to-r from-[#A64DFF] via-[#dac67f] to-[#A64DFF] rounded-full px-2 py-3 md:py-4 md:px-4 text-base sm:text-lg md:text-2xl font-semibold transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
               >
                 <span>Follow on Instagram for more updates</span>
-                <FaInstagram className="text-3xl shrink-0" />
+                <FaInstagram className="text-2xl md:text-3xl shrink-0" />
               </a>
     
              
             </div>
+    </div>
     </div>
   );
 };

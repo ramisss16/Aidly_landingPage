@@ -2,7 +2,7 @@ import React from "react";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 
-const Clinic_TermsCondition = () => {
+const ClinicDocRec_TermsCondition = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#1A5F48] via-[#89C9CA] to-[#C6EBE8] p-4">
       
@@ -45,7 +45,7 @@ const Clinic_TermsCondition = () => {
         </div>
 
         {/* Button */}
-        <Link to = "/Clinic_thankupage">
+        <Link to = "/succesful-add-DocReceptionist">
         <button className="mt-6 w-full bg-blue-600 hover:bg-blue-700 transition text-white py-2.5 rounded-lg font-medium shadow-md">
           Accept and Continue
         </button>
@@ -55,4 +55,4 @@ const Clinic_TermsCondition = () => {
   );
 };
 
-export default Clinic_TermsCondition;
+export default ClinicDocRec_TermsCondition;

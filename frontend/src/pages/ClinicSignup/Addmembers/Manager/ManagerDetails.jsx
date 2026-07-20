@@ -129,7 +129,7 @@ const Clinic_Manager_Details = () => {
 
       console.log(response.data.data.managerId);
 
-      navigate("/Clinic-ManagerApproval");
+      navigate("/Clinicman_TermAndCondition");
     } catch (err) {
       console.log(err.response?.data);
 

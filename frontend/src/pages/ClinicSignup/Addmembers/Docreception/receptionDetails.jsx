@@ -86,7 +86,7 @@ const ClinicDoc_Receptionist_Details = () => {
 
       console.log(response.data.data.receptionistId);
 
-      navigate("/ClinicDoc-receptionistApproval");
+      navigate("/ClinicDocrec_TermAndCondition");
     } catch (err) {
       console.log(err.response?.data);
 

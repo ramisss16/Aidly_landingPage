@@ -63,6 +63,12 @@ const ClinicDocSignup = () => {
 
   const handleSubmit = async () => {
     try {
+   
+      if (!formData.licenseDocument) {
+  alert("Please upload your License Certificate.");
+  return;
+}
+
       setLoading(true);
 
       const clinicId = sessionStorage.getItem("clinicId");
@@ -73,9 +79,10 @@ const ClinicDocSignup = () => {
         return;
       }
 
-      if (!otpVerified) {
-  return alert("Please verify OTP first");
+  if (!otpVerified) {
   setLoading(false);
+  alert("Please verify OTP first");
+  return;
 }
 
       const form = new FormData();
@@ -507,7 +514,7 @@ sessionStorage.removeItem(
                   </p>
 
                   <input
-                  required
+                 
                     type="file"
                     name="licenseDocument"
                     onChange={handleChange}

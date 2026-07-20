@@ -119,7 +119,7 @@ const Navbar = () => {
   return (
     <nav
       ref={navRef}
-      className="fixed top-0 left-0 w-full z-50 bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl shadow-xl"
+      className="fixed top-0 left-0 w-full z-50 bg-white/10 backdrop-blur-xl border border-white/20 rounded-b-2xl shadow-xl"
       style={{ height: NAV_HEIGHT }}
     >
       <div
@@ -134,7 +134,7 @@ const Navbar = () => {
           <img
             src={AidlyLogo}
             alt="Aidly Logo"
-            className="h-25 sm:h-35 md:h-40 w-auto object-contain"
+            className="h-30 sm:h-35 md:h-40 w-auto object-contain"
           />
         </div>
 
@@ -223,7 +223,7 @@ const Navbar = () => {
 
       {/* Mobile Menu */}
       <div
-        className={`md:hidden overflow-hidden backdrop-blur-xl bg-[#37B3BB]/90 rounded-b-2xl transition-all duration-300 ${
+        className={`md:hidden overflow-hidden bg-black/50 backdrop-blur-xl border border-white/50  shadow-xl rounded-b-2xl transition-all duration-300 ${
           isOpen
             ? "max-h-[450px] opacity-100 py-4"
             : "max-h-0 opacity-0 py-0"

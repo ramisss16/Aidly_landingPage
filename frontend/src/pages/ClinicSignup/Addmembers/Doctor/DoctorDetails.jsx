@@ -134,7 +134,7 @@ const Clinic_doc_Details = () => {
       alert("Doctor Added");
       sessionStorage.setItem("doctorId", response.data.data.doctorId);
       console.log(response.data.data.doctorId);
-      navigate("/Clinic-DoctorApproval");
+      navigate("/ClinicDoc_TermAndCondition");
     } catch (err) {
       console.log(err.response?.data);
       alert(err.response?.data?.message || "Error adding doctor");

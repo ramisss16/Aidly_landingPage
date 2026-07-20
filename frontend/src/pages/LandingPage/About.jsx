@@ -5,7 +5,7 @@ import satyam from "../../assets/satyamImage.jpeg"
 import satyamremovebg from "../../assets/satyamImage-removebg.png"
 import shefali from "../../assets/shifaliImage.jpeg"
 import shifaliremovebg from "../../assets/shifaliImage-removebg.png"
-import shahid from "../../assets/shahidImage.jpeg"
+import shahid from "../../assets/shahidImage.png"
 import shahidremovebg from "../../assets/shahidImage-removebg.png"
 import sachin from "../../assets/sachinImage.jpeg"
 import sachinremovebg from "../../assets/sachinImage-removebg.png"
@@ -21,6 +21,8 @@ import nisha from "../../assets/nishaImage.jpeg"
 import nisharemovebg from "../../assets/nishaImage-removebg.png"
 import siya from "../../assets/siyaImage.jpeg"
 import siyaremovebg from "../../assets/siyaImage-removebg.png"
+import shubham from "../../assets/ShubhamImage.jpeg"
+import shubhamremovebg from "../../assets/ShubhamImage-removebg.png"
 
 const AboutAidly = () => {
 
@@ -129,6 +131,13 @@ useEffect(() => {
     role: "App Back-end Developer",
     description: "Developed and maintained the application's backend services, APIs, and database. Ensured secure data management, efficient server-side functionality, and reliable performance to support a seamless user experience.",
   },
+  {
+    image: shubham,
+    bgromveImage: shubhamremovebg,
+    name: "Shubham Kumar",
+    role: "Chief Financial Officer (CFO)",
+    description: "Leads the company's financial strategy, budgeting, fundraising, and financial planning while ensuring regulatory compliance and operational efficiency. Focused on building a sustainable financial foundation, driving strategic growth, managing financial risks, and supporting data-driven decision-making to accelerate the company's vision of transforming healthcare through technology.",
+  },
 ];
 
 const activeMember = team[current];
@@ -171,51 +180,65 @@ useEffect(() => {
 }, [current]);
 
   return (
-    <div ref={aboutRef} className="w-full bg-gradient-to-b from-[#1A5F48] via-[#89C9CA] to-[#C6EBE8] px-4 sm:px-6 md:px-10 py-8 md:py-10">
+    <div className="relative min-h-screen overflow-x-hidden">
+   <div className="fixed inset-0 -z-10 bg-[linear-gradient(0deg,_#FFFFFF_0%,_#C6EBE8_39.9%,_#89C9CA_75.48%,_#1A5F48_100%)]" />
+    <div ref={aboutRef} className=" px-4 sm:px-6 md:px-10 py-8 md:py-10">
 
-      <h2 className="pt-15 md:pt-18 text-2xl sm:text-3xl md:text-[44px] font-bold text-white leading-tight mb-3">
+      <h2 className="pt-19 md:pt-20 text-3xl sm:text-4xl md:text-5xl font-bold text-black leading-tight mb-5 text-center">
         About Aidly
       </h2>
 
-      <p className="text-base sm:text-lg md:text-[20px] font-semibold leading-relaxed text-black">
-        <span className="font-bold">Aidly</span> Aidly is a next-generation healthcare platform designed to bridge the gap between
-        patients and essential medical services through a single, integrated digital ecosystem. Our mission is to make healthcare
-        more accessible, responsive, and convenient for everyone by bringing emergency care, medical consultations, home healthcare
-        services, and medicine delivery together in one seamless platform
+      <p className="text-lg sm:text-xl md:text-2xl  font-semibold leading-relaxed text-black mx-auto">
+         Aidly is an all-in-one digital healthcare platform that connects patients, 
+        healthcare providers, and clinics through a unified ecosystem. Our platform offers smart ambulance booking, real-time
+         emergency support, online doctor consultations, home healthcare services, medical product delivery, and an intelligent
+          Clinic Management System to simplify healthcare access and operations.
       </p>
 
-      <p className="text-base sm:text-lg md:text-[20px] font-semibold leading-relaxed text-black mt-4 md:mt-6">
-        In today's fast-paced world, accessing timely healthcare can be challenging, especially during emergencies.
-        Aidly addresses this challenge by providing a smart and reliable healthcare solution that connects users with ambulances,
-        doctors, healthcare professionals, and medical suppliers in real time. Whether it is an urgent medical emergency,
-        a routine doctor consultation, home-based patient care, or the need for essential medical products, Aidly ensures that
-        help is always just a few taps away.
+      <p className="text-lg sm:text-xl md:text-2xl  font-semibold leading-relaxed text-black mt-4 md:mt-6">
+       Designed for both patients and healthcare organizations, Aidly combines modern technology with reliable healthcare services
+        to deliver a seamless experience. From emergency medical assistance and everyday healthcare needs to managing clinic
+         operations through dedicated dashboards for Clinic Admins, Managers, Doctors, and Receptionists, Aidly helps improve 
+         efficiency, enhance patient care, and make quality healthcare more accessible for everyone.
       </p>
 
-      <h2 className="pt-8 md:pt-18 text-3xl sm:text-4xl md:text-[44px] font-bold text-black leading-tight mb-3">
+      <h2 className="pt-8 md:pt-18 text-3xl sm:text-4xl md:text-5xl font-bold text-center text-black leading-tight mb-3">
         Our Vision
       </h2>
 
-      <p className="text-base sm:text-lg md:text-[20px] font-semibold leading-relaxed text-black mt-4 md:mt-6">
+      <p className="text-lg sm:text-xl md:text-2xl  font-semibold leading-relaxed text-black mt-4 md:mt-6">
         To create a healthcare ecosystem where quality medical assistance is accessible to every individual,
         regardless of location, time, or circumstance. We envision a future where technology empowers healthcare providers
         and patients to connect instantly, resulting in faster response times, better patient outcomes, and improved overall
         healthcare experiences.
       </p>
 
-      <h2 className="pt-8 md:pt-18 text-3xl sm:text-4xl md:text-[44px] font-bold text-black leading-tight mb-3">
+      <h2 className="pt-8 md:pt-18 text-3xl sm:text-4xl md:text-5xl text-center font-bold text-black leading-tight mb-3">
         Our Mission
       </h2>
 
-      <p className="text-base sm:text-lg md:text-[20px] font-semibold leading-relaxed text-black mt-4 md:mt-6">
+      <p className="text-lg sm:text-xl md:text-2xl  font-semibold leading-relaxed text-black mt-4 md:mt-6">
         Our mission is to simplify healthcare access by leveraging technology to deliver efficient, transparent,
         and patient-centric services. We strive to provide reliable emergency support, professional medical consultations,
         convenient home healthcare solutions, and hassle-free medicine delivery through a unified platform.
       </p>
 
+      <h2 className="pt-8 md:pt-18 text-3xl sm:text-4xl md:text-5xl  font-bold text-center text-black leading-tight mb-6 md:mb-10">
+        Why Choose Aidly?
+      </h2>
+
+   <ul className="list-disc list-outside w-fit mx-auto space-y-3 text-lg sm:text-xl md:text-2xl">
+  <li><span className="font-bold">All-in-One Healthcare Solution</span> – Multiple healthcare services available on a single platform.</li>
+  <li><span className="font-bold">Fast Emergency Response</span> – Quick access to ambulances and emergency support.</li>
+  <li><span className="font-bold">Convenient Healthcare Access</span> – Consult doctors and access healthcare services anytime, anywhere.</li>
+  <li><span className="font-bold">Patient-Centered Approach</span> – Designed to prioritize user safety, comfort, and convenience.</li>
+  <li><span className="font-bold">Technology-Driven Efficiency</span> – Smart digital solutions that streamline healthcare delivery.</li>
+  <li><span className="font-bold">Reliable and Accessible</span> – Healthcare support available whenever you need it.</li>
+</ul>
+
       <section className="mt-20">
 
-  <h2 className="text-3xl md:text-5xl font-bold text-black mb-5 ">
+  <h2 className="text-3xl sm:text-4xl md:text-5xl text-center font-bold text-black mb-5 ">
     Our Team
   </h2>
 
@@ -304,23 +327,14 @@ useEffect(() => {
 
 </section>
 
-      <h2 className="pt-8 md:pt-18 text-3xl sm:text-4xl md:text-[44px] font-bold text-black leading-tight mb-5">
-        Why Choose Aidly?
-      </h2>
-
-      <ul className="list-disc pl-5 sm:pl-8 pr-2 sm:pr-8 space-y-3 text-lg sm:text-xl md:text-2xl">
-        <li><span className="font-bold">All-in-One Healthcare Solution</span> – Multiple healthcare services available on a single platform.</li>
-        <li><span className="font-bold">Fast Emergency Response</span> – Quick access to ambulances and emergency support.</li>
-        <li><span className="font-bold">Convenient Healthcare Access</span> – Consult doctors and access healthcare services anytime, anywhere.</li>
-        <li><span className="font-bold">Patient-Centered Approach</span> – Designed to prioritize user safety, comfort, and convenience.</li>
-        <li><span className="font-bold">Technology-Driven Efficiency</span> – Smart digital solutions that streamline healthcare delivery.</li>
-        <li><span className="font-bold">Reliable and Accessible</span> – Healthcare support available whenever you need it.</li>
-      </ul>
+      
 
       <div className="w-fit font-bold text-center text-xl sm:text-2xl md:text-4xl mt-8 md:mt-12 mx-auto px-2">
-        Aidly – Connecting People to Better Healthcare, Anytime and Anywhere.
+        Aidly – All In One Healthcare Platform
       </div>
     </div>
+    </div>
+    
   );
 };
 
