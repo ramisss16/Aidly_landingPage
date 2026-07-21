@@ -322,6 +322,13 @@ const router = createBrowserRouter([
       },
     ],
   },
+
+  // admin dash
+       {
+  path: "/admin/*",
+  element: <AdminRoutes />,
+  errorElement: <ErrorPage />
+},
 //      {
 //       path: "/dashboard/receptionist/staffattendance",
 //       element: <StaffAttendence />,
@@ -410,11 +417,7 @@ const router = createBrowserRouter([
 //         errorElement: <ErrorPage/>
 //   },
        
-//        {
-//   path: "/admin/*",
-//   element: <AdminRoutes />,
-//   errorElement: <ErrorPage />
-// },
+  
 
 ]);
 
