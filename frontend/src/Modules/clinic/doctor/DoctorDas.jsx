@@ -202,6 +202,7 @@ import {
   Legend,
 } from "recharts";
 
+import { useOutletContext } from "react-router-dom";
 import api from "../../../service/api";
 
 import chart from "../../../assets/chart.png.jpg";
@@ -212,8 +213,8 @@ import profile from "../../../assets/apolohos.png";
 
 const DoctorDas = () => {
   const role = localStorage.getItem("role");
-  const [open, setopen] = useState("StaffAttendence");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [open, setopen] = useState("TodaySchedule");
+const { sidebarOpen, setSidebarOpen } = useOutletContext();
   const [clinic, setClinic] = useState({});
 
   const toggle = (name) => {
@@ -299,11 +300,11 @@ const DoctorDas = () => {
         </div>
 
         <div
-          onClick={() => toggle("StaffAttendence")}
-          className="font-semibold text-sm md:text-lg bg-white p-3 md:px-4 lg:px-8 mb-2 cursor-pointer rounded mx-2 mt-2"
+          onClick={() => toggle("TodaySchedule")}
+          className="font-semibold text-lg bg-white p-3 md:px-4 lg:px-8 mb-2 cursor-pointer rounded mx-2 mt-2"
         >
-          Staff Attendance
-          {open === "StaffAttendence" && (
+          Today's Schedule
+          {open === "TodaySchedule" && (
             <div className="flex flex-wrap gap-2 mt-2">
               <button className="bg-blue-300 px-3 py-1 rounded-full">
                 Update
@@ -316,11 +317,11 @@ const DoctorDas = () => {
         </div>
 
         <div
-          onClick={() => toggle("BedManagement")}
+          onClick={() => toggle("MyPatient")}
           className="font-semibold text-lg bg-white p-3 px-4 lg:px-8 mb-2 cursor-pointer rounded mx-2"
         >
-          Bed Management
-          {open === "BedManagement" && (
+          My Patient
+          {open === "MyPatient" && (
             <div className="flex flex-wrap gap-2 mt-2">
               <button className="bg-blue-300 px-3 py-1 rounded-full">
                 Update
@@ -333,11 +334,11 @@ const DoctorDas = () => {
         </div>
 
         <div
-          onClick={() => toggle("StaffScheduling")}
+          onClick={() => toggle("Appointments")}
           className="font-semibold text-lg bg-white p-3 px-4 lg:px-8 mb-2 cursor-pointer rounded mx-2"
         >
-          Staff Scheduling
-          {open === "StaffScheduling" && (
+          Appointments
+          {open === "Appointments" && (
             <div className="flex flex-wrap gap-2 mt-2">
               <button className="bg-blue-300 px-3 py-1 rounded-full">
                 Update
@@ -350,11 +351,11 @@ const DoctorDas = () => {
         </div>
 
         <div
-          onClick={() => toggle("BillingRecords")}
+          onClick={() => toggle("LabResults")}
           className="font-semibold text-lg bg-white p-3 px-4 lg:px-8 mb-2 cursor-pointer rounded mx-2"
         >
-          Billing Records
-          {open === "BillingRecords" && (
+          Lab Results
+          {open === "LabResults" && (
             <div className="flex flex-wrap gap-2 mt-2">
               <button className="bg-blue-300 px-3 py-1 rounded-full">
                 Update
@@ -367,11 +368,11 @@ const DoctorDas = () => {
         </div>
 
         <div
-          onClick={() => toggle("PaymentRecords")}
+          onClick={() => toggle("MedicalRecords")}
           className="font-semibold text-lg bg-white p-3 px-4 lg:px-8 mb-2 cursor-pointer rounded mx-2"
         >
-          Payment Records
-          {open === "PaymentRecords" && (
+          Medical Records
+          {open === "MedicalRecords" && (
             <div className="flex flex-wrap gap-2 mt-2">
               <button className="bg-blue-300 px-3 py-1 rounded-full">
                 Update
@@ -383,26 +384,11 @@ const DoctorDas = () => {
           )}
         </div>
 
-        <div
-          onClick={() => toggle("StaffSalary")}
-          className="font-semibold text-lg bg-white p-3 px-4 lg:px-8 mb-2 cursor-pointer rounded mx-2"
-        >
-          Staff Salary
-          {open === "StaffSalary" && (
-            <div className="flex flex-wrap gap-2 mt-2">
-              <button className="bg-blue-300 px-3 py-1 rounded-full">
-                Update
-              </button>
-              <button className="bg-green-300 px-3 py-1 rounded-full">
-                View
-              </button>
-            </div>
-          )}
-        </div>
+     
       </div>
 
       <div className="flex-1 h-screen overflow-y-auto overflow-x-hidden p-3">
-        <div className="lg:hidden sticky top-0 z-30 inline-flex items-center  bg-[#1A5F48] text-white px-4 py-3 rounded-xl shadow-md mb-4">
+        {/* <div className="lg:hidden sticky top-0 z-30 inline-flex items-center  bg-[#1A5F48] text-white px-4 py-3 rounded-xl shadow-md mb-4">
           <button
             onClick={() => setSidebarOpen(true)}
             className="p-2 rounded-md hover:bg-white/10"
@@ -410,7 +396,7 @@ const DoctorDas = () => {
             <Menu size={28} />
           </button>
 
-           </div>
+           </div> */}
 
        <div className="flex justify-end items-center bg-white p-4 gap-4 mb-4 rounded-2xl shadow-sm border border-[#d7ece9]">
                 <div className="text-right">
@@ -502,44 +488,44 @@ const DoctorDas = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-4">
-          <div className="bg-white rounded-xl shadow p-5 flex items-center gap-4">
-            <Users className="w-10 h-10 text-teal-600" />
-            <div>
-              <h2 className="text-3xl font-bold text-gray-800">0</h2>
-              <p className="text-gray-500 text-lg">Total Patients</p>
+      <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-4">
+              <div className=" bg-white rounded-xl shadow p-2 md:p-5 flex items-center gap-4">
+      <Users className="w-5 md:w-10 h-5 md:h-10 text-teal-600" />
+      <div>
+        <h2 className="text-xl md:text-3xl font-bold text-gray-800">0</h2>
+        <p className="text-gray-500 text-sm md:text-lg">Total Patients</p>
+      </div>
+    </div>
+    
+              <div className=" bg-white rounded-xl shadow p-2 md:p-5 flex items-center gap-4">
+                <IndianRupee className=" w-5 md:w-10 h-5 md:h-10 text-orange-500" />
+                <div>
+                  <h2 className="text-xl md:text-3xl font-bold text-gray-800">₹0</h2>
+                  <p className="text-gray-500 text-sm md:text-lg">Operational Costs</p>
+                </div>
+              </div>
+    
+              <div className=" bg-white rounded-xl shadow p-2 md:p-5 flex items-center gap-4">
+                <Stethoscope className="w-5 md:w-10 h-5 md:h-10 text-orange-500" />
+                <div>
+                  <h2 className="text-xl md:text-3xl font-bold text-gray-800">0</h2>
+                  <p className="text-gray-500 text-sm md:text-lg">Doctors Available</p>
+                </div>
+              </div>
+    
+              <div className=" bg-white rounded-xl shadow p-2 md:p-5 flex items-center gap-4">
+                <Bed className=" w-5 md:w-10 h-5 md:h-10 text-teal-600" />
+                <div>
+                  <h2 className="text-xl md:text-3xl font-bold text-gray-800">0</h2>
+                  <p className="text-gray-500 text-sm md:text-lg">Beds Available</p>
+                </div>
+              </div>
             </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow p-5 flex items-center gap-4">
-            <IndianRupee className="w-10 h-10 text-orange-500" />
-            <div>
-              <h2 className="text-3xl font-bold text-gray-800">₹0</h2>
-              <p className="text-gray-500 text-lg">Operational Costs</p>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow p-5 flex items-center gap-4">
-            <Stethoscope className="w-10 h-10 text-orange-500" />
-            <div>
-              <h2 className="text-3xl font-bold text-gray-800">0</h2>
-              <p className="text-gray-500 text-lg">Doctors Available</p>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow p-5 flex items-center gap-4">
-            <Bed className="w-10 h-10 text-teal-600" />
-            <div>
-              <h2 className="text-3xl font-bold text-gray-800">0</h2>
-              <p className="text-gray-500 text-lg">Beds Available</p>
-            </div>
-          </div>
-        </div>
 
           {/* Management Cards */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-white p-4 rounded-xl shadow text-center">
-             <img src={Mypatient} className="w-24 md:w-34 mx-auto" alt="My Patient" />
+          <div className="w-[270px] mx-auto md:mx-0 md:w-auto bg-white p-4 rounded-xl shadow text-center">
+             <img src={Mypatient} className="w-18 md:w-34 mx-auto" alt="My Patient" />
              <h3 className="font-semibold">My Patient</h3>
              <div className="flex justify-center mt-2">
                {/* <Link to="/dashboard/doctor/mypatient"> */}
@@ -549,8 +535,8 @@ const DoctorDas = () => {
              {/* </Link> */}
              </div>
            </div>
-          <div className="bg-white p-4 rounded-xl shadow text-center">
-             <img src={Myapointment} className="w-24 md:w-34 mx-auto" alt="My Appointment" />
+          <div className=" w-[270px] mx-auto md:mx-0 md:w-auto bg-white p-4 rounded-xl shadow text-center">
+             <img src={Myapointment} className="w-18 md:w-34 mx-auto" alt="My Appointment" />
              <h3 className="font-semibold">My Appointment</h3>
              <div className="flex justify-center mt-2">
                {/* <Link to="/dashboard/doctor/today'sappointmment"> */}

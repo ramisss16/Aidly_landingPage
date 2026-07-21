@@ -442,6 +442,7 @@ import {
   Legend,
 } from "recharts";
 
+import { useOutletContext } from "react-router-dom";
 import api from "../../../service/api";
 
 import chart from "../../../assets/chart.png.jpg";
@@ -456,7 +457,7 @@ import profile from "../../../assets/apolohos.png";
 const ManagerDas = () => {
   const role = localStorage.getItem("role");
   const [open, setopen] = useState("StaffAttendence");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+const { sidebarOpen, setSidebarOpen } = useOutletContext();
   const [clinic, setClinic] = useState({});
 
   const toggle = (name) => {
@@ -543,7 +544,7 @@ const ManagerDas = () => {
 
         <div
           onClick={() => toggle("StaffAttendence")}
-          className="font-semibold text-sm md:text-lg bg-white p-3 md:px-4 lg:px-8 mb-2 cursor-pointer rounded mx-2 mt-2"
+          className="font-semibold text-lg bg-white p-3 md:px-4 lg:px-8 mb-2 cursor-pointer rounded mx-2 mt-2"
         >
           Staff Attendance
           {open === "StaffAttendence" && (
@@ -626,26 +627,11 @@ const ManagerDas = () => {
           )}
         </div>
 
-        <div
-          onClick={() => toggle("StaffSalary")}
-          className="font-semibold text-lg bg-white p-3 px-4 lg:px-8 mb-2 cursor-pointer rounded mx-2"
-        >
-          Staff Salary
-          {open === "StaffSalary" && (
-            <div className="flex flex-wrap gap-2 mt-2">
-              <button className="bg-blue-300 px-3 py-1 rounded-full">
-                Update
-              </button>
-              <button className="bg-green-300 px-3 py-1 rounded-full">
-                View
-              </button>
-            </div>
-          )}
-        </div>
+     
       </div>
 
       <div className="flex-1 h-screen overflow-y-auto overflow-x-hidden p-3">
-        <div className="lg:hidden sticky top-0 z-30 inline-flex items-center  bg-[#1A5F48] text-white px-4 py-3 rounded-xl shadow-md mb-4">
+        {/* <div className="lg:hidden sticky top-0 z-30 inline-flex items-center  bg-[#1A5F48] text-white px-4 py-3 rounded-xl shadow-md mb-4">
           <button
             onClick={() => setSidebarOpen(true)}
             className="p-2 rounded-md hover:bg-white/10"
@@ -653,7 +639,7 @@ const ManagerDas = () => {
             <Menu size={28} />
           </button>
 
-           </div>
+           </div> */}
 
         <div className="flex justify-end items-center bg-white p-4 gap-4 mb-4 rounded-2xl shadow-sm border border-[#d7ece9]">
                  <div className="text-right">
@@ -745,43 +731,43 @@ const ManagerDas = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-4">
-          <div className="bg-white rounded-xl shadow p-5 flex items-center gap-4">
-            <Users className="w-10 h-10 text-teal-600" />
+          <div className="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-4">
+                    <div className=" bg-white rounded-xl shadow p-2 md:p-5 flex items-center gap-4">
+            <Users className="w-5 md:w-10 h-5 md:h-10 text-teal-600" />
             <div>
-              <h2 className="text-3xl font-bold text-gray-800">0</h2>
-              <p className="text-gray-500 text-lg">Total Patients</p>
+              <h2 className="text-xl md:text-3xl font-bold text-gray-800">0</h2>
+              <p className="text-gray-500 text-sm md:text-lg">Total Patients</p>
             </div>
           </div>
-
-          <div className="bg-white rounded-xl shadow p-5 flex items-center gap-4">
-            <IndianRupee className="w-10 h-10 text-orange-500" />
-            <div>
-              <h2 className="text-3xl font-bold text-gray-800">₹0</h2>
-              <p className="text-gray-500 text-lg">Operational Costs</p>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow p-5 flex items-center gap-4">
-            <Stethoscope className="w-10 h-10 text-orange-500" />
-            <div>
-              <h2 className="text-3xl font-bold text-gray-800">0</h2>
-              <p className="text-gray-500 text-lg">Doctors Available</p>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl shadow p-5 flex items-center gap-4">
-            <Bed className="w-10 h-10 text-teal-600" />
-            <div>
-              <h2 className="text-3xl font-bold text-gray-800">0</h2>
-              <p className="text-gray-500 text-lg">Beds Available</p>
-            </div>
-          </div>
-        </div>
+          
+                    <div className=" bg-white rounded-xl shadow p-2 md:p-5 flex items-center gap-4">
+                      <IndianRupee className=" w-5 md:w-10 h-5 md:h-10 text-orange-500" />
+                      <div>
+                        <h2 className="text-xl md:text-3xl font-bold text-gray-800">₹0</h2>
+                        <p className="text-gray-500 text-sm md:text-lg">Operational Costs</p>
+                      </div>
+                    </div>
+          
+                    <div className=" bg-white rounded-xl shadow p-2 md:p-5 flex items-center gap-4">
+                      <Stethoscope className="w-5 md:w-10 h-5 md:h-10 text-orange-500" />
+                      <div>
+                        <h2 className="text-xl md:text-3xl font-bold text-gray-800">0</h2>
+                        <p className="text-gray-500 text-sm md:text-lg">Doctors Available</p>
+                      </div>
+                    </div>
+          
+                    <div className=" bg-white rounded-xl shadow p-2 md:p-5 flex items-center gap-4">
+                      <Bed className=" w-5 md:w-10 h-5 md:h-10 text-teal-600" />
+                      <div>
+                        <h2 className="text-xl md:text-3xl font-bold text-gray-800">0</h2>
+                        <p className="text-gray-500 text-sm md:text-lg">Beds Available</p>
+                      </div>
+                    </div>
+                  </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
-          <div className="bg-white p-4 rounded-xl shadow text-center flex flex-col">
-            <div className="h-28 flex items-center justify-center">
+          <div className="w-[270px] mx-auto md:mx-0 md:w-auto bg-white p-4 rounded-xl shadow text-center flex flex-col">
+            <div className="h-18 md:h-28 flex items-center justify-center">
               <img src={patient} alt="Patient Management" className="max-h-24 object-contain" />
             </div>
             <h3 className="font-semibold mt-2">Patient Management</h3>
@@ -791,8 +777,8 @@ const ManagerDas = () => {
             </div>
           </div>
 
-          <div className="bg-white p-4 rounded-xl shadow text-center flex flex-col">
-            <div className="h-28 flex items-center justify-center">
+          <div className="w-[270px] mx-auto md:mx-0 md:w-auto bg-white p-4 rounded-xl shadow text-center flex flex-col">
+            <div className="h-18 md:h-28 flex items-center justify-center">
               <img src={doctor} alt="Doctor Management" className="max-h-24 object-contain" />
             </div>
             <h3 className="font-semibold mt-2">Doctor Management</h3>
@@ -802,8 +788,8 @@ const ManagerDas = () => {
             </div>
           </div>
 
-          <div className="bg-white p-4 rounded-xl shadow text-center flex flex-col">
-            <div className="h-28 flex items-center justify-center">
+          <div className="w-[270px] mx-auto md:mx-0 md:w-auto bg-white p-4 rounded-xl shadow text-center flex flex-col">
+            <div className="h-18 md:h-28 flex items-center justify-center">
               <img src={diagnosis} alt="Diagnosis Management" className="max-h-24 object-contain" />
             </div>
             <h3 className="font-semibold mt-2">Diagnosis Management</h3>
@@ -815,8 +801,8 @@ const ManagerDas = () => {
 
        
 
-          <div className="bg-white p-4 rounded-xl shadow text-center flex flex-col">
-            <div className="h-28 flex items-center justify-center">
+          <div className="w-[270px] mx-auto md:mx-0 md:w-auto bg-white p-4 rounded-xl shadow text-center flex flex-col">
+            <div className="h-18 md:h-28 flex items-center justify-center">
               <img src={treatment} alt="Treatment Management" className="max-h-24 object-contain" />
             </div>
             <h3 className="font-semibold mt-2">Treatment Management</h3>

@@ -2,8 +2,9 @@ import React, { useState, useRef, useEffect } from "react";
 import AidlyLogo from "../src/assets/Aidly (2).png";
 import { Bell, User } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import {Menu,X,} from "lucide-react";
 
-const DashboardNav = () => {
+const DashboardNav = ({ onMenuClick }) => {
   const [showProfile, setShowProfile] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
 
@@ -47,12 +48,23 @@ const DashboardNav = () => {
     navigate("/login");
   };
 
+  const [open, setopen] = useState("StaffAttendence");
+    const [sidebarOpen, setSidebarOpen] = useState(false);
+
+      const toggle = (name) => {
+    if (open === name) {
+      setopen("");
+    } else {
+      setopen(name);
+    }
+  };
+
   return (
     <nav
-      className="w-full text-white border-b-2 border-white relative"
-      style={{
-        background: "linear-gradient(180deg, #1A5F48 0%, #18765A 100%)",
-      }}
+      className="w-full text-white border-b-2 border-white relative bg-gradient-to-b from-[#1A5F48] to-[#89C9CA]"
+      // style={{
+      //   background: "linear-gradient(180deg, #1A5F48 0%, #18765A 100%)",
+      // }}
     >
       <div className="w-full flex items-center justify-between px-3 sm:px-5 md:px-6 py-2">
         
@@ -74,6 +86,14 @@ const DashboardNav = () => {
 
         {/* Right Icons */}
         <div className="flex items-center gap-3 sm:gap-5 md:gap-6 relative flex-shrink-0">
+
+
+       <button
+  onClick={onMenuClick}
+  className="lg:hidden p-2 rounded-md hover:bg-white/10"
+>
+  <Menu size={28} />
+</button>
 
           {/* Profile */}
           <div className="relative" ref={profileRef}>

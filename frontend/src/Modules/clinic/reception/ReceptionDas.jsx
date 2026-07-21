@@ -422,7 +422,7 @@ import {
 } from "recharts";
 
 import api from "../../../service/api";
-
+import { useOutletContext } from "react-router-dom";
 import diagnosis from "../../../assets/diagonosis.png.jpg";
 import doctor from "../../../assets/doctormanagement.png.jpg";
 import expenses from "../../../assets/expenses.png.jpg";
@@ -434,7 +434,7 @@ import profile from "../../../assets/apolohos.png";
 const ReceptionDas = () => {
   const role = localStorage.getItem("role");
   const [open, setopen] = useState("StaffAttendence");
-  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const { sidebarOpen, setSidebarOpen } = useOutletContext();
   const [clinic, setClinic] = useState({});
 
   const [queueData] = useState([
@@ -557,7 +557,7 @@ const ReceptionDas = () => {
    
            <div
              onClick={() => toggle("StaffAttendence")}
-             className="font-semibold text-sm md:text-lg bg-white p-3 md:px-4 lg:px-8 mb-2 cursor-pointer rounded mx-2 mt-2"
+             className="font-semibold text-lg bg-white p-3 md:px-4 lg:px-8 mb-2 cursor-pointer rounded mx-2 mt-2"
            >
              Staff Attendance
              {open === "StaffAttendence" && (
@@ -576,7 +576,7 @@ const ReceptionDas = () => {
              onClick={() => toggle("BedManagement")}
              className="font-semibold text-lg bg-white p-3 px-4 lg:px-8 mb-2 cursor-pointer rounded mx-2"
            >
-             Bed Management
+             Bed Avalability
              {open === "BedManagement" && (
                <div className="flex flex-wrap gap-2 mt-2">
                  <button className="bg-blue-300 px-3 py-1 rounded-full">
@@ -590,11 +590,11 @@ const ReceptionDas = () => {
            </div>
    
            <div
-             onClick={() => toggle("StaffScheduling")}
+             onClick={() => toggle("AppointmentSchedule")}
              className="font-semibold text-lg bg-white p-3 px-4 lg:px-8 mb-2 cursor-pointer rounded mx-2"
            >
-             Staff Scheduling
-             {open === "StaffScheduling" && (
+             Appointment Schedule
+             {open === "AppointmentSchedule" && (
                <div className="flex flex-wrap gap-2 mt-2">
                  <button className="bg-blue-300 px-3 py-1 rounded-full">
                    Update
@@ -640,26 +640,11 @@ const ReceptionDas = () => {
              )}
            </div>
    
-           <div
-             onClick={() => toggle("StaffSalary")}
-             className="font-semibold text-lg bg-white p-3 px-4 lg:px-8 mb-2 cursor-pointer rounded mx-2"
-           >
-             Staff Salary
-             {open === "StaffSalary" && (
-               <div className="flex flex-wrap gap-2 mt-2">
-                 <button className="bg-blue-300 px-3 py-1 rounded-full">
-                   Update
-                 </button>
-                 <button className="bg-green-300 px-3 py-1 rounded-full">
-                   View
-                 </button>
-               </div>
-             )}
-           </div>
+           
          </div>
 
       <div className="flex-1 h-screen overflow-y-auto overflow-x-hidden p-3">
-      <div className="lg:hidden sticky top-0 z-30 inline-flex items-center  bg-[#1A5F48] text-white px-4 py-3 rounded-xl shadow-md mb-4">
+      {/* <div className="lg:hidden sticky top-0 z-30 inline-flex items-center  bg-[#1A5F48] text-white px-4 py-3 rounded-xl shadow-md mb-4">
                 <button
                   onClick={() => setSidebarOpen(true)}
                   className="p-2 rounded-md hover:bg-white/10"
@@ -667,7 +652,7 @@ const ReceptionDas = () => {
                   <Menu size={28} />
                 </button>
       
-                 </div>
+                 </div> */}
 
         <div className="flex justify-end items-center bg-white p-4 gap-4 mb-4 rounded-2xl shadow-sm border border-[#d7ece9]">
           <div className="text-right">

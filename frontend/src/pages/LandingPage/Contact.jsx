@@ -111,26 +111,25 @@ const AidlyContact = () => {
 
       {/* Social Buttons */}
      <div className="mt-10 space-y-5 mx-auto max-w-lg md:max-w-xl">
-              <a
-                href="https://www.linkedin.com/company/aidly-in/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-1 md:gap-3 bg-gradient-to-r from-[#B8B6FF] via-[#2F3FD8] to-[#B8B6FF] rounded-full px-2 py-3 md:py-4 md:px-4  text-base sm:text-lg md:text-2xl font-semibold transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
-              >
-                <span>Follow on LinkedIn for more updates</span>
-                <FaLinkedin className=" text-2xl md:text-3xl shrink-0" />
-              </a>
-    
-              <a
-                href="https://www.instagram.com/aidly_in?igsh=MWxxMWt1cGoxNmdscA=="
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-1 md:gap-3 bg-gradient-to-r from-[#A64DFF] via-[#dac67f] to-[#A64DFF] rounded-full px-2 py-3 md:py-4 md:px-4 text-base sm:text-lg md:text-2xl font-semibold transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
-              >
-                <span>Follow on Instagram for more updates</span>
-                <FaInstagram className="text-2xl md:text-3xl shrink-0" />
-              </a>
-    
+             <a
+                                   href="https://www.linkedin.com/company/aidly-in/"
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   className="flex items-center justify-center gap-1 md:gap-3 bg-[linear-gradient(90deg,_#C0C3FF_0%,_#313CB1_51.44%,_#C0C3FF_100%)] rounded-full px-2 py-3 md:py-4 md:px-4  text-base sm:text-lg md:text-2xl font-semibold transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+                                 >
+                                   <span className="text-white">Follow on LinkedIn for more updates</span>
+                                   <FaLinkedin className=" text-2xl md:text-3xl shrink-0" />
+                                 </a>
+                       
+                                 <a
+                                   href="https://www.instagram.com/aidly_in?igsh=MWxxMWt1cGoxNmdscA=="
+                                   target="_blank"
+                                   rel="noopener noreferrer"
+                                   className="flex items-center justify-center gap-1 md:gap-3 bg-[linear-gradient(90deg,_#B16DF4_0%,_#F4D56D_50%,_#B16DF4_100%)] rounded-full px-2 py-3 md:py-4 md:px-4 text-base sm:text-lg md:text-2xl font-semibold transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+                                 >
+                                   <span className="text-white">Follow on Instagram for more updates</span>
+                                   <FaInstagram className="text-2xl md:text-3xl shrink-0" />
+                                 </a>
              
             </div>
     </div>

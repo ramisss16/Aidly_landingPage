@@ -181,7 +181,7 @@ const ClinicDoc_Receptionist_Details = () => {
           <div className="flex items-center gap-3 mb-8">
             <ArrowLeftIcon
               className="w-6 h-6 text-black cursor-pointer"
-              onClick={() => navigate("/clinic_Admin_Details")}
+              onClick={() => navigate(-1)}
             />
             <h2 className="text-xl md:text-2xl font-bold mx-auto">
               Clinic Receptionist Detail

@@ -1,14 +1,23 @@
-// DashboardLayout.jsx
-
 import { Outlet } from "react-router-dom";
+import { useState } from "react";
 import DashboardNav from "../Component/DasNavbar";
 
 function DashboardLayout() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+
   return (
-    <div>
-      <DashboardNav />
-      <Outlet />
-    </div>
+    <>
+      <DashboardNav
+        onMenuClick={() => setSidebarOpen(true)}
+      />
+
+      <Outlet
+        context={{
+          sidebarOpen,
+          setSidebarOpen,
+        }}
+      />
+    </>
   );
 }
 

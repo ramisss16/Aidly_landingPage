@@ -610,7 +610,7 @@ useEffect(() => {
               Aidly
             </h2>
 
-            <p className="text-xl sm:text-2xl md:text-3xl mt-5 max-w-xl text-center md:text-left">
+            <p className="text-xl sm:text-2xl md:text-3xl mt-5 max-w-xl text-center font-semibold md:text-left">
               Aidly is an all-in-one healthcare platform offering smart and digital unified ecosystem.
             </p>
           </div>
@@ -815,15 +815,15 @@ useEffect(() => {
           flex items-center justify-center
           md:gap-3 gap-2
           px-1 md:px-6 py-2 md:py-4
-          w-[250px] sm:w-auto mx-auto
-          transition-all duration-300
+          w-[210px] sm:w-auto mx-auto
+          transition-all duration-300 rounded-sm
         "
       >
-        <FaGooglePlay className="text-4xl flex-shrink-0" />
+        <FaGooglePlay className="text-2xl md:text-4xl flex-shrink-0" />
 
         <div className="text-left leading-tight">
-          <p className="text-2xl font-semibold">Get on Google</p>
-          <p className="text-2xl font-semibold">Play Store</p>
+          <p className="text-lg md:text-2xl font-semibold">Get on Google</p>
+          <p className="text-lg md:text-2xl font-semibold">Play Store</p>
         </div>
       </button>
 
@@ -836,15 +836,15 @@ useEffect(() => {
           flex items-center justify-center
          md:gap-3 gap-2
           px-1 md:px-6 py-2 md:py-4
-          w-[250px] sm:w-auto mx-auto
-          transition-all duration-300
+          w-[210px] sm:w-auto mx-auto
+          transition-all duration-300 rounded-sm
         "
       >
-        <FaApple className="text-4xl flex-shrink-0" />
+        <FaApple className="text-2xl md:text-4xl flex-shrink-0" />
 
         <div className="text-left leading-tight">
-          <p className="text-2xl font-semibold">Get on Apple</p>
-          <p className="text-2xl font-semibold">App Store</p>
+          <p className="text-lg md:text-2xl font-semibold">Get on Apple</p>
+          <p className="text-lg md:text-2xl font-semibold">App Store</p>
         </div>
       </button>
 
@@ -857,9 +857,9 @@ useEffect(() => {
                        href="https://www.linkedin.com/company/aidly-in/"
                        target="_blank"
                        rel="noopener noreferrer"
-                       className="flex items-center justify-center gap-1 md:gap-3 bg-gradient-to-r from-[#B8B6FF] via-[#2F3FD8] to-[#B8B6FF] rounded-full px-2 py-3 md:py-4 md:px-4  text-base sm:text-lg md:text-2xl font-semibold transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+                       className="flex items-center justify-center gap-1 md:gap-3 bg-[linear-gradient(90deg,_#C0C3FF_0%,_#313CB1_51.44%,_#C0C3FF_100%)] rounded-full px-2 py-3 md:py-4 md:px-4  text-base sm:text-lg md:text-2xl font-semibold transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
                      >
-                       <span>Follow on LinkedIn for more updates</span>
+                       <span className="text-white">Follow on LinkedIn for more updates</span>
                        <FaLinkedin className=" text-2xl md:text-3xl shrink-0" />
                      </a>
            
@@ -867,9 +867,9 @@ useEffect(() => {
                        href="https://www.instagram.com/aidly_in?igsh=MWxxMWt1cGoxNmdscA=="
                        target="_blank"
                        rel="noopener noreferrer"
-                       className="flex items-center justify-center gap-1 md:gap-3 bg-gradient-to-r from-[#A64DFF] via-[#dac67f] to-[#A64DFF] rounded-full px-2 py-3 md:py-4 md:px-4 text-base sm:text-lg md:text-2xl font-semibold transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
+                       className="flex items-center justify-center gap-1 md:gap-3 bg-[linear-gradient(90deg,_#B16DF4_0%,_#F4D56D_50%,_#B16DF4_100%)] rounded-full px-2 py-3 md:py-4 md:px-4 text-base sm:text-lg md:text-2xl font-semibold transition-all duration-300 hover:shadow-2xl hover:-translate-y-2"
                      >
-                       <span>Follow on Instagram for more updates</span>
+                       <span className="text-white">Follow on Instagram for more updates</span>
                        <FaInstagram className="text-2xl md:text-3xl shrink-0" />
                      </a>
            
