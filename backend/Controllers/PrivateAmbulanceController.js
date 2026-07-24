@@ -2,6 +2,7 @@ const PrivateAmbulance = require("../models/PrivateAmbulance");
 const bcrypt = require("bcryptjs");
 const generateUniqueId = require("../utils/generateUniqueId");
 const jwt = require("jsonwebtoken");
+const validatePassword = require("../utils/validatePassword");
 
 exports.registerPrivateAmbulance = async (req, res) => {
   try {
@@ -13,7 +14,7 @@ exports.registerPrivateAmbulance = async (req, res) => {
       ambulanceType,
       vehicleNumber,
       vehicleRegistrationLicenseNumber,
-      password
+      password,
     } = req.body;
 
     if (
@@ -28,28 +29,33 @@ exports.registerPrivateAmbulance = async (req, res) => {
     ) {
       return res.status(400).json({
         success: false,
-        message: "All required fields must be provided"
+        message: "All required fields must be provided",
+      });
+    }
+
+    const passwordResult = validatePassword(password);
+    if (!passwordResult.valid) {
+      return res.status(400).json({
+        success: false,
+        message: passwordResult.message,
       });
     }
 
     const existing = await PrivateAmbulance.findOne({
-      $or: [
-        { phoneNumber },
-        { vehicleNumber }
-      ]
+      $or: [{ phoneNumber }, { vehicleNumber }],
     });
 
     if (existing) {
       return res.status(400).json({
         success: false,
-        message: "Private ambulance already registered"
+        message: "Private ambulance already registered",
       });
     }
 
     const privateAmbulanceId = await generateUniqueId(
       PrivateAmbulance,
       "privateAmbulanceId",
-      "PRIVAMB"
+      "PRIVAMB",
     );
 
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -68,21 +74,20 @@ exports.registerPrivateAmbulance = async (req, res) => {
       driverIdProof: req.files?.driverIdProof?.[0]?.path || null,
       vehicleRegistrationCertificate:
         req.files?.vehicleRegistrationCertificate?.[0]?.path || null,
-      vehiclePhoto: req.files?.vehiclePhoto?.[0]?.path || null
+      vehiclePhoto: req.files?.vehiclePhoto?.[0]?.path || null,
     });
 
     res.status(201).json({
       success: true,
       message: "Private ambulance registered successfully",
-      ambulance
+      ambulance,
     });
-
   } catch (error) {
     console.error(error);
 
     res.status(500).json({
       success: false,
-      message: "Registration failed"
+      message: "Registration failed",
     });
   }
 };
@@ -94,30 +99,27 @@ exports.loginPrivateAmbulance = async (req, res) => {
     if (!privateAmbulanceId || !password) {
       return res.status(400).json({
         success: false,
-        message: "Private ambulance ID and password are required"
+        message: "Private ambulance ID and password are required",
       });
     }
 
     const ambulance = await PrivateAmbulance.findOne({
-      privateAmbulanceId
+      privateAmbulanceId,
     });
 
     if (!ambulance) {
       return res.status(404).json({
         success: false,
-        message: "Private ambulance not found"
+        message: "Private ambulance not found",
       });
     }
 
-    const isMatch = await bcrypt.compare(
-      password,
-      ambulance.password
-    );
+    const isMatch = await bcrypt.compare(password, ambulance.password);
 
     if (!isMatch) {
       return res.status(401).json({
         success: false,
-        message: "Invalid credentials"
+        message: "Invalid credentials",
       });
     }
 
@@ -125,10 +127,10 @@ exports.loginPrivateAmbulance = async (req, res) => {
       {
         id: ambulance._id,
         privateAmbulanceId: ambulance.privateAmbulanceId,
-        role: "privateAmbulance"
+        role: "privateAmbulance",
       },
       process.env.JWT_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: "7d" },
     );
 
     res.status(200).json({
@@ -141,16 +143,15 @@ exports.loginPrivateAmbulance = async (req, res) => {
         driverName: ambulance.driverName,
         phoneNumber: ambulance.phoneNumber,
         ambulanceType: ambulance.ambulanceType,
-        availability: ambulance.availability
-      }
+        availability: ambulance.availability,
+      },
     });
-
   } catch (error) {
     console.error(error);
 
     res.status(500).json({
       success: false,
-      message: "Login failed"
+      message: "Login failed",
     });
   }
 };

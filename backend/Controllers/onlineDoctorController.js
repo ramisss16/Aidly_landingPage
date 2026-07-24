@@ -2,6 +2,8 @@ const OnlineDoctor = require("../models/OnlineDoctor");
 const generateUniqueId = require("../utils/generateUniqueId");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const validateEmail = require("../utils/validateEmail");
+const validatePassword = require("../utils/validatePassword");
 
 // ================== REGISTER ONLINE DOCTOR ==================
 exports.registerOnlineDoctor = async (req, res) => {
@@ -23,27 +25,35 @@ exports.registerOnlineDoctor = async (req, res) => {
       });
     }
 
-    const existingDoctor = await OnlineDoctor.findOne({ email });
+    const emailResult = validateEmail(email);
+    const passwordResult = validatePassword(password);
 
-    if (existingDoctor) {
+    if (!emailResult.valid) {
       return res.status(400).json({
         success: false,
-        message: "Online doctor already exists",
+        message: "Please enter a valid email address.",
       });
     }
 
+    if (!passwordResult.valid) {
+      return res.status(400).json({
+        success: false,
+        message: passwordResult.message,
+      });
+    }
+
+    const existingDoctor = await OnlineDoctor.findOne({
+      email: emailResult.email,
+    });
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const doctorId = await generateUniqueId(
-      OnlineDoctor,
-      "doctorId",
-      "ODC"
-    );
+    const doctorId = await generateUniqueId(OnlineDoctor, "doctorId", "ODC");
 
     const doctor = new OnlineDoctor({
       doctorId,
       name,
-      email,
+      email: emailResult.email,
       phone,
       password: hashedPassword,
       specialization,
@@ -54,10 +64,8 @@ exports.registerOnlineDoctor = async (req, res) => {
       photo: req.files?.photo?.[0]?.path || "",
       aadhaarDocument: req.files?.aadhaarDocument?.[0]?.path || "",
       panDocument: req.files?.panDocument?.[0]?.path || "",
-      experienceCertificate:
-        req.files?.experienceCertificate?.[0]?.path || "",
-      licenseCertificate:
-        req.files?.licenseCertificate?.[0]?.path || "",
+      experienceCertificate: req.files?.experienceCertificate?.[0]?.path || "",
+      licenseCertificate: req.files?.licenseCertificate?.[0]?.path || "",
     });
 
     await doctor.save();
@@ -68,7 +76,6 @@ exports.registerOnlineDoctor = async (req, res) => {
       doctorId,
       doctor,
     });
-
   } catch (err) {
     res.status(500).json({
       success: false,
@@ -76,7 +83,6 @@ exports.registerOnlineDoctor = async (req, res) => {
     });
   }
 };
-
 
 // ================== LOGIN ONLINE DOCTOR ==================
 exports.loginOnlineDoctor = async (req, res) => {
@@ -109,7 +115,7 @@ exports.loginOnlineDoctor = async (req, res) => {
       process.env.JWT_SECRET,
       {
         expiresIn: "7d",
-      }
+      },
     );
 
     res.status(200).json({
@@ -119,7 +125,6 @@ exports.loginOnlineDoctor = async (req, res) => {
       token,
       doctor,
     });
-
   } catch (err) {
     res.status(500).json({
       success: false,

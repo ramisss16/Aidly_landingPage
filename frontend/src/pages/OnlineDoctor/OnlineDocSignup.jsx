@@ -3,6 +3,8 @@ import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../../service/api";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
+import { getPasswordValidation } from "../../utils/validatePassword";
+import { isValidEmail } from "../../utils/validateEmail";
 
 const OnlineDoctorForm = () => {
   const [step, setStep] = useState(1);
@@ -15,6 +17,13 @@ const OnlineDoctorForm = () => {
 
   const navigate = useNavigate();
   const [formData, setFormData] = useState({});
+  const emailValue = formData.email || "";
+  const isEmailValid = isValidEmail(emailValue);
+  const emailError = emailValue && !isEmailValid;
+  const passwordValidation = getPasswordValidation(
+    formData.Createpassword || "",
+  );
+  const passwordError = formData.Createpassword && !passwordValidation.isValid;
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
@@ -73,11 +82,9 @@ const OnlineDoctorForm = () => {
   };
 
   const handleSubmit = async () => {
-   
-        if (!otpVerified) {
-  return alert("Please verify OTP first");
-
-}
+    if (!otpVerified) {
+      return alert("Please verify OTP first");
+    }
 
     try {
       setLoading(true);
@@ -96,12 +103,18 @@ const OnlineDoctorForm = () => {
       form.append("password", formData.Createpassword);
       form.append("specialization", formData.specialization);
       form.append("consultationFee", formData.fee);
-      form.append("availableSlots", `${formData.fromTime} - ${formData.toTime}`);
+      form.append(
+        "availableSlots",
+        `${formData.fromTime} - ${formData.toTime}`,
+      );
 
       if (formData.photo) form.append("photo", formData.photo);
-      if (formData.aadhaarDocument) form.append("aadhaarDocument", formData.aadhaarDocument);
-      if (formData.experienceCertificate) form.append("experienceCertificate", formData.experienceCertificate);
-      if (formData.licenseCertificate) form.append("licenseCertificate", formData.licenseCertificate);
+      if (formData.aadhaarDocument)
+        form.append("aadhaarDocument", formData.aadhaarDocument);
+      if (formData.experienceCertificate)
+        form.append("experienceCertificate", formData.experienceCertificate);
+      if (formData.licenseCertificate)
+        form.append("licenseCertificate", formData.licenseCertificate);
 
       const response = await api.post("/online-doctor/register", form, {
         headers: {
@@ -126,6 +139,16 @@ const OnlineDoctorForm = () => {
   const handleNext = () => {
     if (!formData.fullName || !formData.email || !formData.phonenumber) {
       alert("Fill all required fields");
+      return;
+    }
+
+    if (!isValidEmail(formData.email || "")) {
+      alert("Please enter a valid email address.");
+      return;
+    }
+
+    if (!passwordValidation.isValid) {
+      alert(passwordValidation.message);
       return;
     }
 
@@ -170,366 +193,419 @@ const OnlineDoctorForm = () => {
 
           {step === 1 && (
             <>
-            <form 
-              onSubmit={(e) => {
-      e.preventDefault();
-      handleNext();
-    }}>
-              <div className="flex items-center md:gap-2 mb-5">
-                <label className="text-sm sm:text-lg font-semibold w-28 sm:w-48 ml-2 sm:ml-10">
-                  Full Name <span className="px-2 text-red-600">*</span>
-                </label>
-                <input
-                  required
-                  name="fullName"
-                  value={formData.fullName || ""}
-                  onChange={handleChange}
-                  className="flex-1 min-w-0 bg-gray-200 p-2 rounded-md outline-none text-sm sm:text-base"
-                />
-              </div>
-
-              <div className="flex items-center md:gap-2 mb-5">
-                <label className="text-sm sm:text-lg font-semibold w-28 sm:w-48 ml-2 sm:ml-10">
-                  Email Address <span className="px-2 text-red-600">*</span>
-                </label>
-                <input
-                   required
-                  name="email"
-                  value={formData.email || ""}
-                  onChange={handleChange}
-                  className="flex-1 min-w-0 bg-gray-200 p-2 rounded-md outline-none text-sm sm:text-base"
-                />
-              </div>
-
-              <div className="flex items-start sm:items-center md:gap-2 mb-5">
-                <label className="text-sm sm:text-lg font-semibold w-28 sm:w-48 ml-2 sm:ml-10">
-                  Phone Number 
-                </label>
-                <div className="flex flex-col sm:flex-row flex-1 gap-2 sm:gap-5">
-                  <input
-                 
-                    name="phonenumber"
-                    value={formData.phonenumber || ""}
-                    onChange={handleChange}
-                    className="w-full sm:flex-1 min-w-0 bg-gray-200 p-2 rounded-md outline-none text-sm sm:text-base"
-                  />
-                  <button
-                    type="button"
-                    onClick={sendOTP}
-                    disabled={otpLoading}
-                    className="bg-blue-600 text-white px-3 sm:px-5 py-1 sm:py-2 rounded-md text-sm sm:text-base w-fit sm:w-auto hover:bg-blue-700"
-                  >
-                    {otpLoading ? "Sending..." : "Get OTP"}
-                  </button>
-                </div>
-              </div>
-
-              <div className="flex flex-col items-start md:gap-2 mb-5">
-                <label className="text-sm sm:text-lg font-semibold w-full ml-2 mb-2 sm:ml-10">
-                  Enter the OTP sent on your mobile number 
-                </label>
-                <div className="flex flex-row flex-1 gap-3 sm:gap-5 sm:ml-[240px] ml-[120px]">
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  handleNext();
+                }}
+              >
+                <div className="flex items-center md:gap-2 mb-5">
+                  <label className="text-sm sm:text-lg font-semibold w-28 sm:w-48 ml-2 sm:ml-10">
+                    Full Name <span className="px-2 text-red-600">*</span>
+                  </label>
                   <input
                     required
-                    name="otp"
-                    value={formData.otp || ""}
+                    name="fullName"
+                    value={formData.fullName || ""}
                     onChange={handleChange}
-                    className="sm:w-full w-[80px] sm:flex-1 min-w-0 bg-gray-200 p-2 rounded-md outline-none text-sm sm:text-base"
+                    className="flex-1 min-w-0 bg-gray-200 p-2 rounded-md outline-none text-sm sm:text-base"
                   />
-                  <button
-                    type="button"
-                    onClick={verifyOTP}
-                    disabled={otpLoading}
-                    className={`bg-blue-600 text-white px-2 sm:px-5 py-1 sm:py-2 rounded-md text-sm sm:text-base w-fit sm:w-auto hover:bg-blue-700 ${
-                      otpVerified ? "bg-green-600 hover:bg-green-700" : ""
-                    }`}
-                  >
-                    {otpVerified ? "Verified" : "Verify"}
-                  </button>
                 </div>
-              </div>
 
-              <h3 className="text-lg md:text-xl font-semibold mb-4">
-                Upload Your Photo
-              </h3>
+                <div className="flex items-center md:gap-2 mb-5">
+                  <label className="text-sm sm:text-lg font-semibold w-28 sm:w-48 ml-2 sm:ml-10">
+                    Email Address <span className="px-2 text-red-600">*</span>
+                  </label>
+                  <div className="flex-1 min-w-0">
+                    <input
+                      required
+                      name="email"
+                      value={formData.email || ""}
+                      onChange={handleChange}
+                      className="w-full bg-gray-200 p-2 rounded-md outline-none text-sm sm:text-base"
+                    />
+                    {emailError && (
+                      <p className="mt-2 text-sm text-red-600 ml-1">
+                        Please enter a valid email address.
+                      </p>
+                    )}
+                  </div>
+                </div>
 
-              <div className="border-2 border-dashed border-blue-500 flex flex-col items-center justify-center mx-auto p-8 mb-2">
-                <p className="text-lg text-gray-500 mb-3">DRAG FILE HERE OR</p>
+                <div className="flex items-start sm:items-center md:gap-2 mb-5">
+                  <label className="text-sm sm:text-lg font-semibold w-28 sm:w-48 ml-2 sm:ml-10">
+                    Phone Number
+                  </label>
+                  <div className="flex flex-col sm:flex-row flex-1 gap-2 sm:gap-5">
+                    <input
+                      name="phonenumber"
+                      value={formData.phonenumber || ""}
+                      onChange={handleChange}
+                      className="w-full sm:flex-1 min-w-0 bg-gray-200 p-2 rounded-md outline-none text-sm sm:text-base"
+                    />
+                    <button
+                      type="button"
+                      onClick={sendOTP}
+                      disabled={otpLoading}
+                      className="bg-blue-600 text-white px-3 sm:px-5 py-1 sm:py-2 rounded-md text-sm sm:text-base w-fit sm:w-auto hover:bg-blue-700"
+                    >
+                      {otpLoading ? "Sending..." : "Get OTP"}
+                    </button>
+                  </div>
+                </div>
 
-                <input
-                  type="file"
-                  name="photo"
-                  onChange={handleChange}
-                  className="hidden"
-                  id="photoUpload"
-                />
+                <div className="flex flex-col items-start md:gap-2 mb-5">
+                  <label className="text-sm sm:text-lg font-semibold w-full ml-2 mb-2 sm:ml-10">
+                    Enter the OTP sent on your mobile number
+                  </label>
+                  <div className="flex flex-row flex-1 gap-3 sm:gap-5 sm:ml-[240px] ml-[120px]">
+                    <input
+                      required
+                      name="otp"
+                      value={formData.otp || ""}
+                      onChange={handleChange}
+                      className="sm:w-full w-[80px] sm:flex-1 min-w-0 bg-gray-200 p-2 rounded-md outline-none text-sm sm:text-base"
+                    />
+                    <button
+                      type="button"
+                      onClick={verifyOTP}
+                      disabled={otpLoading}
+                      className={`bg-blue-600 text-white px-2 sm:px-5 py-1 sm:py-2 rounded-md text-sm sm:text-base w-fit sm:w-auto hover:bg-blue-700 ${
+                        otpVerified ? "bg-green-600 hover:bg-green-700" : ""
+                      }`}
+                    >
+                      {otpVerified ? "Verified" : "Verify"}
+                    </button>
+                  </div>
+                </div>
 
-                <label
-                  htmlFor="photoUpload"
-                  className="bg-blue-600 text-white px-6 py-2 rounded-full mb-4 cursor-pointer hover:bg-blue-700"
-                >
-                  Browse
-                </label>
+                <h3 className="text-lg md:text-xl font-semibold mb-4">
+                  Upload Your Photo
+                </h3>
 
-                {formData.photo && (
-                  <p className="text-green-600 mt-2 text-sm">{formData.photo.name}</p>
-                )}
-              </div>
-
-              <p className="text-gray-500 text-center mb-8">
-                Supported file types: .PDF .PNG .JPG
-              </p>
-
-              <h3 className="text-lg md:text-xl font-semibold mb-4">
-                Upload an ID Proof (Adhar or PAN) <span className="px-2 text-red-600">*</span>
-              </h3>
-
-              <div className="border-2 border-dashed border-blue-500 flex flex-col items-center justify-center mx-auto p-8 mb-2">
-                <p className="text-lg text-gray-500 mb-3">DRAG FILE HERE OR</p>
-
-                <input
-                  required
-                  type="file"
-                  name="aadhaarDocument"
-                  onChange={handleChange}
-                  className="hidden"
-                  id="aadhaarUpload"
-                />
-
-                <label
-                  htmlFor="aadhaarUpload"
-                  className="bg-blue-600 text-white px-6 py-2 rounded-full mb-4 cursor-pointer hover:bg-blue-700"
-                >
-                  Browse
-                </label>
-
-                {formData.aadhaarDocument && (
-                  <p className="text-green-600 mt-2 text-sm">
-                    {formData.aadhaarDocument.name}
+                <div className="border-2 border-dashed border-blue-500 flex flex-col items-center justify-center mx-auto p-8 mb-2">
+                  <p className="text-lg text-gray-500 mb-3">
+                    DRAG FILE HERE OR
                   </p>
-                )}
-              </div>
 
-              <p className="text-gray-500 text-center mb-8">
-                Supported file types: .PDF .PNG .JPG
-              </p>
+                  <input
+                    type="file"
+                    name="photo"
+                    onChange={handleChange}
+                    className="hidden"
+                    id="photoUpload"
+                  />
 
-              <div className="flex items-center md:gap-2 mb-5">
-                <label className="text-sm sm:text-lg font-semibold w-30 sm:w-48 ml-2 sm:ml-10">
-                  Create password 
-                </label>
-                <div className="relative flex-1">
+                  <label
+                    htmlFor="photoUpload"
+                    className="bg-blue-600 text-white px-6 py-2 rounded-full mb-4 cursor-pointer hover:bg-blue-700"
+                  >
+                    Browse
+                  </label>
+
+                  {formData.photo && (
+                    <p className="text-green-600 mt-2 text-sm">
+                      {formData.photo.name}
+                    </p>
+                  )}
+                </div>
+
+                <p className="text-gray-500 text-center mb-8">
+                  Supported file types: .PDF .PNG .JPG
+                </p>
+
+                <h3 className="text-lg md:text-xl font-semibold mb-4">
+                  Upload an ID Proof (Adhar or PAN){" "}
+                  <span className="px-2 text-red-600">*</span>
+                </h3>
+
+                <div className="border-2 border-dashed border-blue-500 flex flex-col items-center justify-center mx-auto p-8 mb-2">
+                  <p className="text-lg text-gray-500 mb-3">
+                    DRAG FILE HERE OR
+                  </p>
+
                   <input
                     required
-                    type={showPassword ? "text" : "password"}
-                    name="Createpassword"
-                    value={formData.Createpassword || ""}
+                    type="file"
+                    name="aadhaarDocument"
                     onChange={handleChange}
-                    className="w-full bg-gray-200 p-2 rounded-md outline-none text-sm sm:text-base pr-10"
+                    className="hidden"
+                    id="aadhaarUpload"
                   />
-                  <span
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-600"
-                  >
-                    {showPassword ? <FaEyeSlash /> : <FaEye />}
-                  </span>
-                </div>
-              </div>
 
-              <div className="flex items-center md:gap-2 mb-5">
-                <label className="text-sm sm:text-lg font-semibold w-30 sm:w-48 ml-2 sm:ml-10">
-                  Confirm Password
-                </label>
-                <div className="relative flex-1">
-                  <input
-                    required
-                    type={showConfirmPassword ? "text" : "password"}
-                    name="confirmPassword"
-                    value={formData.confirmPassword || ""}
-                    onChange={handleChange}
-                    className="w-full bg-gray-200 p-2 rounded-md outline-none text-sm sm:text-base pr-10"
-                  />
-                  <span
-                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-600"
+                  <label
+                    htmlFor="aadhaarUpload"
+                    className="bg-blue-600 text-white px-6 py-2 rounded-full mb-4 cursor-pointer hover:bg-blue-700"
                   >
-                    {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
-                  </span>
-                </div>
-              </div>
+                    Browse
+                  </label>
 
-              <div className="flex justify-center mt-8">
-                <button
-                  
-                  type="submit"
-                  className="bg-blue-600 text-white px-10 py-2 rounded-md text-lg shadow-md hover:bg-blue-700"
-                >
-                  Continue
-                </button>
-              </div>
+                  {formData.aadhaarDocument && (
+                    <p className="text-green-600 mt-2 text-sm">
+                      {formData.aadhaarDocument.name}
+                    </p>
+                  )}
+                </div>
+
+                <p className="text-gray-500 text-center mb-8">
+                  Supported file types: .PDF .PNG .JPG
+                </p>
+
+                <div className="flex items-center md:gap-2 mb-5">
+                  <label className="text-sm sm:text-lg font-semibold w-30 sm:w-48 ml-2 sm:ml-10">
+                    Create password
+                  </label>
+                  <div className="relative flex-1">
+                    <input
+                      required
+                      type={showPassword ? "text" : "password"}
+                      name="Createpassword"
+                      value={formData.Createpassword || ""}
+                      onChange={handleChange}
+                      className="w-full bg-gray-200 p-2 rounded-md outline-none text-sm sm:text-base pr-10"
+                    />
+                    <span
+                      onClick={() => setShowPassword(!showPassword)}
+                      className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-600"
+                    >
+                      {showPassword ? <FaEyeSlash /> : <FaEye />}
+                    </span>
+                    {formData.Createpassword && (
+                      <div className="mt-2 text-sm text-gray-700">
+                        {passwordValidation.isValid ? (
+                          <p className="text-green-600">
+                            ✅ Password looks good.
+                          </p>
+                        ) : (
+                          <ul className="mt-2 space-y-1">
+                            {passwordValidation.requirements.map((item) => (
+                              <li
+                                key={item.label}
+                                className={
+                                  item.valid ? "text-green-600" : "text-red-600"
+                                }
+                              >
+                                • {item.label}
+                              </li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex items-center md:gap-2 mb-5">
+                  <label className="text-sm sm:text-lg font-semibold w-30 sm:w-48 ml-2 sm:ml-10">
+                    Confirm password
+                  </label>
+                  <div className="relative flex-1">
+                    <input
+                      required
+                      type={showConfirmPassword ? "text" : "password"}
+                      name="confirmPassword"
+                      value={formData.confirmPassword || ""}
+                      onChange={handleChange}
+                      className="w-full bg-gray-200 p-2 rounded-md outline-none text-sm sm:text-base pr-10"
+                    />
+                    <span
+                      onClick={() =>
+                        setShowConfirmPassword(!showConfirmPassword)
+                      }
+                      className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-gray-600"
+                    >
+                      {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex justify-center mt-8">
+                  <button
+                    type="submit"
+                    disabled={loading}
+                    className="bg-blue-600 text-white px-10 py-2 rounded-md text-lg shadow-md hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Continue
+                  </button>
+                </div>
               </form>
             </>
           )}
 
           {step === 2 && (
             <>
-            <form 
-              onSubmit={async(e) => {
-      e.preventDefault();
-     await handleSubmit();
-    }}>
-              <div className="space-y-5">
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                  <label className="sm:w-1/3 font-medium">Specialization <span className="px-2 text-red-600">*</span></label>
-                  <input
-                    required
-                    name="specialization"
-                    value={formData.specialization || ""}
-                    onChange={handleChange}
-                    type="text"
-                    className="w-full sm:w-2/3 border rounded-md p-2 bg-gray-100"
-                  />
-                </div>
-
-                <h3 className="text-lg md:text-xl font-semibold mb-4">
-                  Upload Your Experience Certificate
-                </h3>
-
-                <div className="border-2 border-dashed border-blue-500 mx-auto rounded-lg flex flex-col items-center justify-center p-8 mb-2">
-                  <p className="text-gray-500 mb-4 text-center">DRAG FILE HERE OR</p>
-                  <input
-                    type="file"
-                    name="experienceCertificate"
-                    onChange={handleChange}
-                    className="hidden"
-                    id="experienceUpload"
-                  />
-                  <label
-                    htmlFor="experienceUpload"
-                    className="bg-blue-600 text-white px-6 py-2 rounded-full cursor-pointer hover:bg-blue-700"
-                  >
-                    Browse
-                  </label>
-                  {formData.experienceCertificate && (
-                    <p className="text-green-600 mt-2 text-sm">
-                      {formData.experienceCertificate.name}
-                    </p>
-                  )}
-                </div>
-
-                <p className="text-gray-500 text-center mb-8">
-                  Supported file types: .PDF .PNG .JPG
-                </p>
-
-                <h3 className="text-lg md:text-xl font-semibold mb-4">
-                  Upload Your License Certificate <span className="px-2 text-red-600">*</span>
-                </h3>
-
-                <div className="border-2 border-dashed border-blue-500 mx-auto rounded-lg flex flex-col items-center justify-center p-8 mb-2">
-                  <p className="text-gray-500 mb-4 text-center">DRAG FILE HERE OR</p>
-                  <input
-                    required
-                    type="file"
-                    name="licenseCertificate"
-                    onChange={handleChange}
-                    className="hidden"
-                    id="licenseUpload"
-                  />
-                  <label
-                    htmlFor="licenseUpload"
-                    className="bg-blue-600 text-white px-6 py-2 rounded-full cursor-pointer hover:bg-blue-700"
-                  >
-                    Browse
-                  </label>
-                  {formData.licenseCertificate && (
-                    <p className="text-green-600 mt-2 text-sm">
-                      {formData.licenseCertificate.name}
-                    </p>
-                  )}
-                </div>
-
-                <p className="text-gray-500 text-center mb-8">
-                  Supported file types: .PDF .PNG .JPG
-                </p>
-
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                  <label className="sm:w-1/3 font-medium">Consultation Fee</label>
-                  <input
-                    name="fee"
-                    value={formData.fee || ""}
-                    onChange={handleChange}
-                    type="number"
-                    className="w-full sm:w-2/3 border rounded-md p-2 bg-gray-100"
-                  />
-                </div>
-
-                <div className="flex flex-col sm:flex-row sm:items-center gap-2">
-                  <label className="sm:w-1/3 font-medium">Available Time Slot</label>
-                  <div className="flex gap-2 w-full sm:w-2/3">
+              <form
+                onSubmit={async (e) => {
+                  e.preventDefault();
+                  await handleSubmit();
+                }}
+              >
+                <div className="space-y-5">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                    <label className="sm:w-1/3 font-medium">
+                      Specialization{" "}
+                      <span className="px-2 text-red-600">*</span>
+                    </label>
                     <input
-                      name="fromTime"
-                      value={formData.fromTime || ""}
+                      required
+                      name="specialization"
+                      value={formData.specialization || ""}
                       onChange={handleChange}
-                      type="time"
-                      className="w-1/2 border rounded-md p-2 bg-gray-100"
-                    />
-                    <input
-                      name="toTime"
-                      value={formData.toTime || ""}
-                      onChange={handleChange}
-                      type="time"
-                      className="w-1/2 border rounded-md p-2 bg-gray-100"
+                      type="text"
+                      className="w-full sm:w-2/3 border rounded-md p-2 bg-gray-100"
                     />
                   </div>
-                </div>
 
-                <div className="flex flex-col sm:flex-row gap-2">
-                  <label className="sm:w-1/3 font-medium">Address</label>
-                  <textarea
-                    rows="3"
-                    name="address"
-                    value={formData.address || ""}
-                    onChange={handleChange}
-                    className="w-full sm:w-2/3 border rounded-md p-2 bg-gray-100"
-                  />
-                </div>
+                  <h3 className="text-lg md:text-xl font-semibold mb-4">
+                    Upload Your Experience Certificate
+                  </h3>
 
-                <div className="flex flex-col sm:flex-row gap-2">
-                  <label className="sm:w-1/3 font-medium">
-                    Contact Number (Official) <span className="px-2 text-red-600">*</span>
-                  </label>
-                  <input
-                    required
-                    name="officialPhone"
-                    value={formData.officialPhone || ""}
-                    onChange={handleChange}
-                    type="text"
-                    className="w-full sm:w-2/3 border rounded-md p-2 bg-gray-100"
-                  />
-                </div>
+                  <div className="border-2 border-dashed border-blue-500 mx-auto rounded-lg flex flex-col items-center justify-center p-8 mb-2">
+                    <p className="text-gray-500 mb-4 text-center">
+                      DRAG FILE HERE OR
+                    </p>
+                    <input
+                      type="file"
+                      name="experienceCertificate"
+                      onChange={handleChange}
+                      className="hidden"
+                      id="experienceUpload"
+                    />
+                    <label
+                      htmlFor="experienceUpload"
+                      className="bg-blue-600 text-white px-6 py-2 rounded-full cursor-pointer hover:bg-blue-700"
+                    >
+                      Browse
+                    </label>
+                    {formData.experienceCertificate && (
+                      <p className="text-green-600 mt-2 text-sm">
+                        {formData.experienceCertificate.name}
+                      </p>
+                    )}
+                  </div>
 
-                <div className="flex flex-col sm:flex-row gap-2">
-                  <label className="sm:w-1/3 font-medium">
-                    Email Address (Official) <span className="px-2 text-red-600">*</span>
-                  </label>
-                  <input
-                   required
-                    name="officialEmail"
-                    value={formData.officialEmail || ""}
-                    onChange={handleChange}
-                    type="email"
-                    className="w-full sm:w-2/3 border rounded-md p-2 bg-gray-100"
-                  />
-                </div>
+                  <p className="text-gray-500 text-center mb-8">
+                    Supported file types: .PDF .PNG .JPG
+                  </p>
 
-                <button
-                  
-                  type="submit"
-                  className="sm:w-[200px] w-[100px] bg-blue-600 text-white py-3 rounded-lg text-lg font-semibold shadow-md hover:bg-blue-700 transition mx-auto flex justify-center items-center text-center"
-                >
-                  Continue
-                </button>
-              </div>
+                  <h3 className="text-lg md:text-xl font-semibold mb-4">
+                    Upload Your License Certificate{" "}
+                    <span className="px-2 text-red-600">*</span>
+                  </h3>
+
+                  <div className="border-2 border-dashed border-blue-500 mx-auto rounded-lg flex flex-col items-center justify-center p-8 mb-2">
+                    <p className="text-gray-500 mb-4 text-center">
+                      DRAG FILE HERE OR
+                    </p>
+                    <input
+                      required
+                      type="file"
+                      name="licenseCertificate"
+                      onChange={handleChange}
+                      className="hidden"
+                      id="licenseUpload"
+                    />
+                    <label
+                      htmlFor="licenseUpload"
+                      className="bg-blue-600 text-white px-6 py-2 rounded-full cursor-pointer hover:bg-blue-700"
+                    >
+                      Browse
+                    </label>
+                    {formData.licenseCertificate && (
+                      <p className="text-green-600 mt-2 text-sm">
+                        {formData.licenseCertificate.name}
+                      </p>
+                    )}
+                  </div>
+
+                  <p className="text-gray-500 text-center mb-8">
+                    Supported file types: .PDF .PNG .JPG
+                  </p>
+
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                    <label className="sm:w-1/3 font-medium">
+                      Consultation Fee
+                    </label>
+                    <input
+                      name="fee"
+                      value={formData.fee || ""}
+                      onChange={handleChange}
+                      type="number"
+                      className="w-full sm:w-2/3 border rounded-md p-2 bg-gray-100"
+                    />
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2">
+                    <label className="sm:w-1/3 font-medium">
+                      Available Time Slot
+                    </label>
+                    <div className="flex gap-2 w-full sm:w-2/3">
+                      <input
+                        name="fromTime"
+                        value={formData.fromTime || ""}
+                        onChange={handleChange}
+                        type="time"
+                        className="w-1/2 border rounded-md p-2 bg-gray-100"
+                      />
+                      <input
+                        name="toTime"
+                        value={formData.toTime || ""}
+                        onChange={handleChange}
+                        type="time"
+                        className="w-1/2 border rounded-md p-2 bg-gray-100"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <label className="sm:w-1/3 font-medium">Address</label>
+                    <textarea
+                      rows="3"
+                      name="address"
+                      value={formData.address || ""}
+                      onChange={handleChange}
+                      className="w-full sm:w-2/3 border rounded-md p-2 bg-gray-100"
+                    />
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <label className="sm:w-1/3 font-medium">
+                      Contact Number (Official){" "}
+                      <span className="px-2 text-red-600">*</span>
+                    </label>
+                    <input
+                      required
+                      name="officialPhone"
+                      value={formData.officialPhone || ""}
+                      onChange={handleChange}
+                      type="text"
+                      className="w-full sm:w-2/3 border rounded-md p-2 bg-gray-100"
+                    />
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-2">
+                    <label className="sm:w-1/3 font-medium">
+                      Email Address (Official){" "}
+                      <span className="px-2 text-red-600">*</span>
+                    </label>
+                    <input
+                      required
+                      name="officialEmail"
+                      value={formData.officialEmail || ""}
+                      onChange={handleChange}
+                      type="email"
+                      className="w-full sm:w-2/3 border rounded-md p-2 bg-gray-100"
+                    />
+                  </div>
+
+                  <button
+                    type="submit"
+                    disabled={!isEmailValid || loading}
+                    className="sm:w-[200px] w-[100px] bg-blue-600 text-white py-3 rounded-lg text-lg font-semibold shadow-md hover:bg-blue-700 transition mx-auto flex justify-center items-center text-center disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    Continue
+                  </button>
+                </div>
               </form>
             </>
           )}

@@ -6,6 +6,8 @@ const generateUniqueId = require("../utils/generateUniqueId");
 const Clinic = require("../models/Clinic");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const validateEmail = require("../utils/validateEmail");
+const validatePassword = require("../utils/validatePassword");
 
 // ================== CLINIC SIGNUP ==================
 exports.signupClinic = async (req, res) => {
@@ -24,85 +26,91 @@ exports.signupClinic = async (req, res) => {
       licenseNumber,
     } = req.body;
 
-   if (!clinicName || !clinicEmail) {
-  return res.status(400).json({
-    success: false,
-    message:
-      "Clinic name and email are required",
-  });
-}
+    if (!clinicName || !clinicEmail) {
+      return res.status(400).json({
+        success: false,
+        message: "Clinic name and email are required",
+      });
+    }
 
-   const existing = await Clinic.findOne({clinicEmail,});
+    const clinicEmailResult = validateEmail(clinicEmail);
+    if (!clinicEmailResult.valid) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid email address.",
+      });
+    }
 
-if (existing) {
-  return res.status(400).json({
-    success: false,
-    message:
-      "Clinic email already exists",
-  });
-}
+    let cleanedAdminEmail = "";
+    if (email) {
+      const adminEmailResult = validateEmail(email);
+      if (!adminEmailResult.valid) {
+        return res.status(400).json({
+          success: false,
+          message: "Please enter a valid email address.",
+        });
+      }
+      cleanedAdminEmail = adminEmailResult.email;
+    }
 
-   let hashedPassword =
-"";
+    if (password !== undefined && password !== null && password !== "") {
+      const passwordResult = validatePassword(password);
+      if (!passwordResult.valid) {
+        return res.status(400).json({
+          success: false,
+          message: passwordResult.message,
+        });
+      }
+    }
 
-if (password) {
-  hashedPassword =
-    await bcrypt.hash(
-      password,
-      10
-    );
-}
+    const existing = await Clinic.findOne({
+      clinicEmail: clinicEmailResult.email,
+    });
+
+    if (existing) {
+      return res.status(400).json({
+        success: false,
+        message: "Clinic email already exists",
+      });
+    }
+
+    let hashedPassword = "";
+
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
     const adminId = await generateUniqueId(Clinic, "adminId", "ADM");
 
-   const clinic =
-new Clinic({
-  adminId,
+    const clinic = new Clinic({
+      adminId,
 
-  clinicName,
-  clinicEmail,
+      clinicName,
+      clinicEmail: clinicEmailResult.email,
 
- adminName:
-  adminName,
+      adminName: adminName,
 
-  email: email || undefined,
-  password: hashedPassword,
-  phone: phone || undefined,
+      email: cleanedAdminEmail || undefined,
+      password: hashedPassword,
+      phone: phone || undefined,
 
-  address:
-    address ,
+      address: address,
 
-  city:
-    city ,
+      city: city,
 
-  state:
-    state ,
+      state: state,
 
-  pincode:
-    pincode ,
+      pincode: pincode,
 
-  licenseNumber:
-    licenseNumber,
+      licenseNumber: licenseNumber,
 
-  licenseDocument:
-    req.files
-      ?.licenseDocument?.[0]
-      ?.path,
+      licenseDocument: req.files?.licenseDocument?.[0]?.path,
 
-  aadhaarDocument:
-    req.files
-      ?.aadhaarDocument?.[0]
-      ?.path,
+      aadhaarDocument: req.files?.aadhaarDocument?.[0]?.path,
 
-  panDocument:
-    req.files
-      ?.panDocument?.[0]
-      ?.path ,
+      panDocument: req.files?.panDocument?.[0]?.path,
 
-  clinicLogo:
-    req.files
-      ?.clinicLogo?.[0]
-      ?.path,
-});
+      clinicLogo: req.files?.clinicLogo?.[0]?.path,
+    });
 
     await clinic.save();
 
@@ -122,197 +130,123 @@ new Clinic({
   }
 };
 
-
 // update clinic details
-exports.updateClinic =
-  async (req, res) => {
-    try {
-      const { clinicId } =
-        req.params;
+exports.updateClinic = async (req, res) => {
+  try {
+    const { clinicId } = req.params;
 
-      const {
-        adminName,
-        email,
-        password,
-        phone,
-        address,
-        city,
-        state,
-        pincode,
-        specialization,
-        consultationFee,
-        availableSlots,
-        officialAddress,
-        officialContact,
-        officialEmail,
-        specialistsCount,
-        doctorsCount,
-        visitMode,
-        hasSupportStaff,
-      } = req.body;
+    const {
+      adminName,
+      email,
+      password,
+      phone,
+      address,
+      city,
+      state,
+      pincode,
+      specialization,
+      consultationFee,
+      availableSlots,
+      officialAddress,
+      officialContact,
+      officialEmail,
+      specialistsCount,
+      doctorsCount,
+      visitMode,
+      hasSupportStaff,
+    } = req.body;
 
-      // clinic check
-      const clinic =
-        await Clinic.findById(
-          clinicId
-        );
+    // clinic check
+    const clinic = await Clinic.findById(clinicId);
 
-      if (!clinic) {
-        return res
-          .status(404)
-          .json({
-            success:
-              false,
-            message:
-              "Clinic not found",
-          });
-      }
-
-      // hash password only if provided
-      let hashedPassword =
-        clinic.password;
-
-      if (password) {
-        hashedPassword =
-          await bcrypt.hash(
-            password,
-            10
-          );
-      }
-
-      // update clinic
-      const updatedClinic =
-        await Clinic.findByIdAndUpdate(
-          clinicId,
-          {
-            adminName:
-              adminName ||
-              clinic.adminName,
-
-            email:
-              email ||
-              clinic.email,
-
-            password:
-              hashedPassword,
-
-            phone:
-              phone ||
-              clinic.phone,
-
-            address:
-              address ||
-              clinic.address,
-
-            city:
-              city ||
-              clinic.city,
-
-            state:
-              state ||
-              clinic.state,
-
-            pincode:
-              pincode ||
-              clinic.pincode,
-
-            specialization:
-              specialization ||
-              clinic.specialization,
-
-            consultationFee:
-              consultationFee ||
-              clinic.consultationFee,
-
-            availableSlots:
-              availableSlots ||
-              clinic.availableSlots,
-
-            officialAddress:
-              officialAddress ||
-              clinic.officialAddress,
-
-            officialContact:
-              officialContact ||
-              clinic.officialContact,
-
-            officialEmail:
-              officialEmail ||
-              clinic.officialEmail,
-
-            specialistsCount:
-              specialistsCount ||
-              clinic.specialistsCount,
-
-            doctorsCount:
-              doctorsCount ||
-              clinic.doctorsCount,
-
-            visitMode:
-              visitMode ||
-              clinic.visitMode,
-
-            hasSupportStaff:
-              hasSupportStaff ??
-              clinic.hasSupportStaff,
-
-            // FILES
-            photo:
-              req.files?.photo?.[0]
-                ?.path ||
-              clinic.photo,
-
-            licenseDocument:
-              req.files
-                ?.licenseDocument?.[0]
-                ?.path ||
-              clinic.licenseDocument,
-
-            aadhaarDocument:
-              req.files
-                ?.aadhaarDocument?.[0]
-                ?.path ||
-              clinic.aadhaarDocument,
-
-            panDocument:
-              req.files
-                ?.panDocument?.[0]
-                ?.path ||
-              clinic.panDocument,
-
-            clinicLogo:
-              req.files
-                ?.clinicLogo?.[0]
-                ?.path ||
-              clinic.clinicLogo,
-
-            experienceCertificate:
-              req.files
-                ?.experienceCertificate?.[0]
-                ?.path ||
-              clinic.experienceCertificate,
-          },
-          {
-            new: true,
-          }
-        );
-
-      res.status(200).json({
-        success: true,
-        message:
-          "Clinic updated successfully",
-        data:
-          updatedClinic,
-      });
-
-    } catch (err) {
-      res.status(500).json({
+    if (!clinic) {
+      return res.status(404).json({
         success: false,
-        message:
-          err.message,
+        message: "Clinic not found",
       });
     }
-  };
+
+    // hash password only if provided
+    let hashedPassword = clinic.password;
+
+    if (password) {
+      hashedPassword = await bcrypt.hash(password, 10);
+    }
+
+    // update clinic
+    const updatedClinic = await Clinic.findByIdAndUpdate(
+      clinicId,
+      {
+        adminName: adminName || clinic.adminName,
+
+        email: email || clinic.email,
+
+        password: hashedPassword,
+
+        phone: phone || clinic.phone,
+
+        address: address || clinic.address,
+
+        city: city || clinic.city,
+
+        state: state || clinic.state,
+
+        pincode: pincode || clinic.pincode,
+
+        specialization: specialization || clinic.specialization,
+
+        consultationFee: consultationFee || clinic.consultationFee,
+
+        availableSlots: availableSlots || clinic.availableSlots,
+
+        officialAddress: officialAddress || clinic.officialAddress,
+
+        officialContact: officialContact || clinic.officialContact,
+
+        officialEmail: officialEmail || clinic.officialEmail,
+
+        specialistsCount: specialistsCount || clinic.specialistsCount,
+
+        doctorsCount: doctorsCount || clinic.doctorsCount,
+
+        visitMode: visitMode || clinic.visitMode,
+
+        hasSupportStaff: hasSupportStaff ?? clinic.hasSupportStaff,
+
+        // FILES
+        photo: req.files?.photo?.[0]?.path || clinic.photo,
+
+        licenseDocument:
+          req.files?.licenseDocument?.[0]?.path || clinic.licenseDocument,
+
+        aadhaarDocument:
+          req.files?.aadhaarDocument?.[0]?.path || clinic.aadhaarDocument,
+
+        panDocument: req.files?.panDocument?.[0]?.path || clinic.panDocument,
+
+        clinicLogo: req.files?.clinicLogo?.[0]?.path || clinic.clinicLogo,
+
+        experienceCertificate:
+          req.files?.experienceCertificate?.[0]?.path ||
+          clinic.experienceCertificate,
+      },
+      {
+        new: true,
+      },
+    );
+
+    res.status(200).json({
+      success: true,
+      message: "Clinic updated successfully",
+      data: updatedClinic,
+    });
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
 
 // ================== REGISTER DOCTOR ==================
 exports.registerDoctor = async (req, res) => {
@@ -334,7 +268,23 @@ exports.registerDoctor = async (req, res) => {
       });
     }
 
-    const existing = await Doctor.findOne({ email });
+    const emailResult = validateEmail(email);
+    if (!emailResult.valid) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid email address.",
+      });
+    }
+
+    const passwordResult = validatePassword(password);
+    if (!passwordResult.valid) {
+      return res.status(400).json({
+        success: false,
+        message: passwordResult.message,
+      });
+    }
+
+    const existing = await Doctor.findOne({ email: emailResult.email });
     if (existing) {
       return res.status(400).json({
         success: false,
@@ -354,7 +304,7 @@ exports.registerDoctor = async (req, res) => {
       email,
       password: hashedPassword,
 
-      photo: req.files?.photo?.[0]?.path ,
+      photo: req.files?.photo?.[0]?.path,
       aadhaarDocument: req.files?.aadhaarDocument?.[0]?.path,
       panDocument: req.files?.panDocument?.[0]?.path,
       experienceCertificate: req.files?.experienceCertificate?.[0]?.path,
@@ -403,7 +353,23 @@ exports.registerManager = async (req, res) => {
       });
     }
 
-    const existing = await Manager.findOne({ email });
+    const emailResult = validateEmail(email);
+    if (!emailResult.valid) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid email address.",
+      });
+    }
+
+    const passwordResult = validatePassword(password);
+    if (!passwordResult.valid) {
+      return res.status(400).json({
+        success: false,
+        message: passwordResult.message,
+      });
+    }
+
+    const existing = await Manager.findOne({ email: emailResult.email });
     if (existing) {
       return res.status(400).json({
         success: false,
@@ -418,14 +384,15 @@ exports.registerManager = async (req, res) => {
       managerId,
       clinicId,
       name,
-      email,
+      email: emailResult.email,
       phone,
       password: hashedPassword,
 
-      photo: req.files?.photo?.[0]?.path ,
-      aadhaarDocument: req.files?.aadhaarDocument?.[0]?.path ,
-      panDocument: req.files?.panDocument?.[0]? 
-      experienceCertificate: req.files?.experienceCertificate?.[0]?.path ,
+      photo: req.files?.photo?.[0]?.path,
+      aadhaarDocument: req.files?.aadhaarDocument?.[0]?.path,
+      panDocument: req.files?.panDocument?.[0]
+        ? experienceCertificate
+        : req.files?.experienceCertificate?.[0]?.path,
     });
 
     await manager.save();
@@ -470,7 +437,23 @@ exports.registerReceptionist = async (req, res) => {
       });
     }
 
-    const existing = await Receptionist.findOne({ email });
+    const emailResult = validateEmail(email);
+    if (!emailResult.valid) {
+      return res.status(400).json({
+        success: false,
+        message: "Please enter a valid email address.",
+      });
+    }
+
+    const passwordResult = validatePassword(password);
+    if (!passwordResult.valid) {
+      return res.status(400).json({
+        success: false,
+        message: passwordResult.message,
+      });
+    }
+
+    const existing = await Receptionist.findOne({ email: emailResult.email });
     if (existing) {
       return res.status(400).json({
         success: false,
@@ -482,7 +465,7 @@ exports.registerReceptionist = async (req, res) => {
     const receptionistId = await generateUniqueId(
       Receptionist,
       "receptionistId",
-      "REC"
+      "REC",
     );
 
     const receptionist = new Receptionist({
@@ -490,7 +473,7 @@ exports.registerReceptionist = async (req, res) => {
       clinicId,
       name,
       phone,
-      email,
+      email: emailResult.email,
       password: hashedPassword,
 
       photo: req.files?.photo?.[0]?.path,
@@ -523,11 +506,11 @@ exports.loginClinicUser = async (req, res) => {
 
     // Admin
     user = await Clinic.findOne({ adminId: userId });
-    if (user && await bcrypt.compare(password, user.password)) {
+    if (user && (await bcrypt.compare(password, user.password))) {
       const token = jwt.sign(
         { id: user._id, role: "admin" },
         process.env.JWT_SECRET,
-        { expiresIn: "7d" }
+        { expiresIn: "7d" },
       );
 
       return res.json({
@@ -541,11 +524,11 @@ exports.loginClinicUser = async (req, res) => {
 
     // Doctor
     user = await Doctor.findOne({ doctorId: userId });
-    if (user && await bcrypt.compare(password, user.password)) {
+    if (user && (await bcrypt.compare(password, user.password))) {
       const token = jwt.sign(
         { id: user._id, role: "doctor" },
         process.env.JWT_SECRET,
-        { expiresIn: "7d" }
+        { expiresIn: "7d" },
       );
 
       return res.json({
@@ -559,11 +542,11 @@ exports.loginClinicUser = async (req, res) => {
 
     // Manager
     user = await Manager.findOne({ managerId: userId });
-    if (user && await bcrypt.compare(password, user.password)) {
+    if (user && (await bcrypt.compare(password, user.password))) {
       const token = jwt.sign(
         { id: user._id, role: "manager" },
         process.env.JWT_SECRET,
-        { expiresIn: "7d" }
+        { expiresIn: "7d" },
       );
 
       return res.json({
@@ -577,11 +560,11 @@ exports.loginClinicUser = async (req, res) => {
 
     // Receptionist
     user = await Receptionist.findOne({ receptionistId: userId });
-    if (user && await bcrypt.compare(password, user.password)) {
+    if (user && (await bcrypt.compare(password, user.password))) {
       const token = jwt.sign(
         { id: user._id, role: "receptionist" },
         process.env.JWT_SECRET,
-        { expiresIn: "7d" }
+        { expiresIn: "7d" },
       );
 
       return res.json({
@@ -597,7 +580,6 @@ exports.loginClinicUser = async (req, res) => {
       success: false,
       message: "Invalid credentials",
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
@@ -670,7 +652,7 @@ exports.getClinicById = async (req, res) => {
     const { clinicId } = req.params;
 
     const clinic = await Clinic.findById(clinicId).select(
-      "clinicName city state pincode"
+      "clinicName city state pincode",
     );
 
     if (!clinic) {
@@ -684,7 +666,6 @@ exports.getClinicById = async (req, res) => {
       success: true,
       data: clinic,
     });
-
   } catch (err) {
     res.status(500).json({
       success: false,
