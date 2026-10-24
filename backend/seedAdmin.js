@@ -7,18 +7,26 @@ const seedAdmin = async () => {
     await mongoose.connect(process.env.MONGODB_URL_LOCAL);
     console.log("Connected to MongoDB");
 
+    const recoveryEmail = process.env.AIDLY_ADMIN_EMAIL?.trim().toLowerCase();
     const adminExists = await Admin.findOne({
       adminId: "AIDLY001"
     });
 
     if (adminExists) {
-      console.log("Admin already exists");
+      if (recoveryEmail && adminExists.email !== recoveryEmail) {
+        adminExists.email = recoveryEmail;
+        await adminExists.save();
+        console.log("Admin recovery email updated");
+      } else {
+        console.log("Admin already exists");
+      }
       process.exit();
     }
 
     const admin = new Admin({
       name: "System Admin",
       adminId: "AIDLY001",
+      email: recoveryEmail,
       password: "adminpassword123",
       role: "aidlyAdmin"
     });

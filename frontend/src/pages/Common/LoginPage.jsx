@@ -159,6 +159,7 @@ if (data.user || data.ambulance || data.admin) {
           <div className="flex justify-end mb-5">
             <button
               type="button"
+              onClick={() => navigate("/admin/forgot-password")}
               className="text-sm text-blue-600 hover:underline"
             >
               Forgot Password?

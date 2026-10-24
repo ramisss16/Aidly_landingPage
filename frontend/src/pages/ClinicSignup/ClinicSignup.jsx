@@ -128,9 +128,10 @@ const handleSubmit = async (e) => {
 
 
      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+     const clinicEmail = (formData.clinicEmail || "").trim();
 
 
-  if (!emailRegex.test(formData.email)) {
+  if (!emailRegex.test(clinicEmail)) {
     alert("Please enter a valid email address");
     return;
   }
@@ -203,7 +204,7 @@ const handleSubmit = async (e) => {
     
     form.append(
       "clinicEmail",
-      formData.clinicEmail
+      clinicEmail
     );
 
 

@@ -1,4 +1,13 @@
 const client = require("../config/twilio");
+const DEMO_OTP = process.env.BYPASS_OTP || "942506";
+
+const isTwilioVerifyConfigured = () =>
+  /^AC[0-9a-fA-F]{32}$/.test(process.env.TWILIO_ACCOUNT_SID || "") &&
+  Boolean(process.env.TWILIO_AUTH_TOKEN) &&
+  /^VA[0-9a-fA-F]{32}$/.test(
+    process.env.TWILIO_VERIFY_SERVICE_SID || ""
+  );
+
 const sendOtp = async (req, res) => {
   try {
     const { phone } = req.body;
@@ -7,6 +16,22 @@ const sendOtp = async (req, res) => {
       return res.status(400).json({
         success: false,
         message: "Phone number required",
+      });
+    }
+
+    if (process.env.OTP_BYPASS === "true") {
+      return res.status(200).json({
+        success: true,
+        message: `Demo mode enabled. Use OTP ${DEMO_OTP}.`,
+        mode: "bypass",
+      });
+    }
+
+    if (!isTwilioVerifyConfigured()) {
+      return res.status(503).json({
+        success: false,
+        message:
+          "OTP service is not configured. Set valid Twilio Account, Auth Token, and Verify Service credentials in the backend environment.",
       });
     }
 
@@ -29,18 +54,9 @@ const sendOtp = async (req, res) => {
 
       console.log("Twilio Send OTP Error:", twilioError.message);
 
-      // If bypass is enabled, don't fail the request.
-      if (process.env.OTP_BYPASS === "true") {
-        return res.status(200).json({
-          success: true,
-          message: "Demo mode enabled. Use OTP 942506.",
-          mode: "bypass",
-        });
-      }
-
       return res.status(500).json({
         success: false,
-        message: twilioError.message,
+        message: `Twilio could not send the OTP: ${twilioError.message}`,
       });
     }
 
@@ -57,16 +73,35 @@ const sendOtp = async (req, res) => {
 // ====================== VERIFY OTP ======================
 const verifyOtp = async (req, res) => {
   try {
-    const { phone, otp } = req.body;
+    const { phone, otp } = req.body || {};
+
+    if (!phone || !otp) {
+      return res.status(400).json({
+        success: false,
+        message: "Phone number and OTP are required.",
+      });
+    }
 
     // Demo OTP
-    if (
-      process.env.OTP_BYPASS === "true" &&
-      otp === process.env.BYPASS_OTP
-    ) {
-      return res.status(200).json({
-        success: true,
-        message: "OTP verified successfully",
+    if (process.env.OTP_BYPASS === "true") {
+      if (otp === DEMO_OTP) {
+        return res.status(200).json({
+          success: true,
+          message: "OTP verified successfully",
+        });
+      }
+
+      return res.status(400).json({
+        success: false,
+        message: "Invalid OTP for demo mode.",
+      });
+    }
+
+    if (!isTwilioVerifyConfigured()) {
+      return res.status(503).json({
+        success: false,
+        message:
+          "OTP service is not configured. Set valid Twilio Account, Auth Token, and Verify Service credentials in the backend environment.",
       });
     }
 
@@ -95,18 +130,9 @@ const verifyOtp = async (req, res) => {
 
       console.log("Twilio Verify Error:", twilioError.message);
 
-      // If bypass is enabled and Twilio verification fails,
-      // tell user to use demo OTP.
-      if (process.env.OTP_BYPASS === "true") {
-        return res.status(400).json({
-          success: false,
-          message: "Invalid OTP. Use 123456 in demo mode.",
-        });
-      }
-
       return res.status(500).json({
         success: false,
-        message: twilioError.message,
+        message: `Twilio could not verify the OTP: ${twilioError.message}`,
       });
     }
 
