@@ -16,9 +16,27 @@ const adminSchema = new mongoose.Schema(
       required: true,
     },
 
+    email: {
+      type: String,
+      lowercase: true,
+      trim: true,
+      unique: true,
+      sparse: true,
+    },
+
     password: {
       type: String,
       required: true,
+    },
+
+    resetPasswordToken: {
+      type: String,
+      select: false,
+    },
+
+    resetPasswordExpires: {
+      type: Date,
+      select: false,
     },
 
     role: {

@@ -2,10 +2,13 @@ const express = require("express");
 const router = express.Router();
 
 const adminController = require("../Controllers/AidlyAdminController");
+const forgetPasswordController = require("../Controllers/ForgetPasswordController");
 const adminAuth = require("../middleware/adminAuth");
 
 // Public route
 router.post("/login", adminController.adminLogin);
+router.post("/forgot-password", forgetPasswordController.requestPasswordReset);
+router.post("/reset-password", forgetPasswordController.resetPassword);
 
 // Protected routes
 router.use(adminAuth);
