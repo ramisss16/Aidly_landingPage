@@ -8,14 +8,16 @@ const adminAuth = require("../middleware/adminAuth");
 // Public route
 router.post("/login", adminController.adminLogin);
 router.post("/forgot-password", forgetPasswordController.requestPasswordReset);
+router.post(
+  "/verify-reset-code",
+  forgetPasswordController.verifyPasswordResetCode
+);
 router.post("/reset-password", forgetPasswordController.resetPassword);
 
 // Protected routes
-router.use(adminAuth);
-
-router.get("/dashboard", adminController.getDashboardStats);
-router.get("/:entity", adminController.getEntities);
-router.get("/:entity/:id", adminController.getEntityById);
-router.delete("/:entity/:id", adminController.deleteEntity);
+router.get("/dashboard", adminAuth, adminController.getDashboardStats);
+router.get("/:entity", adminAuth, adminController.getEntities);
+router.get("/:entity/:id", adminAuth, adminController.getEntityById);
+router.delete("/:entity/:id", adminAuth, adminController.deleteEntity);
 
 module.exports = router;

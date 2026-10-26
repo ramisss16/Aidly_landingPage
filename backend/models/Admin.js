@@ -39,6 +39,22 @@ const adminSchema = new mongoose.Schema(
       select: false,
     },
 
+    passwordResetCodeHash: {
+      type: String,
+      select: false,
+    },
+
+    passwordResetCodeExpires: {
+      type: Date,
+      select: false,
+    },
+
+    passwordResetCodeAttempts: {
+      type: Number,
+      default: 0,
+      select: false,
+    },
+
     role: {
       type: String,
       default: "aidlyAdmin",
