@@ -2,14 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { Outlet } from "react-router-dom";
 import gsap from "gsap";
 import Navbar from "../Component/Navbar";
-import LandingPage from "./pages/LandingPage/Hero";
 import logo from "./assets/Aidly (2).png";
-import AdminDas from "./Modules/clinic/admin/AdminDas";
-import Receptionist from "./Modules/clinic/reception/ReceptionDas";
-import DashboardNav from "../Component/DasNavbar";
-import ManagerDas from "./Modules/clinic/manager/ManagerDas";
-import DoctorDas from "./Modules/clinic/doctor/DoctorDas";
-import ReceptionDas from "./Modules/clinic/reception/ReceptionDas";
 
 function App() {
   const [loading, setLoading] = useState(true);

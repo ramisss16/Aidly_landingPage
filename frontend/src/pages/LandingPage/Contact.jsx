@@ -1,4 +1,3 @@
-import React from "react";
 import { useRef, useEffect } from "react";
 import { FaLinkedin, FaInstagram } from  "react-icons/fa";
 import gsap from "gsap";

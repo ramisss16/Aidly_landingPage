@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import { login } from '../services/adminApi';
 import AidlyLogo from '../../../assets/Aidly.jpg';

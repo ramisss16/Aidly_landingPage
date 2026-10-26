@@ -1,4 +1,3 @@
-import React from 'react';
 
 const TopTabs = ({ tabs, activeTab, onTabChange }) => {
   return (

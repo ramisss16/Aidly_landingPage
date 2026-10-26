@@ -1,4 +1,3 @@
-import React from 'react';
 import { Search as SearchIcon } from 'lucide-react';
 
 const SearchBar = ({ value, onChange, placeholder = "Search by Name" }) => (

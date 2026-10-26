@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../../service/api";
 import { jwtDecode } from "jwt-decode";
@@ -21,30 +21,34 @@ const LoginPage = () => {
 
     try {
       let res;
+      const normalizedUserId = userId.trim();
 
-      if (userId.startsWith("AIDLY")) {
+      if (normalizedUserId.toUpperCase().startsWith("AIDLY")) {
         res = await api.post("/aidly-admin/login", {
-          adminId: userId,
+          adminId: normalizedUserId,
           password,
         });
-      } else if (userId.startsWith("HOSPAMB")) {
+      } else if (normalizedUserId.toUpperCase().startsWith("HOSPAMB")) {
         res = await api.post("/hospital-ambulance/login", {
-          hospitalAmbulanceId: userId,
+          hospitalAmbulanceId: normalizedUserId,
           password,
         });
-      } else if (userId.startsWith("PRIVAMB")) {
+      } else if (normalizedUserId.toUpperCase().startsWith("PRIVAMB")) {
         res = await api.post("/private-ambulance/login", {
-          privateAmbulanceId: userId,
+          privateAmbulanceId: normalizedUserId,
           password,
         });
-      }else if (userId.startsWith("ODC")) {
-  res = await api.post("/online-doctor/login", {
-    userId,
-    password,
-  });
-}else {
+      } else if (
+        normalizedUserId.toUpperCase().startsWith("ODC") ||
+        normalizedUserId.includes("@")
+      ) {
+        res = await api.post("/online-doctor/login", {
+          userId: normalizedUserId,
+          password,
+        });
+      } else {
         res = await api.post("/clinic/auth/login", {
-          userId,
+          userId: normalizedUserId,
           password,
         });
       }
@@ -159,7 +163,6 @@ if (data.user || data.ambulance || data.admin) {
           <div className="flex justify-end mb-5">
             <button
               type="button"
-              onClick={() => navigate("/admin/forgot-password")}
               className="text-sm text-blue-600 hover:underline"
             >
               Forgot Password?

@@ -1,5 +1,4 @@
-// import React from "react";
-// import { useState } from "react";
+// // import { useState } from "react";
 // import { useRef, useEffect, useLayoutEffect  } from "react";
 // import gsap from "gsap";
 // import { ScrollTrigger } from "gsap/ScrollTrigger";
@@ -380,7 +379,7 @@
 //   );
 // }
 
-import React, { useState, useRef, useLayoutEffect } from "react";
+import { useState, useRef, useLayoutEffect } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import { useEffect, useCallback } from "react";

@@ -1,33 +1,18 @@
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import AidlyLogo from "../src/assets/Aidly (2).png";
-import { Bell, User } from "lucide-react";
+import { Bell, User, Menu } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import {Menu,X,} from "lucide-react";
 
 const DashboardNav = ({ onMenuClick }) => {
   const [showProfile, setShowProfile] = useState(false);
-  const [showNotifications, setShowNotifications] = useState(false);
 
   const profileRef = useRef(null);
-  const notificationRef = useRef(null);
-
   const navigate = useNavigate();
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (
-        profileRef.current &&
-        !profileRef.current.contains(event.target)
-      ) {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
         setShowProfile(false);
-      }
-
-      if (
-        notificationRef.current &&
-        !notificationRef.current.contains(event.target)
-      ) {
-        setShowNotifications(false);
       }
     };
 
@@ -46,17 +31,6 @@ const DashboardNav = ({ onMenuClick }) => {
     localStorage.removeItem("hospitalToken");
 
     navigate("/login");
-  };
-
-  const [open, setopen] = useState("StaffAttendence");
-    const [sidebarOpen, setSidebarOpen] = useState(false);
-
-      const toggle = (name) => {
-    if (open === name) {
-      setopen("");
-    } else {
-      setopen(name);
-    }
   };
 
   return (
@@ -101,7 +75,6 @@ const DashboardNav = ({ onMenuClick }) => {
               className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 cursor-pointer"
               onClick={() => {
                 setShowProfile(!showProfile);
-                setShowNotifications(false);
               }}
             />
 
@@ -126,35 +99,8 @@ const DashboardNav = ({ onMenuClick }) => {
           </div>
 
           {/* Notification */}
-          <div className="relative" ref={notificationRef}>
-            <Bell
-              className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 cursor-pointer"
-              // onClick={() => {
-              //   setShowNotifications(!showNotifications);
-              //   setShowProfile(false);
-              // }}
-            />
-
-            {/* {showNotifications && (
-              <div className="absolute right-0 top-10 sm:top-12 bg-white text-black rounded-md shadow-lg w-64 sm:w-72 z-50 overflow-hidden">
-
-                <div className="px-4 py-3 border-b font-semibold text-base sm:text-lg flex justify-between">
-                  <span>🔴 Test Result</span>
-                  <span className="text-gray-500">2</span>
-                </div>
-
-                <div className="px-4 py-3 border-b font-semibold text-base sm:text-lg flex justify-between">
-                  <span>🔴 Pending Approvals</span>
-                  <span className="text-gray-500">3</span>
-                </div>
-
-                <div className="px-4 py-3 font-semibold text-base sm:text-lg flex justify-between">
-                  <span>🔴 Patient Emergency</span>
-                  <span className="text-gray-500">1</span>
-                </div>
-
-              </div>
-            )} */}
+          <div className="relative">
+            <Bell className="w-6 h-6 sm:w-7 sm:h-7 md:w-8 md:h-8 cursor-pointer" />
           </div>
 
         </div>
