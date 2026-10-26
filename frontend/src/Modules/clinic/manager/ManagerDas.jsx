@@ -1,4 +1,4 @@
-// import React, { useState } from "react";
+// import { useState } from "react";
 // import { Link } from "react-router-dom";
 // import chart from "../../../assets/chart.png.jpg"
 
@@ -417,7 +417,7 @@
 
 //  export default managerDas;
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Users,

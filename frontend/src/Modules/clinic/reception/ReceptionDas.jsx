@@ -1,5 +1,5 @@
 
-// import React, { useState } from "react";
+// import { useState } from "react";
 // import { Link, Outlet } from "react-router-dom";
 // import { useParams } from "react-router-dom";
 // import chart from "../../../assets/chart.png.jpg"
@@ -396,7 +396,7 @@
 //  export default Receptionist;
 
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import {
   Users,

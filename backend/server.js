@@ -1,7 +1,8 @@
+require('dotenv').config({ path: require('node:path').join(__dirname, '.env') });
+
 const express = require('express');
 const app = express();
-const db = require('./db');
-require('dotenv').config();
+const connectDB = require('./db');
 
 const bodyParser = require('body-parser'); 
 const cors = require('cors');
@@ -70,6 +71,14 @@ app.use("/api/auth", authRoutes);
 app.use("/api/otp", otpRoutes);
 app.use("/api/aidly-admin", aidlyAdminRoutes);
 
-app.listen(PORT, () => {
-  console.log(`server is running on port ${PORT}`);
+const startServer = async () => {
+  await connectDB();
+  app.listen(PORT, () => {
+    console.log(`server is running on port ${PORT}`);
+  });
+};
+
+startServer().catch((error) => {
+  console.error('Failed to start server:', error.message);
+  process.exitCode = 1;
 });

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../../service/api";
@@ -84,7 +84,7 @@ const handleChange = (e) => {
 
  const sendOTP = async () => {
   try {
-    const phone = formData.phoneNumber?.trim();
+   const phone = formData.phonenumber?.trim();
 
     if (!phone) {
       setPhoneError("Please enter mobile number");
@@ -104,6 +104,13 @@ const handleChange = (e) => {
       phone: `+91${phone}`,
     });
 
+    if (response.data.mode === "bypass") {
+      setOtpVerified(true);
+      alert("Demo mode enabled. Phone verification was bypassed.");
+      return;
+    }
+
+    setOtpVerified(false);
     alert(response.data.message);
   } catch (error) {
     console.log(error);
@@ -172,9 +179,11 @@ const handleChange = (e) => {
       form.append("phone", formData.phonenumber);
       form.append("password", formData.Createpassword);
       form.append("specialization", formData.specialization);
-      form.append("consultationFee", formData.fee);
       form.append("availableSlots", `${formData.fromTime} - ${formData.toTime}`);
 
+      if (formData.fee?.trim()) {
+        form.append("consultationFee", formData.fee.trim());
+      }
 
       if (formData.photo) form.append("photo", formData.photo);
       if (formData.aadhaarDocument) form.append("aadhaarDocument", formData.aadhaarDocument);

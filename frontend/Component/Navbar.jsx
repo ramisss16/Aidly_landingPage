@@ -1,6 +1,5 @@
 
-// import React from "react";
-// import { useNavigate } from "react-router-dom";
+// // import { useNavigate } from "react-router-dom";
 // import AidlyLogo from "../src/assets/Aidly.jpg";
 
 // const Navbar = () => {
@@ -72,7 +71,7 @@
 //   );
 // };
 
-import React, { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import gsap from "gsap";
 import AidlyLogo from "../src/assets/Aidly.png";

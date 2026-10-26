@@ -1,4 +1,3 @@
-import React from "react";
 import { Eye, Trash2 } from "lucide-react";
 
 const DataTable = ({ columns, data, onView, onDelete, loading }) => {

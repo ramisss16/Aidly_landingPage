@@ -1,6 +1,6 @@
 
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Navigate, useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";

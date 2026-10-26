@@ -23,6 +23,21 @@ exports.registerOnlineDoctor = async (req, res) => {
       });
     }
 
+    const normalizedFee =
+      consultationFee === undefined || consultationFee === ""
+        ? undefined
+        : Number(consultationFee);
+
+    if (
+      normalizedFee !== undefined &&
+      (!Number.isFinite(normalizedFee) || normalizedFee < 0)
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Consultation fee must be a valid non-negative number.",
+      });
+    }
+
     const existingDoctor = await OnlineDoctor.findOne({ email });
 
     if (existingDoctor) {
@@ -47,7 +62,7 @@ exports.registerOnlineDoctor = async (req, res) => {
       phone,
       password: hashedPassword,
       specialization,
-      consultationFee,
+      ...(normalizedFee !== undefined && { consultationFee: normalizedFee }),
       availableSlots,
 
       // CLOUDINARY FILE URLS
@@ -81,9 +96,23 @@ exports.registerOnlineDoctor = async (req, res) => {
 // ================== LOGIN ONLINE DOCTOR ==================
 exports.loginOnlineDoctor = async (req, res) => {
   try {
-    const { userId, password } = req.body;
+    const loginId =
+      typeof req.body?.userId === "string" ? req.body.userId.trim() : "";
+    const { password } = req.body ?? {};
 
-    const doctor = await OnlineDoctor.findOne({ doctorId: userId });
+    if (!loginId || typeof password !== "string" || !password) {
+      return res.status(400).json({
+        success: false,
+        message: "User ID or email and password are required.",
+      });
+    }
+
+    const doctor = await OnlineDoctor.findOne({
+      $or: [
+        { doctorId: loginId.toUpperCase() },
+        { email: loginId.toLowerCase() },
+      ],
+    });
 
     if (!doctor) {
       return res.status(404).json({

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { ArrowLeftIcon } from "@heroicons/react/24/solid";
 import { useNavigate, Link } from "react-router-dom";
 import api from "../../service/api";
