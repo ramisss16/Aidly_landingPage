@@ -32,6 +32,32 @@ const managerSchema = new mongoose.Schema({
     required: true
   },
 
+  resetPasswordToken: {
+    type: String,
+    select: false,
+  },
+
+  resetPasswordExpires: {
+    type: Date,
+    select: false,
+  },
+
+  passwordResetCodeHash: {
+    type: String,
+    select: false,
+  },
+
+  passwordResetCodeExpires: {
+    type: Date,
+    select: false,
+  },
+
+  passwordResetCodeAttempts: {
+    type: Number,
+    default: 0,
+    select: false,
+  },
+
   // CLOUDINARY FILE URLS
   photo: String,
   aadhaarDocument: String,

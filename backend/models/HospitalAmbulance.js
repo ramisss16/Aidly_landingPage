@@ -25,6 +25,40 @@ const hospitalAmbulanceSchema = new mongoose.Schema(
       match: /^[0-9]{10}$/
     },
 
+    email: {
+      type: String,
+      lowercase: true,
+      trim: true,
+      unique: true,
+      sparse: true
+    },
+
+    resetPasswordToken: {
+      type: String,
+      select: false,
+    },
+
+    resetPasswordExpires: {
+      type: Date,
+      select: false,
+    },
+
+    passwordResetCodeHash: {
+      type: String,
+      select: false,
+    },
+
+    passwordResetCodeExpires: {
+      type: Date,
+      select: false,
+    },
+
+    passwordResetCodeAttempts: {
+      type: Number,
+      default: 0,
+      select: false,
+    },
+
     otpVerified: {
       type: Boolean,
       default: false

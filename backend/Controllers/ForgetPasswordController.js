@@ -3,7 +3,12 @@ const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const Admin = require("../models/Admin");
 const Clinic = require("../models/Clinic");
+const Doctor = require("../models/Doctor");
 const OnlineDoctor = require("../models/OnlineDoctor");
+const HospitalAmbulance = require("../models/HospitalAmbulance");
+const PrivateAmbulance = require("../models/PrivateAmbulance");
+const Receptionist = require("../models/Receptionist");
+const Manager = require("../models/Manager");
 
 const VERIFICATION_CODE_TTL_MS = 10 * 60 * 1000;
 const RESET_TOKEN_TTL_MS = 10 * 60 * 1000;
@@ -35,6 +40,46 @@ const ACCOUNT_TYPE_MODELS = {
     displayName: "clinic",
     nameField: "clinicName",
     userIdField: "adminId",
+    hashPassword: true,
+  },
+  doctor: {
+    Model: Doctor,
+    emailFields: ["email"],
+    displayName: "doctor",
+    nameField: "name",
+    userIdField: "doctorId",
+    hashPassword: true,
+  },
+  privateAmbulance: {
+    Model: PrivateAmbulance,
+    emailFields: ["email"],
+    displayName: "private ambulance",
+    nameField: "ownerName",
+    userIdField: "privateAmbulanceId",
+    hashPassword: true,
+  },
+  receptionist: {
+    Model: Receptionist,
+    emailFields: ["email"],
+    displayName: "receptionist",
+    nameField: "name",
+    userIdField: "receptionistId",
+    hashPassword: true,
+  },
+  manager: {
+    Model: Manager,
+    emailFields: ["email"],
+    displayName: "manager",
+    nameField: "name",
+    userIdField: "managerId",
+    hashPassword: true,
+  },
+  hospitalAmbulance: {
+    Model: HospitalAmbulance,
+    emailFields: ["email"],
+    displayName: "hospital ambulance",
+    nameField: "hospitalName",
+    userIdField: "hospitalAmbulanceId",
     hashPassword: true,
   },
 };
