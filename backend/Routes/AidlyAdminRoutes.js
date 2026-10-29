@@ -7,7 +7,7 @@ const adminAuth = require("../middleware/adminAuth");
 
 // Public route
 router.post("/login", adminController.adminLogin);
-router.post("/forgot-password", forgetPasswordController.requestPasswordReset);
+router.post("/forget-password", forgetPasswordController.requestPasswordReset);
 router.post(
   "/verify-reset-code",
   forgetPasswordController.verifyPasswordResetCode
