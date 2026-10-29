@@ -9,6 +9,7 @@ exports.registerHospitalAmbulance = async (req, res) => {
       hospitalName,
       driverName,
       phoneNumber,
+      email,
       hospitalAddress,
       ambulanceType,
       vehicleNumber,
@@ -20,6 +21,7 @@ exports.registerHospitalAmbulance = async (req, res) => {
       !hospitalName ||
       !driverName ||
       !phoneNumber ||
+      !email ||
       !hospitalAddress ||
       !ambulanceType ||
       !vehicleNumber ||
@@ -32,10 +34,19 @@ exports.registerHospitalAmbulance = async (req, res) => {
       });
     }
 
+    const normalizedEmail = email.trim().toLowerCase();
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(normalizedEmail)) {
+      return res.status(400).json({
+        success: false,
+        message: "A valid email address is required"
+      });
+    }
+
     const existing = await HospitalAmbulance.findOne({
       $or: [
         { phoneNumber },
-        { vehicleNumber }
+        { vehicleNumber },
+        { email: normalizedEmail }
       ]
     });
 
@@ -59,6 +70,7 @@ exports.registerHospitalAmbulance = async (req, res) => {
       hospitalName,
       driverName,
       phoneNumber,
+      email: normalizedEmail,
       hospitalAddress,
       ambulanceType,
       vehicleNumber,
