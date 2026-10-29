@@ -46,6 +46,7 @@ const attendanceRoutes = require("./Routes/attendanceRoutes");
 const onlineDoctorRoutes = require("./Routes/onlineDoctorRoutes");
 const authRoutes = require("./Routes/authRoutes");
 const aidlyAdminRoutes = require("./Routes/AidlyAdminRoutes");
+const forgetPasswordController = require("./Controllers/ForgetPasswordController");
 
 
 //  CLEAN PREFIXES
@@ -70,6 +71,12 @@ app.use("/api/online-doctor", onlineDoctorRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/otp", otpRoutes);
 app.use("/api/aidly-admin", aidlyAdminRoutes);
+app.post("/api/forgot-password", forgetPasswordController.requestPasswordReset);
+app.post(
+  "/api/verify-reset-code",
+  forgetPasswordController.verifyPasswordResetCode
+);
+app.post("/api/reset-password", forgetPasswordController.resetPassword);
 
 const startServer = async () => {
   await connectDB();

@@ -2,6 +2,7 @@ const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const nodemailer = require("nodemailer");
 const Admin = require("../models/Admin");
+const Clinic = require("../models/Clinic");
 const OnlineDoctor = require("../models/OnlineDoctor");
 
 const VERIFICATION_CODE_TTL_MS = 10 * 60 * 1000;
@@ -12,12 +13,58 @@ const GENERIC_REQUEST_MESSAGE =
 const INVALID_CODE_MESSAGE =
   "The verification code is invalid, expired, or has reached the attempt limit.";
 const ACCOUNT_TYPE_MODELS = {
-  admin: Admin,
-  onlineDoctor: OnlineDoctor,
+  admin: {
+    Model: Admin,
+    emailFields: ["email"],
+    displayName: "admin",
+    nameField: "name",
+    userIdField: "adminId",
+    hashPassword: false,
+  },
+  onlineDoctor: {
+    Model: OnlineDoctor,
+    emailFields: ["email"],
+    displayName: "online doctor",
+    nameField: "name",
+    userIdField: "doctorId",
+    hashPassword: true,
+  },
+  clinic: {
+    Model: Clinic,
+    emailFields: ["clinicEmail", "email"],
+    displayName: "clinic",
+    nameField: "clinicName",
+    userIdField: "adminId",
+    hashPassword: true,
+  },
 };
 
 const hashToken = (token) =>
   crypto.createHash("sha256").update(token).digest("hex");
+
+const createEmailQuery = (email, emailFields) => {
+  const escapedEmail = email.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const emailRegex = new RegExp(`^${escapedEmail}$`, "i");
+  const emailConditions = emailFields.map((field) => ({
+    [field]: emailRegex,
+  }));
+
+  return emailConditions.length === 1
+    ? emailConditions[0]
+    : { $or: emailConditions };
+};
+
+const escapeHtml = (value) =>
+  String(value).replace(/[&<>"']/g, (character) => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;",
+  })[character]);
+
+const getSupportedAccountTypes = () =>
+  Object.keys(ACCOUNT_TYPE_MODELS).join(", ");
 
 const isValidDevelopmentBypassCode = (code) => {
   const bypassCode = process.env.BYPASS_OTP?.trim();
@@ -29,20 +76,18 @@ const isValidDevelopmentBypassCode = (code) => {
 };
 
 const findAccountsByEmail = async (email, accountType) => {
-  const escapedEmail = email.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const emailQuery = {
-    email: new RegExp(`^${escapedEmail}$`, "i"),
-  };
   const models = accountType
     ? [[accountType, ACCOUNT_TYPE_MODELS[accountType]]]
     : Object.entries(ACCOUNT_TYPE_MODELS);
-  const accounts = await Promise.all(
-    models.map(async ([type, Model]) => ({
+  const accounts = await Promise.all(models.map(async ([type, config]) => {
+    const emailQuery = createEmailQuery(email, config.emailFields);
+    return {
       accountType: type,
-      Model,
-      account: await Model.findOne(emailQuery),
-    }))
-  );
+      ...config,
+      emailQuery,
+      account: await config.Model.findOne(emailQuery),
+    };
+  }));
   return accounts.filter(({ account }) => account);
 };
 
@@ -59,7 +104,7 @@ const createMailer = () => {
 
   if (missingSettings.length > 0) {
     throw new Error(
-      `Admin password reset email is not configured. Missing: ${missingSettings.join(", ")}`
+      `Password reset email is not configured. Missing: ${missingSettings.join(", ")}`
     );
   }
 
@@ -99,7 +144,7 @@ exports.requestPasswordReset = async (req, res) => {
   if (accountType && !ACCOUNT_TYPE_MODELS[accountType]) {
     return res.status(400).json({
       success: false,
-      message: "accountType must be admin or onlineDoctor.",
+      message: `accountType must be one of: ${getSupportedAccountTypes()}.`,
     });
   }
 
@@ -108,7 +153,7 @@ exports.requestPasswordReset = async (req, res) => {
     if (matches.length > 1) {
       return res.status(409).json({
         success: false,
-        message: "This email belongs to multiple account types. Specify accountType as admin or onlineDoctor.",
+        message: `This email belongs to multiple account types. Specify accountType as one of: ${getSupportedAccountTypes()}.`,
       });
     }
     const match = matches[0];
@@ -118,7 +163,15 @@ exports.requestPasswordReset = async (req, res) => {
         message: GENERIC_REQUEST_MESSAGE,
       });
     }
-    const { account, accountType: matchedAccountType } = match;
+    const {
+      account,
+      accountType: matchedAccountType,
+      displayName,
+      nameField,
+      userIdField,
+    } = match;
+    const accountName = String(account[nameField] || displayName);
+    const userId = String(account[userIdField] || "Not available");
 
     const verificationCode = crypto
       .randomInt(0, 1_000_000)
@@ -137,10 +190,10 @@ exports.requestPasswordReset = async (req, res) => {
       const transporter = createMailer();
       await transporter.sendMail({
         from: process.env.SMTP_FROM.trim(),
-        to: account.email.trim(),
-        subject: `Aidly ${matchedAccountType === "onlineDoctor" ? "online doctor" : "admin"} password verification code`,
-        text: `Your Aidly ${matchedAccountType === "onlineDoctor" ? "online doctor" : "admin"} password reset verification code is ${verificationCode}. It expires in 10 minutes. If you did not request this code, you can ignore this email.`,
-        html: `<p>Your Aidly ${matchedAccountType === "onlineDoctor" ? "online doctor" : "admin"} password reset verification code is:</p><p style="font-size:24px;font-weight:bold;letter-spacing:4px">${verificationCode}</p><p>This code expires in 10 minutes. If you did not request it, you can ignore this email.</p>`,
+        to: email,
+        subject: `Aidly ${displayName} password verification code`,
+        text: `Your Aidly password reset verification code is ${verificationCode}.\n\nAccount type: ${displayName}\nName: ${accountName}\nUser ID: ${userId}\n\nThe code expires in 10 minutes. If you did not request this code, you can ignore this email.`,
+        html: `<p>Your Aidly password reset verification code is:</p><p style="font-size:24px;font-weight:bold;letter-spacing:4px">${verificationCode}</p><p>Account type: ${escapeHtml(displayName)}<br>Name: ${escapeHtml(accountName)}<br>User ID: ${escapeHtml(userId)}</p><p>This code expires in 10 minutes. If you did not request this code, you can ignore this email.</p>`,
       });
     } catch (mailError) {
       account.passwordResetCodeHash = undefined;
@@ -190,7 +243,7 @@ exports.verifyPasswordResetCode = async (req, res) => {
   if (accountType && !ACCOUNT_TYPE_MODELS[accountType]) {
     return res.status(400).json({
       success: false,
-      message: "accountType must be admin or onlineDoctor.",
+      message: `accountType must be one of: ${getSupportedAccountTypes()}.`,
     });
   }
 
@@ -200,7 +253,7 @@ exports.verifyPasswordResetCode = async (req, res) => {
     if (matches.length > 1) {
       return res.status(409).json({
         success: false,
-        message: "This email belongs to multiple account types. Specify accountType as admin or onlineDoctor.",
+        message: `This email belongs to multiple account types. Specify accountType as one of: ${getSupportedAccountTypes()}.`,
       });
     }
     const match = matches[0];
@@ -210,16 +263,18 @@ exports.verifyPasswordResetCode = async (req, res) => {
         message: INVALID_CODE_MESSAGE,
       });
     }
-    const { Model, accountType: matchedAccountType } = match;
-    const escapedEmail = email.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-    const emailQuery = new RegExp(`^${escapedEmail}$`, "i");
+    const { Model, accountType: matchedAccountType, emailQuery } = match;
     const account = isBypassCodeValid
       ? match.account
       : await Model.findOneAndUpdate(
           {
-            email: emailQuery,
-            passwordResetCodeExpires: { $gt: new Date() },
-            passwordResetCodeAttempts: { $lt: MAX_VERIFICATION_ATTEMPTS },
+            $and: [
+              emailQuery,
+              {
+                passwordResetCodeExpires: { $gt: new Date() },
+                passwordResetCodeAttempts: { $lt: MAX_VERIFICATION_ATTEMPTS },
+              },
+            ],
           },
           { $inc: { passwordResetCodeAttempts: 1 } },
           { new: true }
@@ -282,30 +337,31 @@ exports.resetPassword = async (req, res) => {
 
   try {
     const hashedResetToken = hashToken(resetToken);
-    const [admin, onlineDoctor] = await Promise.all([
-      Admin.findOne({
-        resetPasswordToken: hashedResetToken,
-        resetPasswordExpires: { $gt: new Date() },
-      }).select("+resetPasswordToken +resetPasswordExpires"),
-      OnlineDoctor.findOne({
-        resetPasswordToken: hashedResetToken,
-        resetPasswordExpires: { $gt: new Date() },
-      }).select("+resetPasswordToken +resetPasswordExpires"),
-    ]);
-    const account = admin || onlineDoctor;
+    const resetTokenQuery = {
+      resetPasswordToken: hashedResetToken,
+      resetPasswordExpires: { $gt: new Date() },
+    };
+    const accountMatches = await Promise.all(
+      Object.values(ACCOUNT_TYPE_MODELS).map(async ({ Model, ...config }) => ({
+        ...config,
+        account: await Model.findOne(resetTokenQuery).select(
+          "+resetPasswordToken +resetPasswordExpires"
+        ),
+      }))
+    );
+    const match = accountMatches.find(({ account }) => account);
+    const account = match?.account;
 
-    if (!account) {
+    if (!account || !match) {
       return res.status(400).json({
         success: false,
         message: "The verified reset token is invalid or has expired.",
       });
     }
 
-    if (onlineDoctor) {
-      onlineDoctor.password = await bcrypt.hash(password, 10);
-    } else {
-      admin.password = password;
-    }
+    account.password = match.hashPassword
+      ? await bcrypt.hash(password, 10)
+      : password;
 
     account.resetPasswordToken = undefined;
     account.resetPasswordExpires = undefined;
