@@ -4,7 +4,7 @@ import "./index.css";
 
 import App from "./App";
 import LoginPage from "./pages/Common/LoginPage";
-import ForgotPassword from "./Modules/AidlyAdmin/pages/PasswordReset/ForgotPassword";
+import ForgotPassword from "./pages/PasswordReset/ForgotPassword";
 import LoginOptions from "./pages/Common/LoginOption";
 import AmbulanceLoginoption from "./pages/AmbulanceSignup/AmbulanceOption";
 
