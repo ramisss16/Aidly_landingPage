@@ -113,7 +113,7 @@ if (data.user || data.ambulance || data.admin) {
       // }}
     >
       <div className="bg-white w-[90%] max-w-[520px] rounded-lg shadow-lg px-10 py-8 mt-18">
-        <h1 className="text-3xl font-semibold mb-1">Admin Login</h1>
+        <h1 className="text-3xl font-semibold mb-1">Login</h1>
 
         <p className="text-sm text-gray-600 mb-6">
           Enter your credentials to login
@@ -161,12 +161,13 @@ if (data.user || data.ambulance || data.admin) {
           </div>
 
           <div className="flex justify-end mb-5">
-            <button
-              type="button"
-              className="text-sm text-blue-600 hover:underline"
-            >
-              Forgot Password?
-            </button>
+          <button
+             type="button"
+             onClick={() => navigate("/forgot-password")}
+             className="text-sm text-blue-600 hover:underline"
+          >
+            Forgot Password?
+         </button>
           </div>
 
           <button

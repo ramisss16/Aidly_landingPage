@@ -4,6 +4,7 @@ import "./index.css";
 
 import App from "./App";
 import LoginPage from "./pages/Common/LoginPage";
+import ForgotPassword from "./pages/PasswordReset/ForgotPassword";
 import LoginOptions from "./pages/Common/LoginOption";
 import AmbulanceLoginoption from "./pages/AmbulanceSignup/AmbulanceOption";
 
@@ -105,6 +106,12 @@ const router = createBrowserRouter([
         element: <LoginPage/>,
         errorElement: <ErrorPage />,
       },
+
+      {
+        path: "forgot-password",
+        element: <ForgotPassword />,
+        errorElement: <ErrorPage />,
+     },
 
       {
         path: "/loginoption",

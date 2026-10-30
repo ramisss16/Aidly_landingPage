@@ -195,6 +195,9 @@ exports.requestPasswordReset = async (req, res) => {
 
   try {
     const matches = await findAccountsByEmail(email, accountType);
+    console.log("Matched account types:", matches.map(
+  (match) => match.accountType
+));
     if (matches.length > 1) {
       return res.status(409).json({
         success: false,
