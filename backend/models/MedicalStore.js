@@ -1,6 +1,11 @@
 const mongoose = require("mongoose");
 
 const medicalStoreSchema = new mongoose.Schema({
+  medicalStoreId: {
+    type: String,
+    required: true,
+    unique: true
+  },
   storeName: {
     type: String,
     required: true
@@ -17,6 +22,39 @@ const medicalStoreSchema = new mongoose.Schema({
   phone: {
     type: String,
     required: true
+  },
+  phoneVerified: {
+    type: Boolean,
+    default: false
+  },
+  gstnumber: {
+    type: String,
+    trim: true,
+    uppercase: true,
+    unique: true,
+    sparse: true
+  },
+  password: {
+    type: String,
+    required: true,
+    select: false
+  },
+  emailVerified: {
+    type: Boolean,
+    default: false
+  },
+  emailVerificationCodeHash: {
+    type: String,
+    select: false
+  },
+  emailVerificationCodeExpires: {
+    type: Date,
+    select: false
+  },
+  emailVerificationCodeAttempts: {
+    type: Number,
+    default: 0,
+    select: false
   },
   address: String,
   city: String,
