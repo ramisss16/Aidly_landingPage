@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Link } from "react-router-dom";
 
 const LoginOptions = () => {
@@ -50,17 +49,6 @@ const LoginOptions = () => {
           className="w-full text-base sm:text-lg"
           >
             Ambulance
-          </button>
-          </Link>
-
-        </div>
-
-        {/* Medical */}
-        <div className="w-full bg-white border border-transparent rounded-2xl mb-2 p-3 border-1 hover:border-gray-500">
-
-          <Link to="#">
-          <button className="w-full text-base sm:text-lg">
-            Medical Store
           </button>
           </Link>
 
