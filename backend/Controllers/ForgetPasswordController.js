@@ -1,6 +1,6 @@
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
-const nodemailer = require("nodemailer");
+const createMailer = require("../utils/createMailer");
 const Admin = require("../models/Admin");
 const Clinic = require("../models/Clinic");
 const Doctor = require("../models/Doctor");
@@ -136,42 +136,6 @@ const findAccountsByEmail = async (email, accountType) => {
   return accounts.filter(({ account }) => account);
 };
 
-const createMailer = () => {
-  const requiredSettings = [
-    "SMTP_HOST",
-    "SMTP_USER",
-    "SMTP_PASS",
-    "SMTP_FROM",
-  ];
-  const missingSettings = requiredSettings.filter(
-    (setting) => !process.env[setting]?.trim()
-  );
-
-  if (missingSettings.length > 0) {
-    throw new Error(
-      `Password reset email is not configured. Missing: ${missingSettings.join(", ")}`
-    );
-  }
-
-  const port = Number(process.env.SMTP_PORT || 587);
-  if (!Number.isInteger(port) || port < 1 || port > 65535) {
-    throw new Error("SMTP_PORT must be a valid TCP port.");
-  }
-
-  return nodemailer.createTransport({
-    host: process.env.SMTP_HOST.trim(),
-    port,
-    secure: process.env.SMTP_SECURE === "true" || port === 465,
-    auth: {
-      user: process.env.SMTP_USER.trim(),
-      pass:
-        process.env.SMTP_HOST.trim().toLowerCase() === "smtp.gmail.com"
-          ? process.env.SMTP_PASS.replace(/\s/g, "")
-          : process.env.SMTP_PASS,
-    },
-  });
-};
-
 exports.requestPasswordReset = async (req, res) => {
   const email =
     typeof req.body?.email === "string"
@@ -235,7 +199,7 @@ exports.requestPasswordReset = async (req, res) => {
     await account.save();
 
     try {
-      const transporter = createMailer();
+      const transporter = createMailer("Password reset email");
       await transporter.sendMail({
         from: process.env.SMTP_FROM.trim(),
         to: email,

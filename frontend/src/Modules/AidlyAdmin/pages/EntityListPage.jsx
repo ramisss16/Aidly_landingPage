@@ -115,6 +115,7 @@ const EntityListPage = () => {
           ...common,
           { header: 'Store Name', key: 'storeName' },
           { header: 'Owner', key: 'ownerName' },
+          { header: 'GST Number', key: 'gstnumber' },
           { header: 'License', key: 'licenseNumber' },
         ];
       case 'private-ambulances':

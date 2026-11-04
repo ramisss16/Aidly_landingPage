@@ -122,6 +122,7 @@ const handleChange = (e) => {
         !formData.hospitalName ||
         !formData.driverName ||
         !formData.phoneNumber ||
+        !formData.email ||
         !formData.hospitalAddress ||
         !formData.ambulanceType ||
         !formData.vehicleNumber ||
@@ -139,6 +140,7 @@ const handleChange = (e) => {
       form.append("hospitalName", formData.hospitalName);
       form.append("driverName", formData.driverName);
       form.append("phoneNumber", formData.phoneNumber);
+      form.append("email", formData.email.trim().toLowerCase());
       form.append("hospitalAddress", formData.hospitalAddress);
       form.append("ambulanceType", formData.ambulanceType);
       form.append("vehicleNumber", formData.vehicleNumber);
@@ -203,6 +205,7 @@ const handleChange = (e) => {
       !formData.hospitalName ||
       !formData.driverName ||
       !formData.phoneNumber ||
+      !formData.email ||
       !formData.hospitalAddress
     ) {
       alert("Please fill all required fields");
@@ -290,6 +293,20 @@ const handleChange = (e) => {
                 />
               </div>
 
+
+              <div className="flex items-start sm:items-center md:gap-2 mb-5">
+                <label className="text-sm sm:text-lg font-semibold w-28 sm:w-48 ml-2 sm:ml-10">
+                  Email Address
+                </label>
+                <input
+                  required
+                  name="email"
+                  type="email"
+                  value={formData.email || ""}
+                  onChange={handleChange}
+                  className="flex-1 min-w-0 bg-gray-200 p-2 rounded-md outline-none text-sm sm:text-base"
+                />
+              </div>
 
               <div className="flex items-start sm:items-center md:gap-2 mb-5">
                 <label className="text-sm sm:text-lg font-semibold w-28 sm:w-48 ml-2 sm:ml-10">

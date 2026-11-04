@@ -9,6 +9,7 @@ const PrivateAmbulance = require("../models/PrivateAmbulance");
 const HospitalAmbulance = require("../models/HospitalAmbulance");
 const MedicalStore = require("../models/MedicalStore");
 const { generateToken } = require("../middleware/jwt");
+const { loginMedicalStore } = require("./MedicalStoreController");
 
 const entityModelMap = {
   "admins": Admin,
@@ -26,15 +27,26 @@ const entityModelMap = {
 // Admin Login
 exports.adminLogin = async (req, res) => {
   try {
-    const { adminId, password } = req.body;
+    const adminId =
+      typeof req.body?.adminId === "string"
+        ? req.body.adminId.trim()
+        : typeof req.body?.userId === "string"
+          ? req.body.userId.trim()
+          : "";
+    const { password } = req.body || {};
+
+    if (!adminId || typeof password !== "string" || !password) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Admin ID or medical store ID/email and password are required",
+      });
+    }
 
     const admin = await Admin.findOne({ adminId });
 
     if (!admin) {
-      return res.status(401).json({
-        success: false,
-        message: "Invalid Admin ID",
-      });
+      return loginMedicalStore(req, res);
     }
 
     const isMatch = await admin.comparePassword(password);
@@ -92,7 +104,7 @@ exports.getEntities = async (req, res) => {
 };
     // Search logic
     if (search) {
-      const searchFields = ["name", "clinicName", "hospitalname", "storeName", "ownerName", "email", "phone", "adminName"];
+      const searchFields = ["name", "clinicName", "hospitalname", "storeName", "ownerName", "email", "phone", "gstnumber", "adminName"];
       query.$or = searchFields.map(field => ({ [field]: { $regex: search, $options: "i" } }));
     }
 

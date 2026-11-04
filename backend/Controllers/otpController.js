@@ -1,4 +1,5 @@
 const client = require("../config/twilio");
+const { createPhoneVerificationToken } = require("../utils/phoneVerification");
 const DEMO_OTP = process.env.BYPASS_OTP || "942506";
 
 const isTwilioVerifyConfigured = () =>
@@ -74,8 +75,14 @@ const sendOtp = async (req, res) => {
 const verifyOtp = async (req, res) => {
   try {
     const { phone, otp } = req.body || {};
+    const normalizedPhone =
+      typeof phone === "string" ? phone.trim() : "";
+    const normalizedOtp =
+      typeof otp === "string" || typeof otp === "number"
+        ? String(otp).trim()
+        : "";
 
-    if (!phone || !otp) {
+    if (!normalizedPhone || !normalizedOtp) {
       return res.status(400).json({
         success: false,
         message: "Phone number and OTP are required.",
@@ -84,10 +91,12 @@ const verifyOtp = async (req, res) => {
 
     // Demo OTP
     if (process.env.OTP_BYPASS === "true") {
-      if (otp === DEMO_OTP) {
+      if (normalizedOtp === DEMO_OTP) {
         return res.status(200).json({
           success: true,
           message: "OTP verified successfully",
+          phoneVerificationToken:
+            createPhoneVerificationToken(normalizedPhone),
         });
       }
 
@@ -110,14 +119,16 @@ const verifyOtp = async (req, res) => {
       const verificationCheck = await client.verify.v2
         .services(process.env.TWILIO_VERIFY_SERVICE_SID)
         .verificationChecks.create({
-          to: phone,
-          code: otp,
+          to: normalizedPhone,
+          code: normalizedOtp,
         });
 
       if (verificationCheck.status === "approved") {
         return res.status(200).json({
           success: true,
           message: "OTP verified successfully",
+          phoneVerificationToken:
+            createPhoneVerificationToken(normalizedPhone),
         });
       }
 
