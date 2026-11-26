@@ -1,0 +1,181 @@
+const Admin = require("../models/Admin");
+const Clinic = require("../models/Clinic");
+const Hospital = require("../models/Hospital");
+const Doctor = require("../models/Doctor");
+const OnlineDoctor = require("../models/OnlineDoctor");
+const Manager = require("../models/Manager");
+const Receptionist = require("../models/Receptionist");
+const PrivateAmbulance = require("../models/PrivateAmbulance");
+const HospitalAmbulance = require("../models/HospitalAmbulance");
+const MedicalStore = require("../models/MedicalStore");
+const { generateToken } = require("../middleware/jwt");
+const { loginMedicalStore } = require("./MedicalStoreController");
+
+const entityModelMap = {
+  "admins": Admin,
+  "managers": Manager,
+  "doctors": Doctor,
+  "receptionists": Receptionist,
+  "clinics": Clinic,
+  "hospitals": Hospital,
+  "online-doctors": OnlineDoctor,
+  "private-ambulances": PrivateAmbulance,
+  "hospital-ambulances": HospitalAmbulance,
+  "medical-stores": MedicalStore
+};
+
+// Admin Login
+exports.adminLogin = async (req, res) => {
+  try {
+    const adminId =
+      typeof req.body?.adminId === "string"
+        ? req.body.adminId.trim()
+        : typeof req.body?.userId === "string"
+          ? req.body.userId.trim()
+          : "";
+    const { password } = req.body || {};
+
+    if (!adminId || typeof password !== "string" || !password) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Admin ID or medical store ID/email and password are required",
+      });
+    }
+
+    const admin = await Admin.findOne({ adminId });
+
+    if (!admin) {
+      return loginMedicalStore(req, res);
+    }
+
+    const isMatch = await admin.comparePassword(password);
+
+    if (!isMatch) {
+      return res.status(401).json({
+        success: false,
+        message: "Invalid Password",
+      });
+    }
+
+    const token = generateToken({
+      id: admin._id,
+      role: "aidlyAdmin",
+      adminId: admin.adminId,
+    });
+
+    res.status(200).json({
+      success: true,
+      token,
+      admin,
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: err.message,
+    });
+  }
+};
+// Dashboard Stats
+exports.getDashboardStats = async (req, res) => {
+  try {
+    const stats = {};
+    for (const [key, model] of Object.entries(entityModelMap)) {
+      stats[key] = await model.countDocuments();
+    }
+    res.json(stats);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Generic List API
+exports.getEntities = async (req, res) => {
+  try {
+    const { entity } = req.params;
+    const { page = 1, limit = 10, search = "" } = req.query;
+    const Model = entityModelMap[entity];
+
+    if (!Model) return res.status(404).json({ error: "Entity not found" });
+
+    let query = {
+  isActive: { $ne: false }
+};
+    // Search logic
+    if (search) {
+      const searchFields = ["name", "clinicName", "hospitalname", "storeName", "ownerName", "email", "phone", "gstnumber", "adminName"];
+      query.$or = searchFields.map(field => ({ [field]: { $regex: search, $options: "i" } }));
+    }
+
+    const totalRecords = await Model.countDocuments(query);
+    const data = await Model.find(query)
+      .select("-password") // Security: Never return passwords
+      .skip((page - 1) * limit)
+      .limit(parseInt(limit))
+      .sort({ createdAt: -1 });
+
+    res.json({
+      data,
+      totalPages: Math.ceil(totalRecords / limit),
+      currentPage: parseInt(page),
+      totalRecords
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Generic Detail API
+exports.getEntityById = async (req, res) => {
+  try {
+    const { entity, id } = req.params;
+    const Model = entityModelMap[entity];
+    if (!Model) return res.status(404).json({ error: "Entity not found" });
+
+   let query = Model.findById(id).select("-password");
+
+if (entity === "receptionists" || entity === "doctors" || entity === "managers") {
+  query = query.populate("clinicId", "clinicName");
+}
+
+const data = await query;
+    if (!data) return res.status(404).json({ error: "Record not found" });
+
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// Generic Soft Delete API (Deactivate)
+exports.deleteEntity = async (req, res) => {
+  try {
+    const { entity, id } = req.params;
+
+    const Model = entityModelMap[entity];
+
+    if (!Model) {
+      return res.status(404).json({
+        error: "Entity not found",
+      });
+    }
+
+    const deleted = await Model.findByIdAndDelete(id);
+
+    if (!deleted) {
+      return res.status(404).json({
+        error: "Record not found",
+      });
+    }
+
+    res.json({
+      message: "Record deleted successfully",
+    });
+
+  } catch (err) {
+    res.status(500).json({
+      error: err.message,
+    });
+  }
+};
